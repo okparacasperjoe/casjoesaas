@@ -1,10 +1,10 @@
 <?php
 
 $config = [
-    'host' => '127.0.0.1',
-    'dbname' => 'saas_db',
-    'username' => 'root',
-    'password' => '',
+    'host' => 'sdb-67.hosting.stackcp.net',
+    'dbname' => 'casjoeapp-35303437c62a',
+    'username' => 'casjoeapp-35303437c62a',
+    'password' => '6xbr400e80',
     'charset' => 'utf8mb4'
 ];
 
