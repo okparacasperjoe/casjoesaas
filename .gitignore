@@ -1,0 +1,19 @@
+# Configuration
+config/database.local.php
+.env
+
+# Dependencies
+vendor/
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# OS Generated
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
