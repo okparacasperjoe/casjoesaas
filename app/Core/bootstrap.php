@@ -3,6 +3,11 @@
 // Validates that we are running in the app
 define('APP_START', microtime(true));
 
+// Load Composer Autoloader
+if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+    require_once __DIR__ . '/../../vendor/autoload.php';
+}
+
 // 1. Load System Settings (DB Configuration)
 // Connect to DB directly for bootstrap
 require_once __DIR__ . '/Database.php';
