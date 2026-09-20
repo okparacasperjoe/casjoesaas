@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Casjoe Biz - Demo Video Script & Storyboard for Grant Submission</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm 10mm 12mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    line-height: 1.4;
+    font-size: 8.5pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    color: #000066;
+    margin-top: 0;
+  }
+
+  .page {
+    page-break-after: always;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .page:last-child {
+    page-break-after: avoid;
+  }
+
+  /* Document Header Banner */
+  .doc-header {
+    background: linear-gradient(135deg, #03041a 0%, #000066 60%, #081142 100%);
+    color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-bottom: 3.5px solid #FFA600;
+    box-shadow: 0 4px 15px rgba(0, 0, 102, 0.15);
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .brand-title {
+    font-size: 17pt;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .brand-title span {
+    color: #FFA600;
+  }
+
+  .badge-grant {
+    background: #FFA600;
+    color: #03041a;
+    font-weight: 800;
+    font-size: 7pt;
+    padding: 3px 9px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+  }
+
+  .doc-subtitle {
+    font-size: 9.5pt;
+    font-weight: 500;
+    color: #cbd5e1;
+    margin: 0 0 5px 0;
+  }
+
+  .doc-meta {
+    font-size: 7.5pt;
+    color: #94a3b8;
+    display: flex;
+    gap: 16px;
+    margin: 0;
+  }
+
+  .doc-meta strong {
+    color: #f1f5f9;
+  }
+
+  /* Key Specs Strip */
+  .specs-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .spec-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3.5px solid #000066;
+    border-radius: 6px;
+    padding: 7px 10px;
+  }
+
+  .spec-card.highlight {
+    border-left-color: #FFA600;
+    background: #fffbeb;
+  }
+
+  .spec-label {
+    font-size: 6.5pt;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .spec-val {
+    font-size: 8.8pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    font-size: 7.8pt;
+  }
+
+  th {
+    background: #000066;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
+    padding: 5px 8px;
+    font-size: 7.5pt;
+    letter-spacing: 0.3px;
+  }
+
+  th:first-child { border-top-left-radius: 5px; }
+  th:last-child { border-top-right-radius: 5px; }
+
+  td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  /* Scene Block Cards */
+  .scene-card {
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    background: #ffffff;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  .scene-header {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .scene-title {
+    font-size: 8.6pt;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .scene-time-pill {
+    background: #FFA600;
+    color: #03041a;
+    font-weight: 800;
+    font-size: 6.8pt;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .scene-target {
+    font-size: 7.2pt;
+    color: #94a3b8;
+  }
+
+  .scene-body {
+    padding: 8px 10px;
+  }
+
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 10px;
+    margin-bottom: 5px;
+  }
+
+  .sub-heading {
+    font-size: 7pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #000066;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  ul.action-list {
+    margin: 0;
+    padding-left: 13px;
+    font-size: 7.6pt;
+    color: #334155;
+  }
+
+  ul.action-list li {
+    margin-bottom: 2px;
+  }
+
+  .overlay-box {
+    background: #f1f5f9;
+    border-left: 3px solid #000066;
+    padding: 4px 7px;
+    border-radius: 4px;
+    font-size: 7.2pt;
+    color: #0f172a;
+  }
+
+  .vo-box {
+    background: #fdfaf3;
+    border: 1px solid #fde68a;
+    border-left: 3.5px solid #FFA600;
+    border-radius: 5px;
+    padding: 6px 9px;
+    margin-top: 4px;
+  }
+
+  .vo-title {
+    font-size: 6.5pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #b45309;
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .vo-text {
+    font-size: 8pt;
+    color: #1e293b;
+    font-style: italic;
+    line-height: 1.35;
+  }
+
+  /* Section Title */
+  .section-divider {
+    border-bottom: 1.5px solid #000066;
+    padding-bottom: 2px;
+    margin: 10px 0 6px 0;
+    font-size: 9.2pt;
+    font-weight: 800;
+    color: #000066;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .checklist-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 7.4pt;
+    margin-top: 6px;
+  }
+
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .check-icon {
+    color: #16a34a;
+    font-weight: bold;
+  }
+
+  .footer-note {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 6.5pt;
+    color: #94a3b8;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="page">
+    <div class="doc-header">
+      <div class="header-top">
+        <div class="brand-title">CASJOE <span>BIZ</span></div>
+        <div class="badge-grant">Grant Submission Demo Video Package</div>
+      </div>
+      <div class="doc-subtitle">Official 2.5-Minute Product Demo Video Script, Screen Storyboard & Voiceover</div>
+      <div class="doc-meta">
+        <div>Platform: <strong>Casjoe BOS / SaaS Enterprise Suite</strong></div>
+        <div>Target Length: <strong>2 Min 30 Sec (150s)</strong></div>
+        <div>Focus: <strong>SME Operational Impact & Autonomous AI</strong></div>
+        <div>Resolution: <strong>1080p 60fps (16:9)</strong></div>
+      </div>
+    </div>
+
+    <!-- Specs Grid -->
+    <div class="specs-strip">
+      <div class="spec-card highlight">
+        <div class="spec-label">Target Duration</div>
+        <div class="spec-val">2m 30s (150 sec)</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">Target Audience</div>
+        <div class="spec-val">Grant Evaluators & Reviewers</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">Core Innovation</div>
+        <div class="spec-val">Autonomous AI Office + ERP</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">Key Problem Solved</div>
+        <div class="spec-val">SME Software Fragmentation</div>
+      </div>
+    </div>
+
+    <!-- Master Timeline Table -->
+    <div class="section-divider">
+      <span>1. Master Timeline & Demonstration Flow</span>
+      <span style="font-size: 7pt; font-weight: normal; color: #64748b;">Paced for optimal evaluator retention</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 14%;">Timestamp</th>
+          <th style="width: 25%;">Scene & Focus Area</th>
+          <th style="width: 33%;">Live Platform Features Demonstrated</th>
+          <th style="width: 28%;">Grant Evaluation Objective</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0:00 – 0:25</strong> (25s)</td>
+          <td><strong>Scene 1:</strong> Entry & Executive Dashboard</td>
+          <td>Google Auth, Executive Ecosystem Dashboard, Cori AI Live Briefing, Instant ON/OFF Modularity</td>
+          <td>Validates high TRL, production-ready UX, clean multi-tenant architecture.</td>
+        </tr>
+        <tr>
+          <td><strong>0:25 – 0:55</strong> (30s)</td>
+          <td><strong>Scene 2:</strong> Core Business Operations</td>
+          <td>Casjoe BOS (ERP), Multi-currency Invoicing, Visual CRM Kanban Pipeline, Staff Attendance/HR</td>
+          <td>Demonstrates replacement of 10+ disconnected tools into 1 unified platform.</td>
+        </tr>
+        <tr>
+          <td><strong>0:55 – 1:35</strong> (40s)</td>
+          <td><strong>Scene 3:</strong> Autonomous AI Office</td>
+          <td>The AI Office, AI Sales Manager, AI Accountant, Human-in-the-Loop Action Queue & Approvals</td>
+          <td>Proves technological innovation: autonomous execution with strict human governance.</td>
+        </tr>
+        <tr>
+          <td><strong>1:35 – 2:10</strong> (35s)</td>
+          <td><strong>Scene 4:</strong> Key SME Workflows</td>
+          <td>Casjoe Pay, Instant Virtual USD Cards (StroWallet), Smart Payment Links & Invoices</td>
+          <td>Solves acute emerging-market barriers: cross-border vendor payments & revenue collection.</td>
+        </tr>
+        <tr>
+          <td><strong>2:10 – 2:30</strong> (20s)</td>
+          <td><strong>Scene 5:</strong> SME Impact & Vision</td>
+          <td>Cost reduction analysis ($500+/mo saved), Scalability metrics, Theme switch, Closing pitch</td>
+          <td>Delivers strong commercial viability and social/economic SME empowerment value.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SCENE 1 -->
+    <div class="scene-card">
+      <div class="scene-header">
+        <div class="scene-title">
+          <span class="scene-time-pill">0:00 – 0:25</span>
+          Scene 1: Frictionless Access & Executive Ecosystem Dashboard
+        </div>
+        <div class="scene-target">Goal: Hook evaluators with live operational maturity</div>
+      </div>
+      <div class="scene-body">
+        <div class="action-grid">
+          <div>
+            <div class="sub-heading">Visual Cues & Click Flow</div>
+            <ul class="action-list">
+              <li>Start directly on <code>/login</code>; click Google One Tap to show frictionless 1-click entry.</li>
+              <li>Arrive on <code>/dashboard</code> (Executive Ecosystem Dashboard).</li>
+              <li>Hover over the glowing <strong>Cori AI Executive Briefing</strong> banner showing live telemetry (active employees, CRM counts, daily intelligence).</li>
+              <li>Pan across the 9 ecosystem cards; toggle one glowing <strong>ON/OFF pill switch</strong>.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="sub-heading">On-Screen Overlay & URL</div>
+            <div class="overlay-box">
+              <strong>Text Overlay:</strong> <em>Casjoe BOS: The All-in-One Operating System for Emerging SMEs</em><br>
+              <strong>Active Path:</strong> <code>https://casjoe.com/dashboard</code>
+            </div>
+          </div>
+        </div>
+        <div class="vo-box">
+          <div class="vo-title">
+            <span>Voiceover Script (Speak with confident, energetic cadence)</span>
+            <span>Duration: 25s</span>
+          </div>
+          <div class="vo-text">
+            "For millions of small and medium enterprises across Africa and emerging markets, running a business means juggling over ten fragmented, costly software tools. Welcome to Casjoe Biz—the unified Business Operating System designed to run an entire enterprise from a single pane of glass. From the moment a business owner logs in, our Executive Dashboard provides a real-time pulse of operations, powered by Cori AI, which synthesizes financial, customer, and staffing data into instant daily executive intelligence."
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-note">
+      Casjoe Biz Grant Demo Video Playbook &bull; Page 1 of 3
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="page">
+    <div class="section-divider" style="margin-top: 0;">
+      <span>2. Core Demonstration: Business Operations & The AI Office</span>
+      <span style="font-size: 7pt; font-weight: normal; color: #64748b;">Enterprise ERP and Autonomous Agent Architecture</span>
+    </div>
+
+    <!-- SCENE 2 -->
+    <div class="scene-card">
+      <div class="scene-header">
+        <div class="scene-title">
+          <span class="scene-time-pill">0:25 – 0:55</span>
+          Scene 2: Core Business Operations (Casjoe ERP / BOS)
+        </div>
+        <div class="scene-target">Goal: Prove end-to-end operational mastery (Finance, CRM, HR)</div>
+      </div>
+      <div class="scene-body">
+        <div class="action-grid">
+          <div>
+            <div class="sub-heading">Visual Cues & Click Flow</div>
+            <ul class="action-list">
+              <li>Click <strong>Launch Module</strong> on <em>Casjoe BOS</em> (navigates to <code>/erp</code>).</li>
+              <li>Navigate to <strong>Finance & Invoices</strong> (<code>/erp/finance/invoices</code>); click an active invoice, showing multi-currency support and direct public pay link.</li>
+              <li>Click <strong>CRM Pipeline</strong> (<code>/erp/crm/pipeline</code>); drag a prospect deal card smoothly from 'Contacted' to 'Proposal Sent'.</li>
+              <li>Briefly click <strong>Staff Attendance</strong> (<code>/erp/employees</code>); show 1-click check-in/check-out and payroll summaries.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="sub-heading">On-Screen Overlay & URL</div>
+            <div class="overlay-box">
+              <strong>Text Overlay:</strong> <em>Unified Operations: Invoicing • Sales CRM • HR & Attendance</em><br>
+              <strong>Active Path:</strong> <code>/erp/finance</code> &bull; <code>/erp/crm/pipeline</code>
+            </div>
+          </div>
+        </div>
+        <div class="vo-box">
+          <div class="vo-title">
+            <span>Voiceover Script</span>
+            <span>Duration: 30s</span>
+          </div>
+          <div class="vo-text">
+            "At the core of Casjoe is our enterprise ERP suite. SMEs manage their end-to-end operations without switching tabs: issuing multi-currency estimates and invoices, tracking deals across a visual CRM sales pipeline, and managing staff onboarding, attendance, and payroll. What used to require three separate, expensive subscriptions is fully synchronized in Casjoe from day one."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 3 -->
+    <div class="scene-card">
+      <div class="scene-header">
+        <div class="scene-title">
+          <span class="scene-time-pill">0:55 – 1:35</span>
+          Scene 3: The Autonomous AI Office & Human-in-the-Loop Governance
+        </div>
+        <div class="scene-target">Goal: Highlight core technological novelty and AI depth</div>
+      </div>
+      <div class="scene-body">
+        <div class="action-grid">
+          <div>
+            <div class="sub-heading">Visual Cues & Click Flow</div>
+            <ul class="action-list">
+              <li>Navigate to <code>/ai-office</code> (<strong>The AI Office</strong> dark cybernetic interface).</li>
+              <li>Show <strong>Office Activity Stream</strong> logging automated multi-agent actions.</li>
+              <li>Click <strong>AI Sales Manager</strong>: Ask the agent to draft a proposal follow-up for a pending CRM deal. Watch the AI generate the response using live CRM context.</li>
+              <li>Click <strong>AI Accountant</strong>: Point out cash flow burn alerts and automated ledger insights.</li>
+              <li>Click <strong>Action Queue</strong> (<code>?agent=queue</code>): Show a pending AI decision; click the green <strong>Approve</strong> button to demonstrate human-in-the-loop validation.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="sub-heading">On-Screen Overlay & URL</div>
+            <div class="overlay-box">
+              <strong>Text Overlay:</strong> <em>Autonomous AI Office • Specialized Agents • Human-in-the-Loop Control</em><br>
+              <strong>Active Path:</strong> <code>https://casjoe.com/ai-office</code>
+            </div>
+          </div>
+        </div>
+        <div class="vo-box">
+          <div class="vo-title">
+            <span>Voiceover Script</span>
+            <span>Duration: 40s</span>
+          </div>
+          <div class="vo-text">
+            "Here is where Casjoe leaps ahead of traditional ERPs: The AI Office. Small business owners can rarely afford dedicated sales directors, accountants, or 24/7 customer support teams. In Casjoe, they deploy autonomous AI employees. Our AI Sales Manager identifies cold leads and drafts personalized proposals; our AI Accountant tracks receivables and flags margin leaks; and our Automation Studio executes cross-module workflows. Crucially, our Action Queue maintains human-in-the-loop governance—ensuring business owners stay in control while their digital workforce handles the heavy lifting."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Casjoe Biz Grant Demo Video Playbook &bull; Page 2 of 3
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 3 ==================== -->
+  <div class="page">
+    <div class="section-divider" style="margin-top: 0;">
+      <span>3. Workflows, SME Economic Impact & Grant Rubric Alignment</span>
+      <span style="font-size: 7pt; font-weight: normal; color: #64748b;">Fintech Enablement, Cost Savings & Best Practices</span>
+    </div>
+
+    <!-- SCENE 4 -->
+    <div class="scene-card">
+      <div class="scene-header">
+        <div class="scene-title">
+          <span class="scene-time-pill">1:35 – 2:10</span>
+          Scene 4: Critical Workflows — Casjoe Pay & Virtual Dollar Cards
+        </div>
+        <div class="scene-target">Goal: Solve critical emerging-market payment & FX frictions</div>
+      </div>
+      <div class="scene-body">
+        <div class="action-grid">
+          <div>
+            <div class="sub-heading">Visual Cues & Click Flow</div>
+            <ul class="action-list">
+              <li>Navigate to <strong>Casjoe Pay</strong> (<code>/pay</code>); showcase dual-currency wallet (NGN / USD balances).</li>
+              <li>Click <strong>Virtual Cards</strong> (<code>/pay/cards</code>): Highlight instant virtual Mastercard/Visa card generation for global SaaS & cloud spend.</li>
+              <li>Click <strong>Reveal Card Details</strong>: Show secure PIN modal displaying card credentials for foreign vendor payments.</li>
+              <li>Quick glance at <strong>Payment Links</strong> (<code>/pay/links</code>): Show a customer-facing payment gateway collecting real-time revenue.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="sub-heading">On-Screen Overlay & URL</div>
+            <div class="overlay-box">
+              <strong>Text Overlay:</strong> <em>Embedded Fintech: Dual-Currency Wallets • Instant Virtual USD Cards</em><br>
+              <strong>Active Path:</strong> <code>https://casjoe.com/pay/cards</code>
+            </div>
+          </div>
+        </div>
+        <div class="vo-box">
+          <div class="vo-title">
+            <span>Voiceover Script</span>
+            <span>Duration: 35s</span>
+          </div>
+          <div class="vo-text">
+            "Let's look at one critical SME bottleneck: cross-border payments and digital receivables. With Casjoe Pay, businesses generate instant virtual USD cards to pay for essential global tools, cloud hosting, and digital ads without being blocked by domestic card limits. Simultaneously, merchants can generate custom smart payment links and forms that settle directly into their wallet, closing the loop between sales, accounting, and cash collection."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 5 -->
+    <div class="scene-card">
+      <div class="scene-header">
+        <div class="scene-title">
+          <span class="scene-time-pill">2:10 – 2:30</span>
+          Scene 5: Tangible SME Benefits, Economic Impact & Vision
+        </div>
+        <div class="scene-target">Goal: Close with unforgettable ROI, social impact, and scale</div>
+      </div>
+      <div class="scene-body">
+        <div class="action-grid">
+          <div>
+            <div class="sub-heading">Visual Cues & Click Flow</div>
+            <ul class="action-list">
+              <li>Return to the <strong>Executive Dashboard</strong> (<code>/dashboard</code>).</li>
+              <li>Toggle the floating theme widget (Dark to Light and back) to show high product polish.</li>
+              <li>Highlight active organization badge, currency, and enterprise telemetry status ("All Systems Online 99.99%").</li>
+              <li>Transition to clean branded closing slide featuring Casjoe Biz logo, website, and contact information.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="sub-heading">On-Screen Overlay & Closing Slate</div>
+            <div class="overlay-box">
+              <strong>Text Overlay:</strong> <em>Democratizing Enterprise Intelligence & Fintech for 40M+ Emerging SMEs</em><br>
+              <strong>Website:</strong> <code>casjoe.com</code> &bull; <strong>Contact:</strong> <code>founder@casjoe.com</code>
+            </div>
+          </div>
+        </div>
+        <div class="vo-box">
+          <div class="vo-title">
+            <span>Voiceover Script</span>
+            <span>Duration: 20s</span>
+          </div>
+          <div class="vo-text">
+            "By replacing disjointed subscriptions with an all-in-one, AI-powered ecosystem, Casjoe saves small businesses hundreds of dollars monthly and countless hours of administrative friction. We aren't just digitizing small businesses—we are empowering them to scale sustainably with enterprise-grade intelligence. Thank you for your support as we build the operating system for the next generation of global businesses."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grant Evaluation Matrix Table -->
+    <div class="section-divider">
+      <span>Grant Reviewer Rubric Alignment</span>
+      <span style="font-size: 7pt; font-weight: normal; color: #64748b;">Key Scoring Dimensions</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 26%;">Grant Evaluation Criteria</th>
+          <th style="width: 44%;">How This Demo Video Proves It</th>
+          <th style="width: 30%;">Video Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Technological Readiness (TRL 7-8)</strong></td>
+          <td>Live production SaaS with functional database, authenticated sessions, responsive UI, zero placeholders.</td>
+          <td>Full Video (0:00 - 2:30)</td>
+        </tr>
+        <tr>
+          <td><strong>Innovation & Intellectual Depth</strong></td>
+          <td>Specialized AI employees with continuous telemetry and human-in-the-loop action approval queues.</td>
+          <td>Scene 1 & 3 (0:10 - 0:25, 0:55 - 1:35)</td>
+        </tr>
+        <tr>
+          <td><strong>Commercial Viability</strong></td>
+          <td>Dual revenue streams: recurring modular SaaS licenses + fintech transaction fees on wallets and cards.</td>
+          <td>Scene 1 & 4 (0:15 - 0:25, 1:35 - 2:10)</td>
+        </tr>
+        <tr>
+          <td><strong>Social & Economic Impact</strong></td>
+          <td>Saves emerging market SMEs $500+/mo, removes foreign exchange barriers, and automates administrative burden.</td>
+          <td>Scene 4 & 5 (1:35 - 2:30)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Checklist Box -->
+    <div class="checklist-box">
+      <div style="font-weight: 800; color: #166534; font-size: 7.8pt;">Technical Recording & Submission Checklist</div>
+      <div class="checklist-grid">
+        <div class="check-item">
+          <span class="check-icon">&#10004;</span>
+          <span><strong>Resolution:</strong> Record at 1080p (1920x1080) at 60fps in 16:9 aspect ratio.</span>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">&#10004;</span>
+          <span><strong>Database Prep:</strong> Ensure 3-5 customers, 2 invoices, and 1 queued AI action exist before recording.</span>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">&#10004;</span>
+          <span><strong>Audio Quality:</strong> Crisp microphone, quiet acoustics; background music at max 8-10% volume.</span>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">&#10004;</span>
+          <span><strong>Hosting Link:</strong> Set Loom / YouTube (Unlisted) permissions to <em>"Anyone with the link can view"</em>.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      &copy; Casjoe SaaS Ecosystem &bull; Confidential & Proprietary Document Prepared for Grant & Innovation Submissions &bull; Page 3 of 3
+    </div>
+  </div>
+
+</body>
+</html>

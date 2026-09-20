@@ -9,7 +9,7 @@ class CampaignController
 {
     public function create()
     {
-        require __DIR__ . '/../views/create_campaign.php';
+        require __DIR__ . '/../Views/create_campaign.php';
     }
 
     public function send()

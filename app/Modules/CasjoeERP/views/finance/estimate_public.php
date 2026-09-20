@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estimate #<?= str_pad($estimate['id'], 5, '0', STR_PAD_LEFT) ?> - <?= htmlspecialchars($companyName) ?></title>

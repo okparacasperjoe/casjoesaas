@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>My Projects | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -9,14 +14,16 @@
 <body>
 <div class="app-container">
     <aside class="sidebar">
-        <div class="brand">
+    <?php include __DIR__ . '/../layout/sidebar_erp_css.php'; ?>
+
+        <div class="erp-brand">
              <img src="/assets/casjoe_logo.png" alt="Casjoe Apps" style="height: 40px;">
         </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="/erp/client/dashboard" class="nav-link"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
-            <li class="nav-item"><a href="/erp/client/projects" class="nav-link active"><ion-icon name="briefcase-outline"></ion-icon> My Projects</a></li>
-            <li class="nav-item"><a href="/erp/client/invoices" class="nav-link"><ion-icon name="receipt-outline"></ion-icon> Invoices</a></li>
-             <li class="nav-item"><a href="/logout" class="nav-link" style="color:red;"><ion-icon name="log-out-outline"></ion-icon> Logout</a></li>
+        <ul class="erp-menu">
+            <li class="erp-item"><a href="/erp/client/dashboard" class="erp-link"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+            <li class="erp-item"><a href="/erp/client/projects" class="erp-link active"><ion-icon name="briefcase-outline"></ion-icon> My Projects</a></li>
+            <li class="erp-item"><a href="/erp/client/invoices" class="erp-link"><ion-icon name="receipt-outline"></ion-icon> Invoices</a></li>
+             <li class="erp-item"><a href="/logout" class="erp-link" style="color:red;"><ion-icon name="log-out-outline"></ion-icon> Logout</a></li>
         </ul>
     </aside>
 

@@ -12,7 +12,7 @@ class WalletController
 
     public function fund()
     {
-        require __DIR__ . '/../views/fund_wallet.php';
+        require __DIR__ . '/../Views/fund_wallet.php';
     }
 
     public function initFund()
@@ -73,7 +73,7 @@ class WalletController
 
     public function transfer()
     {
-        require __DIR__ . '/../views/transfer.php';
+        require __DIR__ . '/../Views/transfer.php';
     }
 
     public function processTransfer()

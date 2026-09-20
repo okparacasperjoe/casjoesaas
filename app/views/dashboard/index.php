@@ -12,7 +12,7 @@
     <div class="card">
         <h3>Casjoe Pay</h3>
         <p>Balance: NGN <?= number_format($balance, 2) ?></p>
-        <a href="/casjoe-pay" class="btn">Go to Wallet</a>
+        <a href="/pay" class="btn">Go to Wallet</a>
     </div>
 
     <div class="card">

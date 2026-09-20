@@ -6,6 +6,6 @@ class DashboardController
 {
     public function index()
     {
-        require __DIR__ . '/../views/dashboard.php';
+        require __DIR__ . '/../Views/dashboard.php';
     }
 }

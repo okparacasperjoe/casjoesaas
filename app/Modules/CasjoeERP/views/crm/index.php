@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>CRM | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -9,12 +14,14 @@
 <body>
 <div class="app-container">
     <aside class="sidebar">
-        <div class="brand">
+    <?php include __DIR__ . '/../layout/sidebar_erp_css.php'; ?>
+
+        <div class="erp-brand">
              <img src="/assets/casjoe_logo.png" alt="Casjoe Apps" style="height: 40px;">
         </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="/erp" class="nav-link"><ion-icon name="arrow-back-outline"></ion-icon> ERP Dashboard</a></li>
-            <li class="nav-item"><a href="/erp/crm" class="nav-link active"><ion-icon name="people-circle-outline"></ion-icon> Customers</a></li>
+        <ul class="erp-menu">
+            <li class="erp-item"><a href="/erp" class="erp-link"><ion-icon name="arrow-back-outline"></ion-icon> ERP Dashboard</a></li>
+            <li class="erp-item"><a href="/erp/crm" class="erp-link active"><ion-icon name="people-circle-outline"></ion-icon> Customers</a></li>
         </ul>
     </aside>
 

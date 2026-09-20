@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
     <meta charset="UTF-8">
     <title>Verify 2FA | Casjoe Apps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

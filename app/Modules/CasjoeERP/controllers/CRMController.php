@@ -23,7 +23,7 @@ class CrmController
         $stmt->execute([$this->tenantId]);
         $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/crm/customers/index.php';
+        require __DIR__ . '/../Views/crm/customers/index.php';
     }
 
     public function storeCustomer()
@@ -65,18 +65,95 @@ class CrmController
         $stmt->execute([$this->tenantId]);
         $leads = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/crm/leads/index.php';
+        require __DIR__ . '/../Views/crm/leads/index.php';
     }
 
     public function storeLead()
     {
-        $name = $_POST['name'];
-        $source = $_POST['source'];
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? null;
+        $phone = $_POST['phone'] ?? null;
+        $company = $_POST['company'] ?? null;
+        $notes = $_POST['notes'] ?? null;
+        $source = $_POST['source'] ?? 'Other';
         $status = 'new'; 
 
-        $stmt = $this->pdo->prepare("INSERT INTO erp_crm_leads (tenant_id, name, source, status) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$this->tenantId, $name, $source, $status]);
+        $stmt = $this->pdo->prepare("
+            INSERT INTO erp_crm_leads 
+            (tenant_id, name, email, phone, company, source, status, notes, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
+        ");
+        $stmt->execute([$this->tenantId, $name, $email, $phone, $company, $source, $status, $notes]);
 
+        \App\Core\Services\EventBus::publish($this->tenantId, 'CRM', 'lead_created', [
+            'name' => $name,
+            'email' => $email,
+            'source' => $source
+        ]);
+
+        // Award lead scoring points for profile completeness
+        try {
+            $newLeadId = $this->pdo->lastInsertId();
+            
+            try {
+                \App\Core\Services\WorkflowEngineService::dispatch($this->tenantId, 'lead_created', [
+                    'lead_id' => $newLeadId,
+                    'name' => $name,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'company' => $company,
+                    'source' => $source
+                ]);
+            } catch (\Exception $e) {
+                error_log('Workflow trigger error (lead_created): ' . $e->getMessage());
+            }
+
+            $profilePoints = 0;
+            if (!empty($email)) $profilePoints += 5;
+            if (!empty($phone)) $profilePoints += 5;
+            if (!empty($company)) $profilePoints += 3;
+            if ($profilePoints > 0) {
+                \App\Core\Services\LeadScoringService::addPoints($this->tenantId, (int)$newLeadId, 'Profile completeness bonus', $profilePoints);
+            }
+        } catch (\Exception $e) {
+            error_log('Lead scoring error: ' . $e->getMessage());
+        }
+
+        header('Location: /erp/crm/leads');
+        exit;
+    }
+
+    public function updateLead()
+    {
+        $id = $_POST['id'] ?? null;
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? null;
+        $phone = $_POST['phone'] ?? null;
+        $company = $_POST['company'] ?? null;
+        $notes = $_POST['notes'] ?? null;
+        $source = $_POST['source'] ?? 'Other';
+        $status = $_POST['status'] ?? 'new';
+
+        if ($id) {
+            $stmt = $this->pdo->prepare("
+                UPDATE erp_crm_leads 
+                SET name = ?, email = ?, phone = ?, company = ?, source = ?, status = ?, notes = ?, updated_at = NOW()
+                WHERE id = ? AND tenant_id = ?
+            ");
+            $stmt->execute([$name, $email, $phone, $company, $source, $status, $notes, $id, $this->tenantId]);
+        }
+
+        header('Location: /erp/crm/leads');
+        exit;
+    }
+
+    public function deleteLead()
+    {
+        $id = $_POST['id'] ?? null;
+        if ($id) {
+            $stmt = $this->pdo->prepare("DELETE FROM erp_crm_leads WHERE id = ? AND tenant_id = ?");
+            $stmt->execute([$id, $this->tenantId]);
+        }
         header('Location: /erp/crm/leads');
         exit;
     }
@@ -93,7 +170,7 @@ class CrmController
         $leads = $this->pdo->query("SELECT id, name FROM erp_crm_leads WHERE tenant_id = {$this->tenantId}")->fetchAll(PDO::FETCH_ASSOC);
         $customers = $this->pdo->query("SELECT id, name FROM erp_crm_customers WHERE tenant_id = {$this->tenantId}")->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/crm/opportunities/index.php';
+        require __DIR__ . '/../Views/crm/opportunities/index.php';
     }
 
     public function storeOpportunity()
@@ -113,6 +190,8 @@ class CrmController
 
     // --- Sales ---
 
+
+
     public function sales()
     {
         // Simple listing for now
@@ -124,7 +203,18 @@ class CrmController
         $customers = $this->pdo->query("SELECT id, name FROM erp_crm_customers WHERE tenant_id = {$this->tenantId}")->fetchAll(PDO::FETCH_ASSOC);
         $inventory = $this->pdo->query("SELECT id, name, unit_price FROM erp_inventory_items WHERE tenant_id = {$this->tenantId} AND status='active'")->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/crm/sales/index.php';
+        $stmtTenant = $this->pdo->prepare("SELECT currency FROM tenants WHERE id = ?");
+        $stmtTenant->execute([$this->tenantId]);
+        $tenantData = $stmtTenant->fetch(PDO::FETCH_ASSOC) ?: ['currency' => '$'];
+        
+        $cCode = $tenantData['currency'] ?? '$';
+        $currencySymbol = $cCode;
+        if ($cCode === 'NGN') $currencySymbol = '₦';
+        if ($cCode === 'USD') $currencySymbol = '$';
+        if ($cCode === 'GBP') $currencySymbol = '£';
+        if ($cCode === 'EUR') $currencySymbol = '€';
+
+        require __DIR__ . '/../Views/crm/sales/index.php';
     }
 
     public function storeSale()
@@ -166,6 +256,7 @@ class CrmController
         header('Location: /erp/crm/sales');
         exit;
     }
+
     public function pipeline()
     {
         // Get All Stages
@@ -196,7 +287,7 @@ class CrmController
              }
         }
 
-        require __DIR__ . '/../views/crm/pipeline.php';
+        require __DIR__ . '/../Views/crm/pipeline.php';
     }
 
     public function updateStage()
@@ -216,11 +307,162 @@ class CrmController
         $result = $stmt->execute([$stageId, $leadId, $this->tenantId]);
 
         if ($result) {
+            try {
+                \App\Core\Services\WorkflowEngineService::dispatch($this->tenantId, 'stage_changed', [
+                    'lead_id' => (int)$leadId,
+                    'stage_id' => (int)$stageId
+                ]);
+            } catch (\Exception $e) {
+                error_log('Workflow trigger error (stage_changed): ' . $e->getMessage());
+            }
+
+            // Award lead scoring points for pipeline advancement
+            try {
+                \App\Core\Services\LeadScoringService::addPoints($this->tenantId, (int)$leadId, 'Pipeline stage advanced', 10);
+            } catch (\Exception $e) {
+                error_log('Lead scoring error: ' . $e->getMessage());
+            }
+            
             echo json_encode(['success' => true]);
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Update failed']);
         }
+        exit;
+    }
+
+    public function storePipelineLead()
+    {
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $company = trim($_POST['company'] ?? '');
+        $notes = trim($_POST['notes'] ?? '');
+        $source = 'Pipeline Board';
+        $status = 'new';
+        $stageId = !empty($_POST['stage_id']) ? (int)$_POST['stage_id'] : null;
+
+        if (empty($name)) {
+            die("Lead name is required");
+        }
+
+        $stmt = $this->pdo->prepare("
+            INSERT INTO erp_crm_leads 
+            (tenant_id, name, email, phone, company, source, status, notes, stage_id, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+        ");
+        $stmt->execute([
+            $this->tenantId,
+            $name,
+            empty($email) ? null : $email,
+            empty($phone) ? null : $phone,
+            empty($company) ? null : $company,
+            $source,
+            $status,
+            empty($notes) ? null : $notes,
+            $stageId
+        ]);
+
+        header('Location: /erp/crm/leads');
+        exit;
+    }
+
+
+    // ==========================================
+    // CUSTOMERS (Edit/Update/Delete)
+    // ==========================================
+    public function updateCustomer() {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $company = $_POST['company'];
+        $phone = $_POST['phone'];
+        $stmt = $this->pdo->prepare("UPDATE erp_crm_customers SET name = ?, email = ?, company = ?, phone = ? WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$name, $email, $company, $phone, $id, $this->tenantId]);
+        header('Location: /erp/crm/customers');
+        exit;
+    }
+
+    public function deleteCustomer() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_crm_customers WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/crm/customers');
+        exit;
+    }
+
+    // ==========================================
+    // OPPORTUNITIES (Edit/Update/Delete)
+    // ==========================================
+    public function updateOpportunity() {
+        $id = $_POST['id'];
+        $title = $_POST['title'];
+        $lead_id = $_POST['lead_id'] ?: null;
+        $customer_id = $_POST['customer_id'] ?: null;
+        $amount = $_POST['amount'];
+        $stage = $_POST['stage'];
+        $close_date = $_POST['close_date'];
+        $stmt = $this->pdo->prepare("UPDATE erp_crm_opportunities SET title=?, lead_id=?, customer_id=?, amount=?, stage=?, close_date=? WHERE id=? AND tenant_id=?");
+        $stmt->execute([$title, $lead_id, $customer_id, $amount, $stage, $close_date, $id, $this->tenantId]);
+        header('Location: /erp/crm/opportunities');
+        exit;
+    }
+
+    public function deleteOpportunity() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_crm_opportunities WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/crm/opportunities');
+        exit;
+    }
+
+    // ==========================================
+    // SALES (Edit/Update/Delete)
+    // ==========================================
+    public function updateSale() {
+        $id = $_POST['id'];
+        $customer_id = $_POST['customer_id'] ?: null;
+        $amount = $_POST['amount'];
+        $sale_date = $_POST['sale_date'];
+        $status = $_POST['status'];
+        $stmt = $this->pdo->prepare("UPDATE erp_crm_sales SET customer_id=?, amount=?, sale_date=?, status=? WHERE id=? AND tenant_id=?");
+        $stmt->execute([$customer_id, $amount, $sale_date, $status, $id, $this->tenantId]);
+        header('Location: /erp/crm/sales');
+        exit;
+    }
+
+    public function deleteSale() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_crm_sales WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/crm/sales');
+        exit;
+    }
+
+    public function clients()
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM erp_clients WHERE tenant_id = ? ORDER BY company_name ASC");
+        $stmt->execute([$this->tenantId]);
+        $clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        require __DIR__ . '/../Views/crm/clients/index.php';
+    }
+
+    public function createClient()
+    {
+        require __DIR__ . '/../Views/crm/clients/create.php';
+    }
+
+    public function storeClient()
+    {
+        $companyName = trim($_POST['company_name'] ?? '');
+        $contactPerson = trim($_POST['contact_person'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+
+        $stmt = $this->pdo->prepare("INSERT INTO erp_clients (tenant_id, company_name, contact_person, email, phone, status) VALUES (?, ?, ?, ?, ?, 'active')");
+        $stmt->execute([$this->tenantId, $companyName, $contactPerson, $email, $phone]);
+
+        header('Location: /erp/clients');
         exit;
     }
 }

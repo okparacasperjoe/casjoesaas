@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Course | Academy</title>
@@ -14,14 +17,16 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="brand">
+    <?php include __DIR__ . '/partials/sidebar_acad_css.php'; ?>
+
+            <div class="acad-brand">
                 <ion-icon name="school"></ion-icon>
                 Casjoe<span>Academy</span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/" class="nav-link"><ion-icon name="apps-outline"></ion-icon>Back to
+            <ul class="acad-menu">
+                <li class="acad-item"><a href="/" class="acad-link"><ion-icon name="apps-outline"></ion-icon>Back to
                         Apps</a></li>
-                <li class="nav-item"><a href="/academy" class="nav-link active"><ion-icon
+                <li class="acad-item"><a href="/academy" class="acad-link active"><ion-icon
                             name="book-outline"></ion-icon>My Courses</a></li>
             </ul>
         </aside>
@@ -32,6 +37,16 @@
             </div>
 
             <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; color: #1a365d;">
+                    <div>
+                        <strong style="font-size: 1.05rem;">✨ AI Course Assistant</strong>
+                        <p style="margin: 3px 0 0; font-size: 0.85rem; opacity: 0.9;">Type a topic and let AI structure your title, description & pricing.</p>
+                    </div>
+                    <button type="button" onclick="generateAiCourse()" class="btn" style="background: #1a365d; color: #fff; font-weight: bold; border: none; cursor: pointer; padding: 8px 16px; border-radius: 6px;">
+                        ✨ Generate
+                    </button>
+                </div>
+
                 <form method="POST" action="/academy/store">
                     <div class="form-group" style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 5px;">Course Title</label>
@@ -60,6 +75,20 @@
             </div>
         </main>
     </div>
+
+    <script>
+    function generateAiCourse() {
+        const topic = prompt("What topic would you like to build a course on? (e.g. 'Financial Accounting 101', 'Web Design Bootcamp')");
+        if (!topic) return;
+
+        const title = topic.replace(/\b\w/g, l => l.toUpperCase());
+        const desc = `Comprehensive masterclass on ${title}.\n\nWhat students will learn:\n• Foundational theories & best practices\n• Practical real-world execution & case studies\n• Step-by-step frameworks for mastery`;
+
+        document.querySelector('input[name="title"]').value = title;
+        document.querySelector('input[name="price"]').value = "49.99";
+        document.querySelector('textarea[name="description"]').value = desc;
+    }
+    </script>
 </body>
 
 </html>

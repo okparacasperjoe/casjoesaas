@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($page['title']) ?></title>
+    
+    <?php 
+    $theme = json_decode($page['theme_config'] ?? '{}', true);
+    $settings = json_decode($page['settings'] ?? '{}', true);
+    
+    $bgColor = $settings['custom_bg_color'] ?? $theme['bg_color'] ?? '#b8c5b4';
+    $textColor = $theme['text_color'] ?? '#2d3a2e';
+    $btnBg = $theme['btn_bg'] ?? '#ffffff';
+    $btnText = $theme['btn_text'] ?? '#2d3a2e';
+    $btnBorder = $theme['border'] ?? 'none';
+    
+    $profileImage = $settings['profile_image'] ?? null;
+    $profileName = $settings['profile_name'] ?? $page['title'];
+    $description = $settings['description'] ?? $page['description'] ?? '';
+    $bannerImage = $settings['banner_image'] ?? null;
+    $bgImage = $settings['custom_bg_image'] ?? $theme['bg_image'] ?? null;
+    $isGlass = !empty($theme['glass']);
+    
+    // Fix legacy bare filenames (no path prefix)
+    if ($profileImage && !str_starts_with($profileImage, '/') && !str_starts_with($profileImage, 'http')) {
+        $profileImage = '/uploads/bio/profiles/' . $profileImage;
+    }
+    if ($bannerImage && !str_starts_with($bannerImage, '/') && !str_starts_with($bannerImage, 'http')) {
+        $bannerImage = '/uploads/bio/banners/' . $bannerImage;
+    }
+    
+    $blocks = json_decode($page['blocks'] ?? '[]', true);
+    
+    // Separate social links from regular links
+    $socialLinks = [];
+    $mainLinks = [];
+    foreach ($blocks as $block) {
+        if (($block['type'] ?? 'link') === 'link') {
+            $icon = $block['icon'] ?? 'globe-outline';
+            if (str_starts_with($icon, 'logo-') || $icon === 'mail-outline') {
+                $socialLinks[] = $block;
+            } else {
+                $mainLinks[] = $block;
+            }
+        } elseif (($block['type'] ?? '') === 'subscribe' || ($block['type'] ?? '') === 'embed') {
+            $mainLinks[] = $block;
+        }
+    }
+    ?>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            <?php if ($bgImage): ?>
+                background-image: url('<?= htmlspecialchars($bgImage) ?>');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            <?php else: ?>
+                background: <?= $bgColor ?>;
+            <?php endif; ?>
+            color: <?= $textColor ?>;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .bio-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ─── BANNER ─────────────────────────────── */
+        .banner {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 100%);
+        }
+
+        /* ─── PROFILE SECTION ────────────────────── */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -55px;
+            position: relative;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .profile-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.85);
+            object-fit: cover;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .profile-avatar-placeholder {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: <?= $textColor ?>;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-top: 16px;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+
+        .profile-description {
+            font-size: 0.9rem;
+            opacity: 0.75;
+            margin-top: 6px;
+            text-align: center;
+            max-width: 320px;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+        }
+
+        /* ─── SOCIAL ICONS ───────────────────────── */
+        .social-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-icon-link {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: <?= $textColor ?>;
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.25s ease;
+            background: rgba(0, 0, 0, 0.06);
+            <?php if ($isGlass): ?>
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: <?= $btnBg ?>;
+            <?php endif; ?>
+        }
+
+        .social-icon-link:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ─── MAIN LINKS ──────────────────────────── */
+        .links-section {
+            width: 100%;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .bio-link {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: <?= $btnBg ?>;
+            color: <?= $btnText ?>;
+            border: <?= $btnBorder ?>;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            letter-spacing: 0.01em;
+            <?php if ($isGlass): ?>
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            <?php endif; ?>
+        }
+
+        .bio-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .bio-link:active {
+            transform: translateY(0);
+        }
+
+        /* ─── FOOTER ──────────────────────────────── */
+        .footer {
+            margin-top: auto;
+            padding: 30px 20px;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            text-align: center;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ─── ANIMATIONS ──────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-section { animation: fadeUp 0.6s ease-out; }
+        .social-row { animation: fadeUp 0.7s ease-out 0.1s both; }
+        .links-section { animation: fadeUp 0.8s ease-out 0.2s both; }
+
+        .bio-link {
+            animation: fadeUp 0.5s ease-out both;
+        }
+        .bio-link:nth-child(1) { animation-delay: 0.25s; }
+        .bio-link:nth-child(2) { animation-delay: 0.35s; }
+        .bio-link:nth-child(3) { animation-delay: 0.45s; }
+        .bio-link:nth-child(4) { animation-delay: 0.55s; }
+        .bio-link:nth-child(5) { animation-delay: 0.65s; }
+        .bio-link:nth-child(6) { animation-delay: 0.75s; }
+
+        /* ─── RESPONSIVE ──────────────────────────── */
+        @media (max-width: 480px) {
+            .banner { height: 180px; }
+            .profile-avatar, .profile-avatar-placeholder { width: 90px; height: 90px; }
+            .profile-name { font-size: 1.4rem; }
+            .links-section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bio-container">
+        
+        <!-- BANNER -->
+        <div class="banner">
+            <?php if ($bannerImage): ?>
+                <img src="<?= htmlspecialchars($bannerImage) ?>" alt="Banner">
+            <?php else: ?>
+                <div class="banner-placeholder"></div>
+            <?php endif; ?>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="profile-section">
+            <?php if ($profileImage): ?>
+                <img src="<?= htmlspecialchars($profileImage) ?>" alt="<?= htmlspecialchars($profileName) ?>" class="profile-avatar">
+            <?php else: ?>
+                <div class="profile-avatar-placeholder">
+                    <?= strtoupper(substr($profileName, 0, 1)) ?>
+                </div>
+            <?php endif; ?>
+
+            <h1 class="profile-name"><?= htmlspecialchars($profileName) ?></h1>
+            
+            <?php if (!empty($description)): ?>
+                <p class="profile-description"><?= htmlspecialchars($description) ?></p>
+            <?php endif; ?>
+        </div>
+
+        <!-- SOCIAL ICONS -->
+        <?php if (!empty($socialLinks)): ?>
+            <div class="social-row">
+                <?php foreach ($socialLinks as $social): ?>
+                    <a href="<?= htmlspecialchars($social['url']) ?>" class="social-icon-link" target="_blank" rel="noopener noreferrer" title="<?= htmlspecialchars($social['title']) ?>">
+                        <ion-icon name="<?= htmlspecialchars($social['icon']) ?>"></ion-icon>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- MAIN LINKS -->
+        <?php if (!empty($mainLinks)): ?>
+            <div class="links-section">
+                <?php if (isset($_GET['subscribed']) && $_GET['subscribed'] == '1'): ?>
+                    <div style="background: rgba(34, 197, 94, 0.2); color: #166534; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: 500; border: 1px solid rgba(34, 197, 94, 0.4); <?php if ($isGlass) echo 'color: #86efac; border-color: rgba(134, 239, 172, 0.5);'; ?>">
+                        Thanks for subscribing!
+                    </div>
+                <?php endif; ?>
+
+                <?php foreach ($mainLinks as $link): ?>
+                    <?php if (($link['type'] ?? 'link') === 'subscribe'): ?>
+                        <div class="subscribe-block" style="background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 14px; <?php if ($isGlass) echo 'backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255,255,255,0.05);'; ?>">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 15px; font-weight: 600;"><?= htmlspecialchars($link['title']) ?></h3>
+                            <form action="/links/bio/subscribe" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
+                                <input type="hidden" name="bio_page_id" value="<?= $page['id'] ?>">
+                                <input type="hidden" name="slug" value="<?= $page['slug'] ?>">
+                                <input type="text" name="name" placeholder="Your Name" required style="padding: 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.9); width: 100%; font-family: inherit;">
+                                <input type="email" name="email" placeholder="Your Email" required style="padding: 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.9); width: 100%; font-family: inherit;">
+                                <button type="submit" class="bio-link" style="width: 100%; border: none; cursor: pointer; margin-top: 5px;"><?= htmlspecialchars($link['button_text'] ?? 'Subscribe') ?></button>
+                            </form>
+                        </div>
+                    <?php elseif (($link['type'] ?? '') === 'embed'): ?>
+                        <?php
+                            $url = $link['url'] ?? '';
+                            $embedHtml = '';
+                            if (str_contains($url, 'youtube.com') || str_contains($url, 'youtu.be')) {
+                                preg_match('/(?:v=|youtu\.be\/)([^&]+)/', $url, $matches);
+                                $vidId = $matches[1] ?? '';
+                                if ($vidId) {
+                                    $embedHtml = '<iframe width="100%" height="200" src="https://www.youtube.com/embed/'.$vidId.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:12px; margin-bottom:14px;"></iframe>';
+                                }
+                            } elseif (str_contains($url, 'spotify.com')) {
+                                $embedUrl = str_replace('spotify.com/', 'spotify.com/embed/', $url);
+                                $embedHtml = '<iframe style="border-radius:12px; margin-bottom:14px;" src="'.$embedUrl.'" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+                            }
+                        ?>
+                        <?= $embedHtml ?>
+                    <?php else: ?>
+                        <a href="<?= htmlspecialchars($link['url']) ?>" class="bio-link" target="_blank" rel="noopener noreferrer">
+                            <?= htmlspecialchars($link['title']) ?>
+                        </a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="footer">
+            Powered by Casjoe Links
+        </div>
+    </div>
+</body>
+</html>

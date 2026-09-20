@@ -12,6 +12,11 @@ class CsrfService
         return $_SESSION['csrf_token'];
     }
 
+    public static function getToken()
+    {
+        return self::generateToken();
+    }
+
     public static function verifyToken($token)
     {
         if (!isset($_SESSION['csrf_token']) || empty($token)) {
@@ -24,5 +29,10 @@ class CsrfService
     {
         $token = self::generateToken();
         return '<input type="hidden" name="csrf_token" value="' . $token . '">';
+    }
+
+    public static function generateInput()
+    {
+        return self::getTokenField();
     }
 }

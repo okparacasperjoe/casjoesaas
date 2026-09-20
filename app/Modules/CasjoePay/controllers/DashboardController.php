@@ -32,6 +32,6 @@ class DashboardController
         $stmt = $db->query("SELECT COUNT(*) as count FROM cp_virtual_cards WHERE user_id = ?", [$user['id']]);
         $cardCount = $stmt->fetch()['count'];
 
-        require __DIR__ . '/../views/dashboard.php';
+        require __DIR__ . '/../Views/dashboard.php';
     }
 }

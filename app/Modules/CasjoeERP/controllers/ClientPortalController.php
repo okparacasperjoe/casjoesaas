@@ -48,7 +48,7 @@ class ClientPortalController
         $unpaidInvoices->execute([$this->user['email']]); // Invoice usually linked by email or name
         $countInvoices = $unpaidInvoices->fetchColumn();
 
-        require __DIR__ . '/../views/client/dashboard.php';
+        require __DIR__ . '/../Views/client/dashboard.php';
     }
 
     public function projects()
@@ -57,7 +57,7 @@ class ClientPortalController
         $stmt->execute([$this->customerId]);
         $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/client/projects.php';
+        require __DIR__ . '/../Views/client/projects.php';
     }
 
     public function projectDetails($id)
@@ -76,7 +76,7 @@ class ClientPortalController
         $tStmt->execute([$id]);
         $tasks = $tStmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/client/project_details.php';
+        require __DIR__ . '/../Views/client/project_details.php';
     }
 
     public function invoices()
@@ -85,6 +85,6 @@ class ClientPortalController
         $stmt->execute([$this->user['email']]);
         $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/client/invoices.php';
+        require __DIR__ . '/../Views/client/invoices.php';
     }
 }

@@ -10,28 +10,20 @@ class GeminiService
     public function __construct()
     {
         // ideally load from .env or settings
-        $this->apiKey = getenv('GEMINI_API_KEY') ?: 'YOUR_API_KEY';
+        $this->apiKey = $_ENV['GEMINI_API_KEY'] ?? (defined('GEMINI_API_KEY') ? GEMINI_API_KEY : 'YOUR_API_KEY');
     }
 
     public function generateEmailContent($prompt, $tone = 'professional')
     {
-        // Mock Implementation for Development without API Key
-        // In production, this would make a curl request to Google's API.
-        
-        $mockResponses = [
-            "Subject: Special Offer Just for You!\n\nDear Subscribe,\n\nWe are thrilled to bring you an exclusive deal...",
-            "Subject: Important Update\n\nHello Team,\n\nPlease find the latest updates regarding our project..."
-        ];
-
-        // Simulate API latency
-        // usleep(500000); 
-
-        return "AI Generated Content based on prompt: '$prompt' with tone '$tone'.\n\n" . $mockResponses[rand(0, 1)];
+        $fullPrompt = "You are a professional AI Assistant for Casjoe ERP. Tone: $tone. Generate content for the following request:\n\n$prompt";
+        return $this->generateReal($fullPrompt);
     }
 
-    /*
-    // Real implementation skeleton
     public function generateReal($prompt) {
+        if ($this->apiKey === 'YOUR_API_KEY' || empty($this->apiKey)) {
+            return "Error: Gemini API Key is missing. Please add it to your .env file.";
+        }
+
         $data = [
             'contents' => [
                 ['parts' => [['text' => $prompt]]]
@@ -45,9 +37,18 @@ class GeminiService
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         
         $response = curl_exec($ch);
-        curl_close($ch);
+        $err = curl_error($ch);
+
+        if ($err) {
+            return "cURL Error: " . $err;
+        }
+
+        $decoded = json_decode($response, true);
         
-        return json_decode($response, true);
+        if (isset($decoded['candidates'][0]['content']['parts'][0]['text'])) {
+            return $decoded['candidates'][0]['content']['parts'][0]['text'];
+        }
+
+        return "AI Error: Could not generate response. " . ($decoded['error']['message'] ?? '');
     }
-    */
 }

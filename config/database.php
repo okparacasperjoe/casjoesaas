@@ -1,13 +1,14 @@
 <?php
-
+// Default database configuration
 $config = [
-    'host' => 'sdb-67.hosting.stackcp.net',
-    'dbname' => 'casjoeapp-35303437c62a',
-    'username' => 'casjoeapp-35303437c62a',
-    'password' => '6xbr400e80',
+    'host' => 'sdb-p.hosting.stackcp.net',
+    'dbname' => 'casjoeapp-3139384215',
+    'username' => 'casjoeapp-3139384215',
+    'password' => 'casjoeapp2',
     'charset' => 'utf8mb4'
 ];
 
+// Load local overrides if they exist
 if (file_exists(__DIR__ . '/database.local.php')) {
     $localConfig = require __DIR__ . '/database.local.php';
     $config = array_merge($config, $localConfig);

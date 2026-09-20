@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance | Casjoe ERP</title>
@@ -19,10 +22,69 @@
             <div class="top-bar">
                 <h1>Finance & Accounting</h1>
                 <!-- Actions -->
-                <button class="btn" onclick="alert('Demo: Create Journal Modal')">
-                    <ion-icon name="add-circle-outline"></ion-icon> New Entry
-                </button>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" onclick="alert('Demo: Create Journal Modal')">
+                        <ion-icon name="add-circle-outline"></ion-icon> New Entry
+                    </button>
+                    <button class="btn" style="background: #2ecc71;" onclick="document.getElementById('posModal').style.display='flex'">
+                        <ion-icon name="calculator-outline"></ion-icon> Receive via POS
+                    </button>
+                </div>
             </div>
+
+            <!-- POS Modal -->
+            <div id="posModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+                <div class="modal-content" style="background:var(--card-bg); padding:20px; border-radius:8px; width:400px; max-width:90%; position:relative; margin: 10% auto;">
+                    <span onclick="document.getElementById('posModal').style.display='none'" style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px;">&times;</span>
+                    <h2>Receive via Moniepoint POS</h2>
+                    <div style="margin-top:15px;">
+                        <label>Amount (₦)</label><br>
+                        <input type="number" id="posAmount" style="width:100%; padding:8px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-color); color:var(--text-color);" placeholder="Enter amount">
+                        
+                        <label>Description</label><br>
+                        <input type="text" id="posDesc" style="width:100%; padding:8px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-color); color:var(--text-color);" placeholder="e.g., POS Sale">
+                        
+                        <button onclick="pushToPos()" class="btn" style="width:100%; background:#2ecc71; text-align:center;">Push to Terminal</button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            async function pushToPos() {
+                const amount = document.getElementById('posAmount').value;
+                const desc = document.getElementById('posDesc').value;
+                if (!amount) return alert('Enter amount');
+                
+                const btn = document.querySelector('#posModal .btn');
+                const origText = btn.innerHTML;
+                btn.innerHTML = 'Waiting for Customer...';
+                btn.disabled = true;
+
+                const formData = new FormData();
+                formData.append('amount', amount);
+                formData.append('description', desc);
+
+                try {
+                    const response = await fetch('/api/erp/moniepoint/push', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const res = await response.json();
+                    
+                    if (res.success) {
+                        alert('Payment successful and recorded! Ref: ' + res.reference);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + res.message);
+                    }
+                } catch (e) {
+                    alert('Network error pushing to POS.');
+                }
+                
+                btn.innerHTML = origText;
+                btn.disabled = false;
+            }
+            </script>
 
             <!-- GL Accounts -->
             <div class="table-container" style="margin-bottom: 30px;">

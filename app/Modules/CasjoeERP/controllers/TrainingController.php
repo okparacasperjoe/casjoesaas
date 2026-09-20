@@ -23,7 +23,7 @@ class TrainingController
         $stmt->execute([$this->tenantId]);
         $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/hr/training/index.php';
+        require __DIR__ . '/../Views/hr/training/index.php';
     }
 
     public function storeProgram()
@@ -52,5 +52,13 @@ class TrainingController
          // For now, let's just redirect back as this is a list view focused implementation
          header("Location: /erp/training");
          exit;
+    }
+
+    public function deleteProgram() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_hr_training WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/training');
+        exit;
     }
 }

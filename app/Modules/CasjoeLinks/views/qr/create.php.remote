@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create QR Code | Casjoe Links</title>
+    <!-- Use main style but we will override heavily for the specific UI -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <style>
+        :root {
+            --brand-primary: #000066;
+            --brand-accent: #FFA600;
+            --brand-bg: #f8fafc;
+        }
+        body { background: var(--brand-bg); color: #334155; font-family: 'Inter', sans-serif; }
+        
+        .qr-header {
+            background: white; padding: 20px 40px; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .qr-header h1 { font-size: 20px; font-weight: 700; color: var(--brand-primary); margin: 0; }
+        
+        .main-wrapper {
+            max-width: 1200px; margin: 30px auto; display: grid; grid-template-columns: 1fr 350px; gap: 30px; padding: 0 20px;
+        }
+        
+        /* Left Column */
+        .config-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        
+        .type-tabs { display: flex; gap: 15px; margin-bottom: 30px; }
+        .type-tab {
+            flex: 1; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px;
+            text-align: center; cursor: pointer; transition: all 0.2s;
+        }
+        .type-tab:hover { border-color: #cbd5e1; }
+        .type-tab.active { border-color: var(--brand-accent); background: #fffbf0; color: var(--brand-primary); font-weight: 600; }
+        .type-tab ion-icon { font-size: 24px; display: block; margin: 0 auto 8px; color: #64748b; }
+        .type-tab.active ion-icon { color: var(--brand-accent); }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #1e293b !important; }
+        .form-control {
+            width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;
+            font-size: 14px; transition: border-color 0.2s;
+            color: #1e293b !important; 
+            background-color: #ffffff !important;
+        }
+        .form-control:focus { outline: none; border-color: var(--brand-primary); box-shadow: 0 0 0 3px rgba(0, 0, 102, 0.1); }
+        
+        /* Right Column (Sticky Preview) */
+        .preview-col { position: sticky; top: 30px; height: fit-content; }
+        .preview-card {
+            background: var(--brand-primary); padding: 30px; border-radius: 20px;
+            text-align: center; color: white; box-shadow: 0 20px 25px -5px rgba(0, 0, 102, 0.3);
+        }
+        .qr-canvas-wrapper {
+            background: white; padding: 20px; border-radius: 12px; margin: 20px auto;
+            width: fit-content; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        
+        .btn-brand {
+            background: var(--brand-accent); color: var(--brand-primary); font-weight: 700;
+            padding: 14px 24px; border: none; border-radius: 10px; width: 100%; font-size: 16px;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .btn-brand:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(255, 166, 0, 0.3); }
+
+        /* Accordion for Design */
+        .color-group { display: flex; gap: 15px; margin-top: 10px; }
+        .color-picker-wrapper { flex: 1; }
+        input[type="color"] { width: 100%; height: 40px; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+</head>
+<body>
+
+    <div class="qr-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <a href="/links/qr" style="text-decoration: none; color: #64748b; font-size: 24px;"><ion-icon name="arrow-back-outline"></ion-icon></a>
+            <h1><?= isset($prefill['id']) ? 'Edit QR Code' : 'Create New QR Code' ?></h1>
+        </div>
+        <div class="user-info">
+            <!-- User menu could go here -->
+        </div>
+    </div>
+
+    <form action="<?= isset($prefill['id']) ? '/links/qr/update/' . $prefill['id'] : '/links/qr/store' ?>" method="POST" enctype="multipart/form-data" id="qrForm">
+        <input type="hidden" name="csrf_token" value="<?= \App\Core\Services\CsrfService::generateToken() ?>">
+        <input type="hidden" name="design_config" id="designConfig">
+        <input type="hidden" name="type" id="inputType" value="url">
+        
+        <!-- This hidden input holds the FINAL content string (URL or vCard data) to be sent to DB -->
+        <input type="hidden" name="content" id="finalContent"> 
+
+        <div class="main-wrapper">
+            <!-- Configuration Area -->
+            <div class="config-card">
+                
+                <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--brand-primary);">1. Select Type</h3>
+                <div class="type-tabs" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <div class="type-tab active" onclick="setTab('url')">
+                        <ion-icon name="globe-outline"></ion-icon>
+                        Website
+                    </div>
+                    <div class="type-tab" onclick="setTab('whatsapp')">
+                        <ion-icon name="logo-whatsapp"></ion-icon>
+                        WhatsApp
+                    </div>
+                    <div class="type-tab" onclick="setTab('wifi')">
+                        <ion-icon name="wifi-outline"></ion-icon>
+                        WiFi
+                    </div>
+                    <div class="type-tab" onclick="setTab('vcard')">
+                        <ion-icon name="person-outline"></ion-icon>
+                        vCard
+                    </div>
+                    <div class="type-tab" onclick="setTab('sms')">
+                        <ion-icon name="chatbubble-outline"></ion-icon>
+                        SMS
+                    </div>
+                    <div class="type-tab" onclick="setTab('email')">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        Email
+                    </div>
+                </div>
+                
+                <div class="type-tabs" style="margin-top: 10px;">
+                    <div class="type-tab" onclick="setTab('pdf')">
+                        <ion-icon name="document-text-outline"></ion-icon>
+                        PDF File
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">QR Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. My Campaign QR" value="<?= htmlspecialchars($prefill['name'] ?? '') ?>" required>
+                </div>
+
+                <!-- URL Section -->
+                <div id="section-url" class="type-section">
+                    <div class="form-group">
+                        <label class="form-label">Website URL</label>
+                        <input type="url" id="inputUrl" class="form-control" placeholder="https://example.com" value="<?= htmlspecialchars($prefill['content'] ?? '') ?>">
+                        <small style="color: #64748b; margin-top: 5px; display: block;">Enter the link you want the QR code to open.</small>
+                    </div>
+                </div>
+
+                <!-- PDF Section -->
+                <div id="section-pdf" class="type-section" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Upload PDF File</label>
+                        <input type="file" name="pdf_file" id="inputPdf" class="form-control" accept="application/pdf">
+                        <small style="color: #64748b; margin-top: 5px; display: block;">Users will see a "View PDF" page when scanning. (Max 5MB)</small>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Section -->
+                <div id="section-whatsapp" class="type-section" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" id="whatsappPhone" class="form-control" placeholder="+1234567890">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message (Optional)</label>
+                        <textarea id="whatsappMessage" class="form-control" rows="3" placeholder="I'm interested in your services!"></textarea>
+                    </div>
+                </div>
+
+                <!-- WiFi Section -->
+                <div id="section-wifi" class="type-section" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Network Name (SSID)</label>
+                        <input type="text" id="wifiSsid" class="form-control" placeholder="Office-WiFi">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="text" id="wifiPass" class="form-control" placeholder="password123">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Security</label>
+                        <select id="wifiSec" class="form-control">
+                            <option value="WPA">WPA/WPA2</option>
+                            <option value="WEP">WEP</option>
+                            <option value="nopass">None</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SMS Section -->
+                <div id="section-sms" class="type-section" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Recipient Number</label>
+                        <input type="tel" id="smsPhone" class="form-control" placeholder="+1234567890">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message</label>
+                        <textarea id="smsMessage" class="form-control" rows="3" placeholder="Hello there!"></textarea>
+                    </div>
+                </div>
+
+                <!-- Email Section -->
+                <div id="section-email" class="type-section" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="emailTo" class="form-control" placeholder="hello@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <input type="text" id="emailSub" class="form-control" placeholder="Inquiry">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Body</label>
+                        <textarea id="emailBody" class="form-control" rows="3" placeholder="I'd like to learn more..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <div id="section-vcard" class="type-section" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="contact-field form-control" id="contactFn" placeholder="John">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="contact-field form-control" id="contactLn" placeholder="Doe">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="contact-field form-control" id="contactPhone" placeholder="+1 234 567 890">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="contact-field form-control" id="contactEmail" placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Organization / Company</label>
+                        <input type="text" class="contact-field form-control" id="contactOrg" placeholder="Casjoe Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Job Title</label>
+                        <input type="text" class="contact-field form-control" id="contactTitle" placeholder="Manager">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Website</label>
+                        <input type="url" class="contact-field form-control" id="contactUrl" placeholder="https://casjoe.com">
+                    </div>
+                </div>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+                <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--brand-primary);">2. Customize Design</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Upload Logo (Optional)</label>
+                    <input type="file" name="logo_image" id="inputLogo" class="form-control" accept="image/png, image/jpeg">
+                    <small style="color: #64748b; margin-top: 5px; display: block;">Add your brand logo to the center of the QR code.</small>
+                </div>
+
+                <div class="color-group">
+                    <div class="color-picker-wrapper">
+                        <label class="form-label">Dots Color</label>
+                        <input type="color" id="dotsColor" value="#000000">
+                    </div>
+                    <div class="color-picker-wrapper">
+                        <label class="form-label">Background Color</label>
+                        <input type="color" id="bgColor" value="#ffffff">
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label class="form-label">Dots Style</label>
+                        <select id="dotsType" class="form-control">
+                            <option value="rounded" selected>Rounded</option>
+                            <option value="dots">Dots</option>
+                            <option value="classy">Classy</option>
+                            <option value="classy-rounded">Classy Rounded</option>
+                            <option value="square">Square</option>
+                            <option value="extra-rounded">Extra Rounded</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Corner Frame Style</label>
+                        <select id="cornersSquareType" class="form-control">
+                            <option value="square" selected>Square</option>
+                            <option value="dot">Dot</option>
+                            <option value="extra-rounded">Extra Rounded</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <label class="form-label">Corner Dot Style</label>
+                    <select id="cornersDotType" class="form-control">
+                        <option value="square" selected>Square</option>
+                        <option value="dot">Dot</option>
+                    </select>
+                </div>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--brand-primary);">3. Add Frame Label</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Frame Text</label>
+                    <input type="text" id="frameText" class="form-control" placeholder="e.g. SCAN ME" value="">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Frame Color</label>
+                    <input type="color" id="frameColor" value="#000000" style="width:100%; height:40px; border:none; border-radius:8px; cursor:pointer;">
+                </div>
+
+            </div>
+
+            <!-- Preview Area -->
+            <div class="preview-col">
+                <div class="preview-card">
+                    <h3 style="margin: 0 0 20px 0;">Live Preview</h3>
+                    <div class="qr-canvas-wrapper" style="padding:0; overflow:hidden; width:fit-content; border-radius:12px; margin:20px auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                        <div id="qr-canvas" style="display: none;"></div>
+                        <!-- Composited Canvas -->
+                        <canvas id="master-canvas" width="250" height="300" style="display: block; background: white;"></canvas>
+                    </div>
+                    <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">Scan this code to test it before saving.</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button type="submit" class="btn-brand">Save & Create QR</button>
+                        <button type="button" id="btnPreviewDownload" onclick="previewDownload()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <ion-icon name="download-outline"></ion-icon> <span>Download Preview</span>
+                        </button>
+                    </div>
+                    <!-- Loading Spinner (Hidden by default) -->
+                    <div id="loadingSpinner" style="display:none; margin-top:10px;">Creating...</div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        // Init QR
+        const qrCode = new QRCodeStyling({
+            width: 250,
+            height: 250,
+            type: "canvas", // Canvas is better for PNG downloads with logos
+            data: "https://casjoe.com",
+            dotsOptions: { color: "#000000", type: "rounded" },
+            backgroundOptions: { color: "#ffffff" },
+            imageOptions: { crossOrigin: "anonymous", margin: 5 }
+        });
+        qrCode.append(document.getElementById("qr-canvas"));
+
+        // Master Canvas Compositing
+        function renderMaster() {
+            const master = document.getElementById('master-canvas');
+            const ctx = master.getContext('2d');
+            const qrCanvas = document.querySelector("#qr-canvas canvas");
+            const text = document.getElementById('frameText').value.toUpperCase();
+            const color = document.getElementById('frameColor').value;
+
+            // Clear
+            ctx.clearRect(0, 0, 250, 300);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, 250, 300);
+
+            // 1. Draw QR code
+            if (qrCanvas) ctx.drawImage(qrCanvas, 0, 0, 250, 250);
+
+            // 2. Draw Frame Banner (Only if text exists)
+            if (text.trim().length > 0) {
+                ctx.fillStyle = color;
+                ctx.fillRect(0, 250, 250, 50);
+
+                // Draw Text
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "700 16px 'Inter', sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(text, 125, 275);
+            }
+        }
+
+        // Continious updates loop supporting async render loads
+        setInterval(renderMaster, 300);
+
+        // Frame Input Listeners
+        ['frameText', 'frameColor'].forEach(id => {
+            document.getElementById(id).addEventListener('input', renderMaster);
+        });
+
+        let activeType = 'url';
+
+        function setTab(type) {
+            activeType = type;
+            document.getElementById('inputType').value = type;
+            
+            // UI Tabs - Fix active state
+            document.querySelectorAll('.type-tab').forEach(el => {
+                el.classList.remove('active');
+                // Check if this tab's onclick contains the type
+                if (el.getAttribute('onclick').includes(`'${type}'`)) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Show Sections
+            document.querySelectorAll('.type-section').forEach(el => el.style.display = 'none');
+            const section = document.getElementById(`section-${type}`);
+            if (section) section.style.display = 'block';
+
+            updateQR();
+        }
+
+        async function previewDownload() {
+            const btn = document.getElementById('btnPreviewDownload');
+            const span = btn.querySelector('span');
+            const originalText = span.innerText;
+            
+            try {
+                span.innerText = "Downloading HQ...";
+                btn.disabled = true;
+                
+                const name = document.querySelector('input[name="name"]').value || "qr-code";
+
+                // 1. Temporarily Upgrade Size for High-Res (e.g. 1000px)
+                await qrCode.update({ width: 1000, height: 1000 });
+                // Allow async render to paint
+                await new Promise(r => setTimeout(r, 500)); 
+
+                const qrCanvas = document.querySelector("#qr-canvas canvas");
+                const text = document.getElementById('frameText').value.toUpperCase();
+                const color = document.getElementById('frameColor').value;
+                const hasFrame = text.trim().length > 0;
+
+                // 2. High-res compositing canvas
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = 1000;
+                tempCanvas.height = hasFrame ? 1200 : 1000; 
+                
+                const ctx = tempCanvas.getContext('2d');
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, 1000, tempCanvas.height);
+
+                if (qrCanvas) ctx.drawImage(qrCanvas, 0, 0, 1000, 1000);
+
+                if (hasFrame) {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(0, 1000, 1000, 200);
+
+                    ctx.fillStyle = "#ffffff";
+                    ctx.font = "bold 64px 'Inter', sans-serif"; 
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(text, 500, 1100);
+                }
+
+                const link = document.createElement('a');
+                link.download = name + '.png';
+                link.href = tempCanvas.toDataURL("image/png", 1.0);
+                link.click();
+
+                // 3. Revert back for Live View
+                await qrCode.update({ width: 250, height: 250 });
+
+            } catch (e) {
+                console.error("Download error:", e);
+                alert("Download failed: " + e.message);
+            } finally {
+                span.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function generateVCard() {
+            const fn = document.getElementById('contactFn').value;
+            const ln = document.getElementById('contactLn').value;
+            const phone = document.getElementById('contactPhone').value;
+            const email = document.getElementById('contactEmail').value;
+            const org = document.getElementById('contactOrg').value;
+            const title = document.getElementById('contactTitle').value;
+            const website = document.getElementById('contactUrl').value;
+
+            // vCard 3.0 Format
+            let vcard = `BEGIN:VCARD\nVERSION:3.0\n`;
+            if (fn || ln) vcard += `N:${ln};${fn};;;\nFN:${fn} ${ln}\n`;
+            if (org) vcard += `ORG:${org}\n`;
+            if (title) vcard += `TITLE:${title}\n`;
+            if (phone) vcard += `TEL;TYPE=CELL:${phone}\n`;
+            if (email) vcard += `EMAIL;TYPE=WORK:${email}\n`;
+            if (website) vcard += `URL:${website}\n`;
+            vcard += `END:VCARD`;
+            return vcard;
+        }
+
+        function updateQR() {
+            let data = "";
+            
+            if (activeType === 'url') {
+                data = document.getElementById('inputUrl').value || "https://casjoe.com";
+            } 
+            else if (activeType === 'whatsapp') {
+                const phone = document.getElementById('whatsappPhone').value.replace(/\+/g, '');
+                const msg = encodeURIComponent(document.getElementById('whatsappMessage').value);
+                data = `https://wa.me/${phone}${msg ? '?text=' + msg : ''}`;
+            }
+            else if (activeType === 'wifi') {
+                const ssid = document.getElementById('wifiSsid').value;
+                const pass = document.getElementById('wifiPass').value;
+                const sec = document.getElementById('wifiSec').value;
+                data = `WIFI:S:${ssid};T:${sec};P:${pass};;`;
+            }
+            else if (activeType === 'sms') {
+                const phone = document.getElementById('smsPhone').value;
+                const msg = document.getElementById('smsMessage').value;
+                data = `SMSTO:${phone}:${msg}`;
+            }
+            else if (activeType === 'email') {
+                const to = document.getElementById('emailTo').value;
+                const sub = encodeURIComponent(document.getElementById('emailSub').value);
+                const body = encodeURIComponent(document.getElementById('emailBody').value);
+                data = `mailto:${to}?subject=${sub}&body=${body}`;
+            }
+            else if (activeType === 'vcard') {
+                data = generateVCard();
+            }
+            else if (activeType === 'pdf') {
+                data = "PDF content will be available after saving.";
+            }
+
+            document.getElementById('finalContent').value = data;
+            qrCode.update({ data: data });
+        }
+
+        // --- Event Listeners ---
+
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+            el.addEventListener('input', updateQR);
+        });
+
+        // Design: Dots Color
+        document.getElementById('dotsColor').addEventListener('input', (e) => {
+            qrCode.update({ dotsOptions: { color: e.target.value } });
+        });
+
+        // Design: Bg
+        document.getElementById('bgColor').addEventListener('input', (e) => {
+            qrCode.update({ backgroundOptions: { color: e.target.value } });
+        });
+
+        // Design: Dots Style
+        document.getElementById('dotsType').addEventListener('change', (e) => {
+            qrCode.update({ dotsOptions: { type: e.target.value } });
+        });
+
+        // Design: Corner Frame
+        document.getElementById('cornersSquareType').addEventListener('change', (e) => {
+            qrCode.update({ cornersSquareOptions: { type: e.target.value } });
+        });
+
+        // Design: Corner Dot
+        document.getElementById('cornersDotType').addEventListener('change', (e) => {
+            qrCode.update({ cornersDotOptions: { type: e.target.value } });
+        });
+
+        // Design: Logo Preview
+        document.getElementById('inputLogo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    qrCode.update({ image: evt.target.result });
+                }
+                reader.readAsDataURL(file);
+            } else {
+                qrCode.update({ image: null });
+            }
+        });
+
+        // Form Submit
+        document.getElementById('qrForm').addEventListener('submit', function(e) {
+            // Show loading
+            document.querySelector('.btn-brand').disabled = true;
+            document.querySelector('.btn-brand').innerText = "Processing...";
+            
+            // Save Design JSON
+            const config = {
+                dotsOptions: { 
+                    color: document.getElementById('dotsColor').value,
+                    type: document.getElementById('dotsType').value 
+                },
+                backgroundOptions: { color: document.getElementById('bgColor').value },
+                cornersSquareOptions: { type: document.getElementById('cornersSquareType').value },
+                cornersDotOptions: { type: document.getElementById('cornersDotType').value },
+                frame: {
+                    text: document.getElementById('frameText').value,
+                    color: document.getElementById('frameColor').value
+                }
+            };
+            document.getElementById('designConfig').value = JSON.stringify(config);
+            
+            // For PDF, we don't need #finalContent.
+            // For URL and Contact, we set it in updateQR().
+        });
+
+        // Init
+        const prefillUrl = "<?= filter_var($prefill['content'] ?? '', FILTER_SANITIZE_URL) ?>";
+        if (prefillUrl) {
+            document.getElementById('inputUrl').value = prefillUrl;
+        }
+
+        const savedConfig = <?= isset($prefill['design_config']) ? $prefill['design_config'] : '{}' ?>;
+        if (savedConfig) {
+            if (savedConfig.dotsOptions) {
+                document.getElementById('dotsColor').value = savedConfig.dotsOptions.color || "#000000";
+                if (savedConfig.dotsOptions.type) document.getElementById('dotsType').value = savedConfig.dotsOptions.type;
+            }
+            if (savedConfig.backgroundOptions) {
+                document.getElementById('bgColor').value = savedConfig.backgroundOptions.color || "#ffffff";
+            }
+            if (savedConfig.cornersSquareOptions) {
+                document.getElementById('cornersSquareType').value = savedConfig.cornersSquareOptions.type || "square";
+            }
+            if (savedConfig.cornersDotOptions) {
+                document.getElementById('cornersDotType').value = savedConfig.cornersDotOptions.type || "square";
+            }
+            if (savedConfig.frame) {
+                if (savedConfig.frame.text) document.getElementById('frameText').value = savedConfig.frame.text;
+                if (savedConfig.frame.color) document.getElementById('frameColor').value = savedConfig.frame.color;
+            }
+            qrCode.update(savedConfig);
+        }
+
+        const savedType = "<?= $prefill['type'] ?? 'url' ?>";
+        if (savedType !== 'url') {
+            setTab(savedType);
+        } else {
+            updateQR();
+        }
+
+    </script>
+</body>
+</html>
+

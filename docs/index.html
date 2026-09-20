@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avellin SaaS — Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ff6eb4;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        aside {
+            background: var(--surface);
+            padding: 40px 20px;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        nav ul { list-style: none; padding: 0; }
+        nav li { margin-bottom: 15px; }
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        nav a:hover, nav a.active { color: var(--text); }
+        nav a.active { color: var(--primary); }
+
+        /* Main Content */
+        main {
+            padding: 60px 80px;
+            max-width: 900px;
+        }
+        h1 { font-size: 3rem; margin-bottom: 10px; }
+        h2 { font-size: 1.8rem; margin-top: 50px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        h3 { color: var(--secondary); margin-top: 30px; }
+        .badge {
+            background: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        pre {
+            background: #000;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #10b981;
+        }
+        .info-box {
+            background: rgba(124, 58, 237, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .warning-box {
+            background: rgba(244, 63, 94, 0.1);
+            border-left: 4px solid #f43f5e;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        img { max-width: 100%; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <div class="logo">Avellin Docs</div>
+            <nav>
+                <ul>
+                    <li><a href="#intro" class="active"><ion-icon name="rocket-outline"></ion-icon> Introduction</a></li>
+                    <li><a href="#install"><ion-icon name="cloud-download-outline"></ion-icon> Installation</a></li>
+                    <li><a href="#payments"><ion-icon name="card-outline"></ion-icon> Payment Setup</a></li>
+                    <li><a href="#ai"><ion-icon name="brain-outline"></ion-icon> AI Integration</a></li>
+                    <li><a href="#social"><ion-icon name="logo-google"></ion-icon> Social Auth</a></li>
+                    <li><a href="#modular"><ion-icon name="cube-outline"></ion-icon> Modules</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <section id="intro">
+                <span class="badge">Version 1.0.0</span>
+                <h1>Welcome to Avellin</h1>
+                <p class="text-muted">Avellin is a premium AI-driven digital fashion and beauty SaaS platform. Built on a modular PHP architecture, it allows entrepreneurs to launch a high-end fashion marketplace with integrated skin analysis and personalized styling.</p>
+                
+                <div class="info-box">
+                    <strong>Key Feature:</strong> Avellin uses Clean URLs by default. No <code>.php</code> or <code>.html</code> will ever appear in your browser's address bar.
+                </div>
+            </section>
+
+            <section id="install">
+                <h2>1. Installation</h2>
+                <p>Setting up Avellin is simple with our built-in Installation Wizard.</p>
+                <ol>
+                    <li>Upload the script files to your server (preferably in the <code>public_html</code> or a subfolder).</li>
+                    <li>Ensure your domain points to the <code>/public</code> directory.</li>
+                    <li>Navigate to <code>yourdomain.com/install</code>.</li>
+                    <li>Follow the steps: 
+                        <ul>
+                            <li><strong>Requirement Check:</strong> System verifies PHP extensions.</li>
+                            <li><strong>Database:</strong> Enter your MySQL credentials.</li>
+                            <li><strong>Admin:</strong> Create your master administrator account.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="warning-box">
+                    <strong>Security:</strong> After installation, please delete the <code>/public/install</code> folder immediately.
+                </div>
+            </section>
+
+            <section id="payments">
+                <h2>2. Payment Gateways</h2>
+                <p>Avellin supports global and regional payment providers out of the box. Go to <strong>Admin Dashboard > Settings > Integrations</strong> to configure:</p>
+                <h3>Stripe</h3>
+                <p>Enter your Publishable and Secret keys to enable global credit card payments.</p>
+                <h3>PayPal</h3>
+                <p>Enter your Client ID and Secret to accept PayPal payments.</p>
+                <h3>Razorpay & Paystack</h3>
+                <p>Optimized for Indian and African markets respectively. Simply toggle them ON and add your keys.</p>
+            </section>
+
+            <section id="ai">
+                <h2>3. AI Fashion Brain</h2>
+                <p>The core of Avellin is its AI integration. We support two major engines:</p>
+                <ul>
+                    <li><strong>Google Gemini Vision:</strong> Used for skin analysis and body shape detection from photos.</li>
+                    <li><strong>OpenAI:</strong> Used for the interactive fashion chatbot and smart support responses.</li>
+                </ul>
+                <p>Get your API keys from the <a href="https://aistudio.google.com/" target="_blank" style="color:var(--primary)">Google AI Studio</a> and <a href="https://platform.openai.com/" target="_blank" style="color:var(--primary)">OpenAI Dashboard</a>.</p>
+            </section>
+
+            <section id="social">
+                <h2>4. Social Login</h2>
+                <p>Enable "Login with Google" or "Login with Apple" to increase user conversion. All settings are manageable from the <strong>Integrations Hub</strong> in the Admin Panel.</p>
+            </section>
+
+            <section id="modular">
+                <h2>5. Modular Architecture</h2>
+                <p>Avellin is built to be extended. All specific fashion logic resides in:</p>
+                <pre>app/Modules/Avellin/</pre>
+                <p>You can easily add new modules or themes without touching the core SaaS engine.</p>
+            </section>
+
+            <footer style="margin-top: 100px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); font-size: 0.9rem;">
+                &copy; 2026 Casjoe. All rights reserved. Built with Antigravity AI.
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

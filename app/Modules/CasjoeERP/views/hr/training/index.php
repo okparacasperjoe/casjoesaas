@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>Training | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -20,7 +25,7 @@
                 <thead>
                     <tr>
                         <th>Program Name</th>
-                        <th>Instructor</th>
+                        <th>Instructor</th><th>Action</th>
                         <th>Dates</th>
                         <th>Status</th>
                     </tr>
@@ -30,6 +35,12 @@
                     <tr>
                         <td><?= htmlspecialchars($prog['name']) ?></td>
                         <td><?= htmlspecialchars($prog['instructor']) ?></td>
+                     <td>
+                        <form action="/erp/training/delete" method="POST" style="display:inline;" onsubmit="return confirm('Delete training program?');">
+                            <input type="hidden" name="id" value="<?= $prog['id'] ?>">
+                            <button type="submit" class="btn btn-danger-outline" style="padding: 2px 6px; font-size: 0.75rem;">Del</button>
+                        </form>
+                     </td>
                         <td><?= $prog['start_date'] ?> - <?= $prog['end_date'] ?></td>
                         <td><?= ucfirst($prog['status']) ?></td>
                     </tr>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shorten URL | Casjoe Links</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <style>
+        :root {
+            --brand-primary: #000066;
+            --brand-accent: #FFA600;
+        }
+        .main-content { padding: 40px; background: #f8fafc; }
+
+        /* Fix Sidebar Contrast */
+        .sidebar .nav-link { color: rgba(255, 255, 255, 0.8) !important; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #ffffff !important; background: rgba(255, 255, 255, 0.1); }
+        .sidebar .nav-link ion-icon { color: inherit !important; }
+        .sidebar { border-right: 4px solid #FFA600 !important; }
+
+        .page-header h1 { color: var(--brand-primary); font-size: 24px; font-weight: 700; margin-bottom: 5px; }
+        .page-header p { color: #64748b; font-size: 14px; }
+        
+        .creation-card {
+            background: white; border-radius: 16px; padding: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            max-width: 600px; margin-top: 30px;
+        }
+        
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; color: #1e293b; font-size: 14px; }
+        .form-control {
+            width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px;
+            font-size: 15px; transition: all 0.2s;
+        }
+        .form-control:focus {
+            outline: none; border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(0, 0, 102, 0.1);
+        }
+        
+        .input-group { display: flex; align-items: stretch; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; transition: 0.2s; }
+        .input-group:focus-within { border-color: var(--brand-primary); box-shadow: 0 0 0 3px rgba(0, 0, 102, 0.1); }
+        .input-group-text {
+            background: #f1f5f9; padding: 0 16px; display: flex; align-items: center;
+            color: #64748b; font-weight: 500; font-size: 14px; border-right: 1px solid #cbd5e1;
+        }
+        .input-group input { border: none; padding: 12px 16px; width: 100%; outline: none; font-size: 15px; }
+
+        .btn-brand {
+            background: var(--brand-primary); color: white; border: none;
+            padding: 14px 24px; border-radius: 8px; font-weight: 600; font-size: 16px;
+            cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-brand:hover { background: #000044; transform: translateY(-1px); }
+        
+        .btn-cancel {
+            display: block; text-align: center; margin-top: 15px; color: #64748b; text-decoration: none; font-weight: 500;
+        }
+        .btn-cancel:hover { color: var(--brand-primary); }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand"><a href="/dashboard" style="text-decoration:none; display:flex; align-items:center;"><img src="/assets/casjoe_logo.png" alt="Casjoe Links" style="height: 30px;"></a></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/links" class="nav-link"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+                <li class="nav-item"><a href="/links/bio" class="nav-link"><ion-icon name="person-outline"></ion-icon> Bio Pages</a></li>
+                <li class="nav-item"><a href="/links/short" class="nav-link active"><ion-icon name="link-outline"></ion-icon> Short URLs</a></li>
+                <li class="nav-item"><a href="/links/qr" class="nav-link"><ion-icon name="qr-code-outline"></ion-icon> QR Codes</a></li>
+                <li class="nav-item"><a href="/links/funnels" class="nav-link"><ion-icon name="funnel-outline"></ion-icon> Sales Funnels</a></li>
+                 <li class="nav-item"><a href="/dashboard" class="nav-link"><ion-icon name="arrow-back-outline"></ion-icon> Back to Apps</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Create Short Link</h1>
+                <p>Paste a long URL to generate a short, trackable Casjoe link.</p>
+            </div>
+
+            <?php if (isset($_GET['error'])): ?>
+                <div style="background: #fee2e2; color: #ef4444; padding: 12px; border-radius: 8px; margin-top: 20px; max-width: 600px; display:flex; align-items:center; gap: 10px;">
+                    <ion-icon name="alert-circle"></ion-icon>
+                    <?= htmlspecialchars($_GET['error']) ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="creation-card">
+                <form action="/links/short/store" method="POST">
+                    <input type="hidden" name="csrf_token" value="<?= \App\Core\Services\CsrfService::generateToken() ?>">
+                    
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="form-label">Destination URL</label>
+                        <input type="url" name="long_url" class="form-control" required placeholder="https://very-long-website.com/article/123" autofocus>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="form-label">Short Alias (Optional)</label>
+                        <div class="input-group">
+                            <div class="input-group-text">casjoe.com/</div>
+                            <input type="text" name="short_code" placeholder="my-custom-link">
+                        </div>
+                        <small style="color: #94a3b8; font-size: 13px; margin-top: 5px; display: block;">Leave empty to generate a random string.</small>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="form-label">Password Protection (Optional)</label>
+                        <input type="text" name="password" class="form-control" placeholder="SecretPassword123" style="color: #64748b;">
+                        <small style="color: #94a3b8; font-size: 13px; margin-top: 5px; display: block;">Require visitors to enter this password before redirecting.</small>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label class="form-label">Expiration (Optional)</label>
+                        <input type="datetime-local" name="expires_at" class="form-control" style="color: #64748b;">
+                    </div>
+
+                    <button type="submit" class="btn-brand">
+                        <ion-icon name="flash"></ion-icon>
+                        Shorten It
+                    </button>
+                    
+                    <a href="/links/short" class="btn-cancel">Cancel</a>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

@@ -16,12 +16,12 @@ class TicketController
         $stmt = $db->query("SELECT * FROM support_tickets WHERE tenant_id = ? AND user_id = ? ORDER BY created_at DESC", [$tenantId, $userId]);
         $tickets = $stmt->fetchAll();
 
-        require __DIR__ . '/../views/index.php';
+        require __DIR__ . '/../Views/index.php';
     }
 
     public function create()
     {
-        require __DIR__ . '/../views/create.php';
+        require __DIR__ . '/../Views/create.php';
     }
 
     public function store()
@@ -59,7 +59,7 @@ class TicketController
         $stmt = $db->query("SELECT m.*, u.email FROM support_messages m JOIN users u ON m.user_id = u.id WHERE m.ticket_id = ? ORDER BY m.created_at ASC", [$id]);
         $messages = $stmt->fetchAll();
 
-        require __DIR__ . '/../views/show.php';
+        require __DIR__ . '/../Views/show.php';
     }
 
     public function reply()

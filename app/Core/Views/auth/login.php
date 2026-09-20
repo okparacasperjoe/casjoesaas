@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
     <meta charset="UTF-8">
-    <title>Login | Casjoe SaaS</title>
+    <title>Login | Casjoe</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" href="/css/style.css">
@@ -13,11 +14,19 @@
             padding: 0;
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #000066 0%, #000044 50%, #FFA600 100%); /* Brand Gradient */
-            height: 100vh;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .page-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            min-height: 100vh;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .login-container {
@@ -131,22 +140,49 @@
             transition: 0.2s;
         }
         .btn-google:hover { background: #f1f1f1; }
-
     </style>
 </head>
 <body>
 
+<?php 
+    $clientId = defined('GOOGLE_CLIENT_ID') ? GOOGLE_CLIENT_ID : '';
+    if (!empty($clientId)):
+?>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+     data-client_id="<?= htmlspecialchars($clientId) ?>"
+     data-login_uri="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://" . $_SERVER['HTTP_HOST'] . "/auth/google/onetap" ?>"
+     data-auto_prompt="true"
+     data-use_fedcm_for_prompt="true"
+     style="position: fixed; top: 20px; right: 20px; z-index: 10000;">
+</div>
+<?php endif; ?>
+
+<div class="page-wrapper">
 <div class="login-container">
-    <!-- Logo: Real Brand Logo -->
-    <img src="/casjoe_logo.png" alt="Casjoe Logo" class="logo-img" style="max-width: 200px; margin-bottom: 20px;">
+    <img src="/casjoe_logo.png" alt="Casjoe Logo" class="logo-img" style="max-height: 80px; width: auto; object-fit: contain; margin: 0 auto 20px auto; display: block;">
     <!-- <div class="logo">Casjoe</div> -->
     
     <div class="subtitle">Sign in to manage your business</div>
+
+    <?php if (isset($success)): ?>
+        <div class="alert-success" style="background: rgba(46, 204, 113, 0.2); border: 1px solid rgba(46, 204, 113, 0.5); color: #c8e6c9; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
+            <ion-icon name="checkmark-circle-outline" style="vertical-align: middle;"></ion-icon> 
+            <?= htmlspecialchars($success) ?>
+        </div>
+    <?php endif; ?>
 
     <?php if (isset($error)): ?>
         <div class="alert-error">
             <ion-icon name="alert-circle-outline" style="vertical-align: middle;"></ion-icon> 
             <?= htmlspecialchars($error) ?>
+            <?php if (isset($unverified_email)): ?>
+                <div style="margin-top: 8px;">
+                    <a href="/resend-verification?email=<?= urlencode($unverified_email) ?>" style="color: #FFA600; text-decoration: underline; font-weight: bold;">
+                        Resend Verification Email
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
@@ -161,17 +197,30 @@
         <button type="submit" class="btn-login">Sign In</button>
     </form>
 
+    <p style="text-align: right; margin: 10px 0 0 0;">
+        <a href="/forgot-password" style="color: #FFA600; text-decoration: none; font-size: 0.85rem;">Forgot Password?</a>
+    </p>
+
     <div class="divider"><span>OR CONTINUE WITH</span></div>
 
-    <div style="display: flex; gap: 10px;">
-        <a href="/auth/google" style="text-decoration: none; flex: 1;">
-            <button type="button" class="btn-google">
+    <div style="display: flex; gap: 10px; align-items: stretch;">
+        <div style="flex: 1; position: relative; min-height: 44px; display: flex;">
+            <button type="button" class="btn-google" style="width: 100%; height: 100%;" onclick="if(typeof google !== 'undefined' && google.accounts && google.accounts.id){ google.accounts.id.prompt(); } else { window.location.href='/auth/google'; }">
                 <ion-icon name="logo-google" style="color: #DB4437; font-size: 1.2rem;"></ion-icon>
                 Google
             </button>
-        </a>
-        <a href="/auth/linkedin" style="text-decoration: none; flex: 1;">
-            <button type="button" class="btn-google">
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="continue_with"
+                 data-size="large"
+                 data-logo_alignment="left"
+                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.01; overflow: hidden; z-index: 5;">
+            </div>
+        </div>
+        <a href="/auth/linkedin" style="text-decoration: none; flex: 1; display: flex;">
+            <button type="button" class="btn-google" style="width: 100%; height: 100%;">
                 <ion-icon name="logo-linkedin" style="color: #0077b5; font-size: 1.2rem;"></ion-icon>
                 LinkedIn
             </button>
@@ -181,6 +230,7 @@
     <p style="margin-top: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.5);">
         Don't have an account? <a href="/register" style="color: #FFA600; text-decoration: none;">Create one</a>
     </p>
+</div>
 </div>
 
 </body>

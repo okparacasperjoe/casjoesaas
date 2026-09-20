@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>HR | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -8,15 +13,7 @@
 </head>
 <body>
 <div class="app-container">
-    <aside class="sidebar">
-        <div class="brand">
-             <img src="/assets/casjoe_logo.png" alt="Casjoe Apps" style="height: 40px;">
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="/erp" class="nav-link"><ion-icon name="arrow-back-outline"></ion-icon> ERP Dashboard</a></li>
-            <li class="nav-item"><a href="/erp/hr" class="nav-link active"><ion-icon name="people-outline"></ion-icon> Employees</a></li>
-        </ul>
-    </aside>
+    <?php require __DIR__ . '/../layout/sidebar.php'; ?>
 
     <main class="main-content">
         <div class="top-bar">

@@ -29,7 +29,7 @@ class PayrollController
         $stmt->execute([$this->tenantId]);
         $payrolls = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/hr/payroll/index.php';
+        require __DIR__ . '/../Views/hr/payroll/index.php';
     }
 
     public function create()
@@ -39,7 +39,7 @@ class PayrollController
         $stmt->execute([$this->tenantId]);
         $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/hr/payroll/create.php';
+        require __DIR__ . '/../Views/hr/payroll/create.php';
     }
 
     public function store()
@@ -84,6 +84,25 @@ class PayrollController
             }
 
             $this->pdo->commit();
+
+            // Notify Employee
+            $empStmt = $this->pdo->prepare("SELECT email, first_name, last_name FROM erp_employees WHERE id = ?");
+            $empStmt->execute([$employeeId]);
+            $emp = $empStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($emp && !empty($emp['email'])) {
+                $subject = "Payslip Generated";
+                $message = "<p>Hello {$emp['first_name']},</p>";
+                $message .= "<p>Your payslip for the period <strong>{$startDate}</strong> to <strong>{$endDate}</strong> has been generated.</p>";
+                $message .= "<p><strong>Net Pay:</strong> " . number_format($net, 2) . "</p>";
+                $message .= "<p>You can view the full details in your Employee Portal.</p>";
+                try {
+                    \App\Core\Mailer::send($emp['email'], $subject, $message, false);
+                } catch (\Exception $e) {
+                    error_log("Payslip email failed: " . $e->getMessage());
+                }
+            }
+
             header('Location: /erp/payroll');
             exit;
 
@@ -116,6 +135,46 @@ class PayrollController
         $stmt->execute([$id]);
         $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/hr/payroll/show.php';
+        require __DIR__ . '/../Views/hr/payroll/show.php';
+    }
+
+
+    public function delete() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_hr_payroll WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/hr/payroll');
+        exit;
+    }
+
+    public function run()
+    {
+        $month = $_POST['month'] ?? date('F');
+        $year = (int)($_POST['year'] ?? date('Y'));
+
+        // Run payroll for all active employees
+        $stmt = $this->pdo->prepare("SELECT * FROM erp_employees WHERE tenant_id = ? AND status = 'active'");
+        $stmt->execute([$this->tenantId]);
+        $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $startDate = date('Y-m-01', strtotime("{$month} {$year}"));
+        $endDate = date('Y-m-t', strtotime("{$month} {$year}"));
+        $paymentDate = date('Y-m-d');
+
+        foreach ($employees as $emp) {
+            $salary = (float)($emp['salary'] ?? 0);
+            if ($salary <= 0) continue;
+            $tax = round($salary * 0.05, 2);
+            $net = $salary - $tax;
+
+            $insert = $this->pdo->prepare("
+                INSERT INTO erp_payroll (tenant_id, employee_id, pay_period_start, pay_period_end, payment_date, gross_pay, net_pay, status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'paid')
+            ");
+            $insert->execute([$this->tenantId, $emp['id'], $startDate, $endDate, $paymentDate, $salary, $net]);
+        }
+
+        header('Location: /erp/payroll?success=Payroll generated');
+        exit;
     }
 }

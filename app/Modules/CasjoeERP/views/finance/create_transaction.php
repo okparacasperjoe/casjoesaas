@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>New Transaction | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -18,25 +23,25 @@
 
         <div class="card" style="max-width: 600px; margin: auto;">
             <form method="POST" action="/erp/transactions/store">
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 15px;">
                     <label>Description</label>
-                    <input type="text" name="description" class="form-control" required>
+                    <input type="text" name="description" class="form-control" required placeholder="e.g. Client Payment, Office Supplies">
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 15px;">
                     <label>Type</label>
                     <select name="type" class="form-control">
-                        <option value="income">Income</option>
-                        <option value="expense">Expense</option>
+                        <option value="income">Income (Revenue / Inflow)</option>
+                        <option value="expense">Expense (Outflow)</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Amount ($)</label>
-                    <input type="number" step="0.01" name="amount" class="form-control" required>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Amount (<?= htmlspecialchars($cCode ?? 'NGN') ?> - <?= htmlspecialchars($currencySymbol ?? '₦') ?>)</label>
+                    <input type="number" step="0.01" name="amount" class="form-control" placeholder="0.00" required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 15px;">
                     <label>Date</label>
                     <input type="date" name="date" class="form-control" value="<?= date('Y-m-d') ?>" required>
                 </div>

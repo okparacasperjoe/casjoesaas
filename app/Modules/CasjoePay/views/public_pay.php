@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($link['title']) ?> | Secure Payment</title>
@@ -86,16 +89,17 @@
         <p style="color: #666; font-size: 0.9rem;">Pay securely via Casjoe Pay</p>
     </div>
 
-    <?php if ($link['amount']): ?>
-        <div class="amount-display">₦<?= number_format($link['amount']) ?></div>
-    <?php else: ?>
-        <div class="input-group">
-            <label>Amount (₦)</label>
-            <input type="number" name="amount" placeholder="Enter amount" required>
-        </div>
-    <?php endif; ?>
+    <form method="POST" action="/pay/process/<?= $link['slug'] ?>">
+        <?php if ($link['amount'] > 0): ?>
+            <div class="amount-display"><?= $link['currency'] ?> <?= number_format($link['amount'], 2) ?></div>
+            <input type="hidden" name="amount" value="<?= $link['amount'] ?>">
+        <?php else: ?>
+            <div class="input-group">
+                <label>Amount (<?= $link['currency'] ?>)</label>
+                <input type="number" name="amount" placeholder="Enter amount" required min="1" step="0.01">
+            </div>
+        <?php endif; ?>
 
-    <form method="POST" action="/pay/process/<?= $link['slug'] ?>"> <!-- Placeholder action -->
         <div class="input-group">
             <label>Full Name</label>
             <input type="text" name="name" placeholder="John Doe" required>

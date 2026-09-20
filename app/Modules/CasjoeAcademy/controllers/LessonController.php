@@ -23,7 +23,7 @@ class LessonController
         if (!$lesson)
             die("Lesson not found");
 
-        require __DIR__ . '/../views/lesson.php';
+        require __DIR__ . '/../Views/lesson.php';
     }
 
     public function complete()

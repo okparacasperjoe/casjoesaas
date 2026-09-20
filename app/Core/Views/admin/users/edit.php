@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit User | Admin Dashboard</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-<div class="app-container">
-    <main class="main-content" style="margin: auto; max-width: 600px; padding-top: 50px;">
-        <div class="card">
+<?php
+$pageTitle = 'Edit User';
+require __DIR__ . '/../header.php';
+?>
+<div style="max-width: 600px; margin: 20px auto;">
+    <div class="card" style="background: #13141f !important; border: 1px solid rgba(255, 166, 0, 0.2) !important; padding: 25px; border-radius: 14px;">
             <h2>Edit User</h2>
-            <form method="POST" action="/admin/users/update/<?= $user['id'] ?>">
+            <form method="POST" action="/<?= ADMIN_PATH ?>/users/update/<?= $user['id'] ?>">
                 <?= \App\Core\Services\CsrfService::getTokenField() ?>
                 <div class="form-group">
                     <label>Email Address</label>
@@ -45,10 +40,8 @@
                 -->
 
                 <button type="submit" class="btn">Update User</button>
-                <a href="/admin/users" class="btn" style="background: grey; text-align: center;">Cancel</a>
+                <a href="/<?= ADMIN_PATH ?>/users" class="btn" style="background: grey; text-align: center;">Cancel</a>
             </form>
-        </div>
-    </main>
+    </div>
 </div>
-</body>
-</html>
+<?php require __DIR__ . '/../footer.php'; ?>

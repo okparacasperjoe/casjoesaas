@@ -110,3 +110,16 @@ ALTER TABLE `academy_courses`
   ADD CONSTRAINT `fk_course_tenant` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE;
 
 COMMIT;
+
+CREATE TABLE IF NOT EXISTS erp_payment_integrations (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    tenant_id INT(11) NOT NULL,
+    provider VARCHAR(50) NOT NULL DEFAULT 'moniepoint',
+    client_id VARCHAR(255) NULL,
+    client_secret VARCHAR(255) NULL,
+    terminal_serial VARCHAR(100) NULL,
+    is_active TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY tenant_provider (tenant_id, provider)
+);

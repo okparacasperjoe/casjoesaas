@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <title>Security | Casjoe Apps</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -79,7 +82,7 @@
                                     <input type="hidden" name="secret" value="<?= $secret ?>">
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label style="display: block; margin-bottom: 5px; font-weight: 500;">Enter Verification Code</label>
-                                        <input type="text" name="code" class="form-control" style="width: 100%; padding: 10px; font-size: 1.2rem; letter-spacing: 3px; border: 1px solid #ddd; border-radius: 5px;" placeholder="000000" maxlength="6" required>
+                                        <input type="text" name="code" class="form-control" style="width: 100%; padding: 10px; font-size: 1.2rem; letter-spacing: 3px; border: 1px solid #ddd; border-radius: 5px; color: #333; background-color: #fff;" placeholder="000000" maxlength="6" required>
                                     </div>
                                     <button type="submit" class="btn">Verify & Enable</button>
                                 </form>

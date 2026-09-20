@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
-    <title>Record Lifecycle Event | Casjoe ERP</title>
+    <title>Record Lifecycle Event | Casjoe</title>
     <link rel="stylesheet" href="/css/style.css">
     <script>
         function togglePositionField() {
@@ -16,6 +21,7 @@
                 document.querySelector('input[name="new_position"]').required = false;
             }
         }
+        window.addEventListener('DOMContentLoaded', togglePositionField);
     </script>
 </head>
 <body>
@@ -24,7 +30,7 @@
 
     <main class="main-content">
         <div class="top-bar">
-            <h2>Record Event</h2>
+            <h2>Record <?= !empty($selectedType) ? ucfirst($selectedType) : 'Lifecycle' ?> Event</h2>
         </div>
 
         <div class="card" style="max-width: 600px; margin: 0 auto;">
@@ -42,9 +48,9 @@
                 <div class="form-group">
                     <label>Event Type</label>
                     <select name="type" class="form-control" required onchange="togglePositionField()">
-                        <option value="promotion">Promotion</option>
-                        <option value="resignation">Resignation</option>
-                        <option value="termination">Termination</option>
+                        <option value="promotion" <?= ($selectedType ?? '') === 'promotion' ? 'selected' : '' ?>>Promotion</option>
+                        <option value="resignation" <?= ($selectedType ?? '') === 'resignation' ? 'selected' : '' ?>>Resignation</option>
+                        <option value="termination" <?= ($selectedType ?? '') === 'termination' ? 'selected' : '' ?>>Termination</option>
                     </select>
                 </div>
 

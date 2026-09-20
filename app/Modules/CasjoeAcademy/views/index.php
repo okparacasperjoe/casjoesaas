@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academy | Casjoe Apps</title>
@@ -14,15 +17,17 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="brand">
+    <?php include __DIR__ . '/partials/sidebar_acad_css.php'; ?>
+
+            <div class="acad-brand">
                 <ion-icon name="school"></ion-icon>
                 Casjoe<span>Academy</span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/dashboard" class="nav-link"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
-                <li class="nav-item"><a href="/academy" class="nav-link active"><ion-icon
+            <ul class="acad-menu">
+                <li class="acad-item"><a href="/dashboard" class="acad-link"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+                <li class="acad-item"><a href="/academy" class="acad-link active"><ion-icon
                             name="book-outline"></ion-icon>My Courses</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><ion-icon
+                <li class="acad-item"><a href="#" class="acad-link"><ion-icon
                             name="library-outline"></ion-icon>Catalog</a></li>
             </ul>
         </aside>

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>Departments | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -46,5 +51,25 @@
         </div>
     </main>
 </div>
+    <dialog id="editDeptModal" style="padding: 28px; border: 1px solid #e2e8f0; border-radius: 16px; width: 440px; max-width: 90vw; background: #ffffff; color: #1e293b; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+        <form action="/erp/departments/update" method="POST">
+            <input type="hidden" name="id" id="edit_dept_id">
+            <h3 style="color:#000066; margin-top:0;">Edit Department</h3>
+            <div class="form-group"><label>Department Name *</label><input type="text" name="name" id="edit_dept_name" class="form-control" required></div>
+            <div class="form-group"><label>Description</label><textarea name="description" id="edit_dept_desc" class="form-control" rows="3"></textarea></div>
+            <div style="margin-top: 20px; text-align: right; display:flex; justify-content:flex-end; gap:10px;">
+                <button type="button" onclick="document.getElementById('editDeptModal').close()" class="btn btn-outline">Cancel</button>
+                <button type="submit" class="btn" style="background:#000066; color:#fff;">Update</button>
+            </div>
+        </form>
+    </dialog>
+    <script>
+    function editDept(d) {
+        document.getElementById('edit_dept_id').value = d.id;
+        document.getElementById('edit_dept_name').value = d.name;
+        document.getElementById('edit_dept_desc').value = d.description;
+        document.getElementById('editDeptModal').showModal();
+    }
+    </script>
 </body>
 </html>

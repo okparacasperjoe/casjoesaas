@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($lesson['title']) ?> | Academy</title>
@@ -14,14 +17,16 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="brand">
+    <?php include __DIR__ . '/partials/sidebar_acad_css.php'; ?>
+
+            <div class="acad-brand">
                 <ion-icon name="school"></ion-icon>
                 Casjoe<span>Academy</span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/" class="nav-link"><ion-icon name="apps-outline"></ion-icon>Back to
+            <ul class="acad-menu">
+                <li class="acad-item"><a href="/" class="acad-link"><ion-icon name="apps-outline"></ion-icon>Back to
                         Apps</a></li>
-                <li class="nav-item"><a href="/academy/course/<?= $lesson['course_id'] ?>" class="nav-link"><ion-icon
+                <li class="acad-item"><a href="/academy/course/<?= $lesson['course_id'] ?>" class="acad-link"><ion-icon
                             name="arrow-back-outline"></ion-icon>Back to Course</a></li>
             </ul>
         </aside>

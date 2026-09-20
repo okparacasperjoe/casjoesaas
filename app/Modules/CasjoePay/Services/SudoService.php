@@ -41,7 +41,6 @@ class SudoService
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
-        curl_close($curl);
 
         if ($err) {
             throw new \Exception("Sudo API Error: " . $err);

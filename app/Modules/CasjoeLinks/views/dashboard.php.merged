@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links Dashboard | Casjoe Apps</title>
+    <meta name="description" content="Casjoe Links Overview">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mail_app.css?v=2.2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Mobile Sidebar Toggle -->
+        <?php include dirname(__DIR__, 3) . '/Core/Views/partials/mobile_nav.php'; ?>
+        
+        <!-- Sidebar -->
+        <?php $active = 'links_dashboard'; include __DIR__ . '/partials/sidebar_links.php'; ?>
+
+        <!-- Main Content -->
+        <main class="erp-main">
+            
+            <!-- Hero Banner -->
+            <section class="erp-hero">
+                <div class="erp-hero-top">
+                    <div>
+                        <div class="label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--erp-gold); margin-bottom: 8px; font-weight: bold;">
+                            <ion-icon name="link-outline" style="vertical-align: middle; margin-right: 5px;"></ion-icon> Links & Growth
+                        </div>
+                        <h1>Dashboard Overview</h1>
+                        <p class="subtitle">Manage your bio pages, shortened URLs, and QR codes.</p>
+                    </div>
+                    <div>
+                        <a href="/links/short/create" class="hero-btn">
+                            <ion-icon name="add-circle"></ion-icon> Shorten URL
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Content -->
+            <div class="erp-content">
+                
+                <div class="section-header" style="margin-bottom: 25px;">
+                    <ion-icon name="stats-chart"></ion-icon> Asset Overview
+                </div>
+
+                <div class="dashboard-grid">
+                    
+                    <div class="stat-card-modern">
+                        <div class="stat-top">
+                            <div class="stat-icon" style="color: #00a8ff;">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </div>
+                            <div class="stat-title">Bio Pages</div>
+                        </div>
+                        <div class="stat-value"><?= number_format($bioCount ?? 0) ?></div>
+                    </div>
+
+                    <div class="stat-card-modern">
+                        <div class="stat-top">
+                            <div class="stat-icon" style="color: #2ed573;">
+                                <ion-icon name="link-outline"></ion-icon>
+                            </div>
+                            <div class="stat-title">Short URLs</div>
+                        </div>
+                        <div class="stat-value"><?= number_format($shortCount ?? 0) ?></div>
+                    </div>
+
+                    <div class="stat-card-modern">
+                        <div class="stat-top">
+                            <div class="stat-icon" style="color: #ff4757;">
+                                <ion-icon name="qr-code-outline"></ion-icon>
+                            </div>
+                            <div class="stat-title">QR Codes</div>
+                        </div>
+                        <div class="stat-value"><?= number_format($qrCount ?? 0) ?></div>
+                    </div>
+
+                </div>
+
+                <div class="section-header" style="margin-top: 40px; margin-bottom: 25px;">
+                    <ion-icon name="apps-outline"></ion-icon> Quick Actions
+                </div>
+
+                <div class="dashboard-grid">
+                    <a href="/links/bio/create" class="quick-link-card">
+                        <div class="ql-icon"><ion-icon name="person-add-outline"></ion-icon></div>
+                        <div class="ql-info">
+                            <div class="ql-title">New Bio Page</div>
+                            <div class="ql-desc">Create a branded profile link</div>
+                        </div>
+                    </a>
+                    <a href="/links/short/create" class="quick-link-card">
+                        <div class="ql-icon"><ion-icon name="link-outline"></ion-icon></div>
+                        <div class="ql-info">
+                            <div class="ql-title">Shorten Link</div>
+                            <div class="ql-desc">Create a trackable short URL</div>
+                        </div>
+                    </a>
+                    <a href="/links/funnels/create" class="quick-link-card">
+                        <div class="ql-icon" style="color: #f59e0b; background: rgba(245,158,11,0.1);"><ion-icon name="funnel-outline"></ion-icon></div>
+                        <div class="ql-info">
+                            <div class="ql-title">New Sales Funnel</div>
+                            <div class="ql-desc">Build a conversion funnel</div>
+                        </div>
+                    </a>
+                    <a href="/links/qr/create" class="quick-link-card">
+                        <div class="ql-icon"><ion-icon name="qr-code-outline"></ion-icon></div>
+                        <div class="ql-info">
+                            <div class="ql-title">Generate QR Code</div>
+                            <div class="ql-desc">Create a custom QR code</div>
+                        </div>
+                    </a>
+                    <a href="/links/static/create" class="quick-link-card">
+                        <div class="ql-icon"><ion-icon name="cloud-upload-outline"></ion-icon></div>
+                        <div class="ql-info">
+                            <div class="ql-title">Host Static Site</div>
+                            <div class="ql-desc">Upload a zip to host instantly</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="section-header" style="margin-top: 40px; margin-bottom: 25px;">
+                    <ion-icon name="analytics-outline"></ion-icon> Recent Analytics
+                </div>
+
+                <div class="card" style="margin-top: 15px; min-height: 200px; display: flex; align-items: center; justify-content: center; color: #888;">
+                    No data to display yet.
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -19,7 +19,7 @@ class PaymentController
             header("Location: /login");
             exit;
         }
-        require __DIR__ . '/../views/pay.php';
+        require __DIR__ . '/../Views/pay.php';
     }
 
     public function initiate()
@@ -76,7 +76,6 @@ class PaymentController
         ));
 
         $response = curl_exec($curl);
-        curl_close($curl);
 
         $res = json_decode($response, true);
 
@@ -112,7 +111,6 @@ class PaymentController
             ));
 
             $response = curl_exec($curl);
-            curl_close($curl);
 
             $res = json_decode($response, true);
 

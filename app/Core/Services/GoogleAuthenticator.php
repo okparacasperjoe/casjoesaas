@@ -61,7 +61,7 @@ class GoogleAuthenticator
         // Warning: Sharing secrets with Google Charts is not best practice for high security, 
         // but fine for prototyping. A local library like PHPQRCode is better for prod.
         $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer);
-        return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.$urlencoded;
+        return 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='.$urlencoded;
     }
 
     private function base32Decode($secret)

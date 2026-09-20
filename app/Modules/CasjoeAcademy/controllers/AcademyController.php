@@ -16,13 +16,56 @@ class AcademyController
 
     public function index()
     {
+        header('Location: /academy/overview');
+        exit;
+    }
+
+    public function overview()
+    {
+        $tenantId = \App\Core\TenantContext::getTenantId();
+        \App\Core\SubscriptionManager::requireActive($tenantId);
+        
+        $active = 'academy_overview';
+        require __DIR__ . '/../Views/overview.php';
+    }
+
+    public function catalog()
+    {
         $tenantId = \App\Core\TenantContext::getTenantId();
         \App\Core\SubscriptionManager::requireActive($tenantId);
 
-        // Public Catalog
-        $stmt = $this->pdo->query("SELECT * FROM academy_courses WHERE status = 'published' ORDER BY created_at DESC");
-        $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        require __DIR__ . '/../views/catalog.php';
+        // Public Catalog Courses (Deduplicated by Title)
+        $stmt = $this->pdo->query("SELECT * FROM academy_courses WHERE status = 'published' ORDER BY id DESC");
+        $rawCourses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $uniqueCourses = [];
+        foreach ($rawCourses as $c) {
+            $key = strtolower(trim($c['title']));
+            if (!isset($uniqueCourses[$key])) {
+                $uniqueCourses[$key] = $c;
+            }
+        }
+        $courses = array_values($uniqueCourses);
+
+        // Public Catalog Books (All Tenants - Deduplicated by Title)
+        $books = [];
+        try {
+            $stmtBooks = $this->pdo->query("SELECT * FROM academy_books WHERE (is_published = 1 OR is_published IS NULL) ORDER BY id DESC");
+            if ($stmtBooks) {
+                $rawBooks = $stmtBooks->fetchAll(PDO::FETCH_ASSOC);
+                $uniqueBooks = [];
+                foreach ($rawBooks as $b) {
+                    $key = strtolower(trim($b['title']));
+                    if (!isset($uniqueBooks[$key])) {
+                        $uniqueBooks[$key] = $b;
+                    }
+                }
+                $books = array_values($uniqueBooks);
+            }
+        } catch (\Exception $e) {
+            $books = [];
+        }
+
+        require __DIR__ . '/../Views/catalog.php';
     }
 
     public function myCourses()
@@ -42,11 +85,13 @@ class AcademyController
         $stmt->execute([$userId]);
         $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/student_dashboard.php';
+        require __DIR__ . '/../Views/student_dashboard.php';
     }
 
     public function course($id)
     {
+        if (is_array($id)) $id = array_values($id)[0];
+        
         $stmt = $this->pdo->prepare("SELECT * FROM academy_courses WHERE id = ?");
         $stmt->execute([$id]);
         $course = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -72,11 +117,13 @@ class AcademyController
             $isEnrolled = $stmt->fetch();
         }
 
-        require __DIR__ . '/../views/course_details.php';
+        require __DIR__ . '/../Views/course_details.php';
     }
 
     public function enroll($id)
     {
+        if (is_array($id)) $id = array_values($id)[0];
+        
         if (!isset($_SESSION['user_id'])) {
             header('Location: /login');
             exit;
@@ -93,6 +140,8 @@ class AcademyController
 
     public function learn($lessonId)
     {
+        if (is_array($lessonId)) $lessonId = array_values($lessonId)[0];
+        
         if (!isset($_SESSION['user_id'])) {
             header('Location: /login');
             exit;
@@ -125,6 +174,6 @@ class AcademyController
             $s['lessons'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        require __DIR__ . '/../views/learn.php';
+        require __DIR__ . '/../Views/learn.php';
     }
 }

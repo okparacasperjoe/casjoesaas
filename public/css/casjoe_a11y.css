@@ -1,0 +1,567 @@
+/* Casjoe LLC: PWD Accessibility Styling (WCAG 2.1 Level AA) */
+
+/* ── Floating Launcher Trigger ── */
+#casjoe-a11y-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #000066 0%, #030414 100%);
+    border: 2px solid #FFA600;
+    color: #FFA600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 102, 0.5), 0 0 12px rgba(255, 166, 0, 0.35);
+    z-index: 99990;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+
+#casjoe-a11y-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 22px rgba(255, 166, 0, 0.5);
+}
+
+#casjoe-a11y-btn:focus-visible {
+    outline: 3px solid #FFA600;
+    outline-offset: 3px;
+}
+
+#casjoe-a11y-btn svg {
+    width: 26px;
+    height: 26px;
+    fill: currentColor;
+    transition: transform 0.25s ease;
+}
+
+/* ── Floating Accessibility Panel ── */
+#casjoe-a11y-panel {
+    position: fixed;
+    bottom: 84px;
+    left: 24px;
+    width: 340px;
+    max-width: calc(100vw - 32px);
+    max-height: 540px;
+    background: #0b0f19;
+    color: #f8fafc;
+    border: 1px solid #1f2937;
+    border-top: 3px solid #FFA600;
+    border-radius: 16px;
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 166, 0, 0.15);
+    z-index: 99995;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    animation: a11ySlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+#casjoe-a11y-panel.is-open {
+    display: flex;
+}
+
+@keyframes a11ySlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Panel Header */
+.a11y-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #111827;
+    border-bottom: 1px solid #1f2937;
+}
+
+.a11y-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.a11y-title svg {
+    width: 18px;
+    height: 18px;
+    fill: #FFA600;
+}
+
+.a11y-close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+}
+
+.a11y-close-btn:hover {
+    color: #ffffff;
+}
+
+/* Panel Body */
+.a11y-body {
+    padding: 16px 18px;
+    overflow-y: auto;
+    max-height: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.a11y-section-title {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #FFA600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+}
+
+/* Option Row / Buttons */
+.a11y-btn-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.a11y-btn-group-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
+
+.a11y-btn {
+    background: #1f2937;
+    border: 1px solid #374151;
+    color: #e2e8f0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.a11y-btn:hover {
+    background: #374151;
+    color: #ffffff;
+}
+
+.a11y-btn.active {
+    background: rgba(255, 166, 0, 0.15);
+    border-color: #FFA600;
+    color: #FFA600;
+    font-weight: 700;
+}
+
+/* Toggle Switch Row */
+.a11y-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.a11y-toggle-row:hover {
+    border-color: #374151;
+}
+
+.a11y-toggle-label {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.a11y-switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 20px;
+}
+
+.a11y-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.a11y-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #374151;
+    border-radius: 20px;
+    transition: .25s;
+}
+
+.a11y-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.a11y-switch input:checked + .a11y-switch-slider {
+    background-color: #FFA600;
+}
+
+.a11y-switch input:checked + .a11y-switch-slider:before {
+    transform: translateX(18px);
+    background-color: #0b0f19;
+}
+
+/* Panel Footer */
+.a11y-footer {
+    padding: 12px 18px;
+    background: #111827;
+    border-top: 1px solid #1f2937;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.a11y-reset-btn {
+    background: transparent;
+    border: 1px solid #374151;
+    color: #94a3b8;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.a11y-reset-btn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.a11y-hint {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+/* ── Mobile Positioning ── */
+@media (max-width: 768px) {
+    #casjoe-a11y-btn {
+        bottom: 76px;
+        left: 16px;
+        width: 44px;
+        height: 44px;
+    }
+    
+    #casjoe-a11y-panel {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 20px 20px 0 0;
+        max-height: 80vh;
+        z-index: 10002;
+    }
+}
+
+/* ── Accessibility Global Class Rules ── */
+
+/* 1. Font Scaler */
+html.a11y-font-lg body,
+html.a11y-font-lg p,
+html.a11y-font-lg span,
+html.a11y-font-lg li,
+html.a11y-font-lg a,
+html.a11y-font-lg label,
+html.a11y-font-lg input,
+html.a11y-font-lg select,
+html.a11y-font-lg textarea,
+html.a11y-font-lg button,
+html.a11y-font-lg td,
+html.a11y-font-lg th {
+    font-size: 115% !important;
+    line-height: 1.6 !important;
+}
+
+html.a11y-font-xl body,
+html.a11y-font-xl p,
+html.a11y-font-xl span,
+html.a11y-font-xl li,
+html.a11y-font-xl a,
+html.a11y-font-xl label,
+html.a11y-font-xl input,
+html.a11y-font-xl select,
+html.a11y-font-xl textarea,
+html.a11y-font-xl button,
+html.a11y-font-xl td,
+html.a11y-font-xl th {
+    font-size: 130% !important;
+    line-height: 1.7 !important;
+}
+
+/* 2. Dyslexia Font */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/OpenDyslexic-Regular.otf') format('opentype');
+    font-display: swap;
+}
+
+html.a11y-dyslexia body,
+html.a11y-dyslexia p,
+html.a11y-dyslexia span,
+html.a11y-dyslexia li,
+html.a11y-dyslexia a,
+html.a11y-dyslexia label,
+html.a11y-dyslexia input,
+html.a11y-dyslexia select,
+html.a11y-dyslexia textarea,
+html.a11y-dyslexia button,
+html.a11y-dyslexia td,
+html.a11y-dyslexia th,
+html.a11y-dyslexia h1,
+html.a11y-dyslexia h2,
+html.a11y-dyslexia h3,
+html.a11y-dyslexia h4,
+html.a11y-dyslexia h5,
+html.a11y-dyslexia h6 {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', 'Comic Neue', sans-serif !important;
+    letter-spacing: 0.05em !important;
+}
+
+/* 3. High-Contrast Dark */
+html.a11y-contrast-dark {
+    --bg-body: #000000 !important;
+    --bg-card: #080808 !important;
+    --cl-bg: #000000 !important;
+    --cl-surface: #080808 !important;
+    --cl-surface-card: #080808 !important;
+    --cl-text: #ffffff !important;
+    --cl-text-muted: #e2e8f0 !important;
+    --cl-border: #FFA600 !important;
+}
+
+html.a11y-contrast-dark body {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+html.a11y-contrast-dark a:not(.a11y-btn, .btn) {
+    color: #FFCC00 !important;
+    text-decoration: underline !important;
+}
+
+html.a11y-contrast-dark .card,
+html.a11y-contrast-dark .checkout-card,
+html.a11y-contrast-dark .main-content,
+html.a11y-contrast-dark .sidebar {
+    background: #080808 !important;
+    border-color: #FFA600 !important;
+}
+
+/* 4. High-Contrast Light */
+html.a11y-contrast-light {
+    --bg-body: #ffffff !important;
+    --bg-card: #f8fafc !important;
+    --cl-bg: #ffffff !important;
+    --cl-surface: #ffffff !important;
+    --cl-surface-card: #ffffff !important;
+    --cl-text: #000000 !important;
+    --cl-text-muted: #1e293b !important;
+    --cl-border: #000066 !important;
+}
+
+html.a11y-contrast-light body {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+html.a11y-contrast-light a:not(.a11y-btn, .btn) {
+    color: #0000AA !important;
+    text-decoration: underline !important;
+}
+
+html.a11y-contrast-light .card,
+html.a11y-contrast-light .checkout-card,
+html.a11y-contrast-light .main-content,
+html.a11y-contrast-light .sidebar {
+    background: #ffffff !important;
+    border-color: #000066 !important;
+}
+
+/* 5. Monochrome Grayscale */
+html.a11y-monochrome {
+    filter: grayscale(100%) !important;
+}
+
+/* 6. Stop Motion & Transitions */
+html.a11y-stop-motion,
+html.a11y-stop-motion *,
+html.a11y-stop-motion *::before,
+html.a11y-stop-motion *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+}
+
+/* 7. Highlight Clickable Links */
+html.a11y-highlight-links a,
+html.a11y-highlight-links button:not(#casjoe-a11y-btn, .a11y-btn, .a11y-close-btn, .a11y-reset-btn),
+html.a11y-highlight-links [role="button"],
+html.a11y-highlight-links input[type="submit"],
+html.a11y-highlight-links input[type="button"],
+html.a11y-highlight-links .btn {
+    outline: 2px dashed #FFA600 !important;
+    outline-offset: 3px !important;
+    text-decoration: underline !important;
+    font-weight: 700 !important;
+}
+
+/* 8. Reading Ruler Line */
+#a11y-ruler-line {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: rgba(255, 166, 0, 0.8);
+    box-shadow: 0 0 12px rgba(255, 166, 0, 0.6);
+    pointer-events: none;
+    z-index: 9999999;
+    transform: translateY(-50%);
+    display: none;
+}
+
+html.a11y-ruler-active #a11y-ruler-line {
+    display: block;
+}
+
+/* Protected Elements (never distort media, QR codes, or virtual card SecureProxy) */
+html.a11y-contrast-dark img,
+html.a11y-contrast-dark svg:not(.a11y-icon),
+html.a11y-contrast-dark video,
+html.a11y-contrast-dark canvas,
+html.a11y-contrast-dark .qr-code,
+html.a11y-contrast-dark .strowallet-iframe,
+html.a11y-contrast-light img,
+html.a11y-contrast-light svg:not(.a11y-icon),
+html.a11y-contrast-light video,
+html.a11y-contrast-light canvas,
+html.a11y-contrast-light .qr-code,
+html.a11y-contrast-light .strowallet-iframe {
+    filter: none !important;
+}
+
+/* ── Phase 2: Cognitive, Speech & Keyboard Enhancements ── */
+
+/* 9. Reading Focus Mask */
+#a11y-mask-top,
+#a11y-mask-bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    z-index: 9999998;
+    display: none;
+    transition: height 0.04s ease-out, top 0.04s ease-out;
+}
+#a11y-mask-top {
+    top: 0;
+}
+#a11y-mask-bottom {
+    bottom: 0;
+}
+html.a11y-mask-active #a11y-mask-top,
+html.a11y-mask-active #a11y-mask-bottom {
+    display: block;
+}
+
+/* 10. Text-to-Speech (TTS) Voice Reader */
+html.a11y-tts-active body {
+    cursor: default;
+}
+.a11y-speaking-target {
+    outline: 3px solid #FFA600 !important;
+    outline-offset: 3px !important;
+    background: rgba(255, 166, 0, 0.18) !important;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.a11y-tts-hover {
+    outline: 2px dashed rgba(255, 166, 0, 0.7) !important;
+    outline-offset: 2px !important;
+}
+
+/* 11. Enhanced Focus Indicators */
+:focus-visible {
+    outline: 3px solid #FFA600 !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 10px rgba(255, 166, 0, 0.7) !important;
+}
+html.a11y-focus-ring *:focus {
+    outline: 3px solid #FFA600 !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 12px rgba(255, 166, 0, 0.8) !important;
+}
+
+/* 12. Skip to Content Link */
+.a11y-skip-link {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFA600;
+    color: #0b0f19;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 10px 22px;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    z-index: 1000000;
+    text-decoration: none;
+    transition: top 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.a11y-skip-link:focus {
+    top: 0;
+    outline: 3px solid #000066;
+}
+

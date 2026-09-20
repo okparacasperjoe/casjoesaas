@@ -1,0 +1,1066 @@
+/* ═══════════════════════════════════════════════════════════════
+   CASJOE LINKS — Unified Module Design System
+   Dark Mode (default) + Light Mode (html.light-theme)
+   Brand: #FFA600 (Yellow), #000066 (Navy), #FFFFFF (White)
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* ── Dark Mode Variables (Default) ── */
+#casjoe-links-app {
+    --cl-accent: #FFA600;
+    --cl-accent-light: #FFC107;
+    --cl-accent-glow: rgba(255, 166, 0, 0.4);
+    --cl-accent-subtle: rgba(255, 166, 0, 0.1);
+    --cl-accent-border: rgba(255, 166, 0, 0.2);
+    --cl-bg: transparent;
+    --cl-surface: rgba(15, 23, 42, 0.6);
+    --cl-surface-hover: rgba(255, 255, 255, 0.06);
+    --cl-surface-input: rgba(0, 0, 0, 0.2);
+    --cl-border: rgba(255, 255, 255, 0.08);
+    --cl-border-hover: rgba(255, 255, 255, 0.15);
+    --cl-text: #f8fafc;
+    --cl-text-muted: #94a3b8;
+    --cl-text-btn: #0f172a;
+    --cl-danger: #ef4444;
+    --cl-danger-bg: rgba(239, 68, 68, 0.1);
+    --cl-danger-border: rgba(239, 68, 68, 0.2);
+    --cl-info: #3b82f6;
+    --cl-info-bg: rgba(59, 130, 246, 0.1);
+    --cl-success: #22c55e;
+    --cl-success-bg: rgba(34, 197, 94, 0.1);
+    --cl-radius: 16px;
+    --cl-radius-sm: 12px;
+    --cl-radius-xs: 8px;
+
+    font-family: 'Outfit', sans-serif;
+    color: var(--cl-text);
+    padding: 32px 40px;
+    animation: clFadeIn 0.5s ease-out;
+    min-height: 100vh;
+}
+
+/* ── Light Mode Variable Overrides ── */
+html.light-theme #casjoe-links-app {
+    --cl-navy: #000066;
+    --cl-surface: rgba(255, 255, 255, 0.9);
+    --cl-surface-hover: rgba(0, 0, 102, 0.03);
+    --cl-surface-input: #ffffff;
+    --cl-border: rgba(0, 0, 102, 0.1);
+    --cl-border-hover: rgba(0, 0, 102, 0.15);
+    --cl-text: #1e293b;
+    --cl-text-muted: #64748b;
+    --cl-text-btn: #ffffff;
+    --cl-accent-subtle: rgba(255, 166, 0, 0.08);
+    --cl-accent-border: rgba(255, 166, 0, 0.25);
+    --cl-accent-glow: rgba(0, 0, 102, 0.25);
+    --cl-danger-bg: rgba(239, 68, 68, 0.06);
+    --cl-info-bg: rgba(59, 130, 246, 0.06);
+    --cl-success-bg: rgba(34, 197, 94, 0.06);
+}
+
+/* ── Body Background ── */
+html.dark-theme body,
+body {
+    background: radial-gradient(ellipse at top right, #1e1b4b 0%, #0f172a 40%, #020617 100%) !important;
+}
+
+html.light-theme body {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
+}
+
+/* ── Entrance Animation ── */
+@keyframes clFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Page Header
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+#casjoe-links-app .cl-header h1 {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    background: linear-gradient(135deg, #FFA600, #FFC107) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    color: transparent !important;
+    letter-spacing: -0.5px;
+}
+
+/* Light mode: Navy blue headings */
+html.light-theme #casjoe-links-app .cl-header h1 {
+    background: linear-gradient(135deg, #000066, #000088) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+#casjoe-links-app .cl-header p {
+    color: var(--cl-text-muted);
+    font-size: 15px;
+    margin: 6px 0 0 0;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Primary Button (Glow)
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-btn {
+    background: linear-gradient(135deg, var(--cl-accent), var(--cl-accent-light));
+    color: var(--cl-text-btn) !important;
+    padding: 12px 26px;
+    border-radius: var(--cl-radius-sm);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px var(--cl-accent-glow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+html.light-theme #casjoe-links-app .cl-btn {
+    background: linear-gradient(135deg, #000066, #000088);
+    color: #ffffff !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 102, 0.3);
+    border-color: rgba(0, 0, 102, 0.2);
+}
+
+#casjoe-links-app .cl-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 14px 32px var(--cl-accent-glow);
+}
+
+#casjoe-links-app .cl-btn:active {
+    transform: scale(0.97) !important;
+}
+
+#casjoe-links-app .cl-btn-sm {
+    padding: 10px 22px;
+    font-size: 14px;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Glass Panel
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-panel {
+    background: var(--cl-surface) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--cl-border) !important;
+    border-radius: 24px !important;
+    padding: 28px !important;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.35) !important;
+    transition: border-color 0.3s;
+}
+
+html.light-theme #casjoe-links-app .cl-panel {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Modern Table
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-table {
+    width: 100%;
+    background: transparent !important;
+    border: none !important;
+    border-spacing: 0 10px !important;
+    border-collapse: separate !important;
+    margin-top: -10px;
+}
+
+#casjoe-links-app .cl-table th {
+    background: transparent !important;
+    color: var(--cl-text-muted) !important;
+    border: none !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    padding: 8px 22px !important;
+    font-weight: 600 !important;
+}
+
+#casjoe-links-app .cl-table td {
+    background: var(--cl-surface) !important;
+    border: 1px solid transparent !important;
+    padding: 18px 22px !important;
+    color: var(--cl-text) !important;
+    font-size: 0.95rem !important;
+    transition: all 0.25s ease;
+    vertical-align: middle;
+}
+
+html.light-theme #casjoe-links-app .cl-table td {
+    background: rgba(255,255,255,0.6) !important;
+}
+
+#casjoe-links-app .cl-table tbody tr {
+    transition: all 0.25s ease;
+}
+
+#casjoe-links-app .cl-table tbody tr:hover td {
+    background: var(--cl-surface-hover) !important;
+    border-color: var(--cl-border-hover) !important;
+}
+
+html.light-theme #casjoe-links-app .cl-table tbody tr:hover td {
+    background: rgba(255, 166, 0, 0.04) !important;
+}
+
+#casjoe-links-app .cl-table td:first-child {
+    border-top-left-radius: var(--cl-radius);
+    border-bottom-left-radius: var(--cl-radius);
+    border-left: 1px solid var(--cl-border) !important;
+}
+
+#casjoe-links-app .cl-table td:last-child {
+    border-top-right-radius: var(--cl-radius);
+    border-bottom-right-radius: var(--cl-radius);
+    border-right: 1px solid var(--cl-border) !important;
+}
+
+#casjoe-links-app .cl-table tbody tr:hover td:first-child {
+    border-left-color: var(--cl-accent) !important;
+}
+
+#casjoe-links-app .cl-table tbody tr:hover td:last-child {
+    border-right-color: var(--cl-accent) !important;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Stat Pill
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-pill {
+    background: var(--cl-accent-subtle);
+    color: var(--cl-accent);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--cl-accent-border);
+}
+
+#casjoe-links-app .cl-pill-danger {
+    background: var(--cl-danger-bg);
+    color: var(--cl-danger);
+    border-color: var(--cl-danger-border);
+}
+
+#casjoe-links-app .cl-pill-info {
+    background: var(--cl-info-bg);
+    color: var(--cl-info);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+#casjoe-links-app .cl-pill-success {
+    background: var(--cl-success-bg);
+    color: var(--cl-success);
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Link Styles
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-link {
+    color: var(--cl-accent) !important;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s, opacity 0.2s;
+}
+
+#casjoe-links-app .cl-link:hover {
+    color: var(--cl-accent-light) !important;
+    opacity: 0.9;
+}
+
+#casjoe-links-app .cl-link-muted {
+    color: var(--cl-text-muted) !important;
+    text-decoration: none;
+    display: block;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+#casjoe-links-app .cl-link-muted:hover {
+    color: var(--cl-text) !important;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Action Buttons (Icon)
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#casjoe-links-app .cl-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--cl-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--cl-border);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 18px;
+    background: transparent;
+    color: var(--cl-text-muted);
+}
+
+#casjoe-links-app .cl-icon-btn:hover {
+    transform: translateY(-2px);
+}
+
+#casjoe-links-app .cl-icon-btn.edit:hover {
+    background: var(--cl-info-bg);
+    border-color: var(--cl-info);
+    color: #60a5fa;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.15);
+}
+
+#casjoe-links-app .cl-icon-btn.stats:hover {
+    background: var(--cl-accent-subtle);
+    border-color: var(--cl-accent);
+    color: var(--cl-accent);
+    box-shadow: 0 4px 12px var(--cl-accent-glow);
+}
+
+#casjoe-links-app .cl-icon-btn.delete:hover {
+    background: var(--cl-danger-bg);
+    border-color: var(--cl-danger);
+    color: #f87171;
+    box-shadow: 0 4px 12px rgba(239,68,68,0.15);
+}
+
+#casjoe-links-app .cl-icon-btn.download:hover {
+    background: var(--cl-success-bg);
+    border-color: var(--cl-success);
+    color: #4ade80;
+    box-shadow: 0 4px 12px rgba(34,197,94,0.15);
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Empty State
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-empty {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+#casjoe-links-app .cl-empty ion-icon {
+    font-size: 72px;
+    color: var(--cl-border);
+    margin-bottom: 20px;
+    display: block;
+}
+
+#casjoe-links-app .cl-empty h3 {
+    font-size: 22px;
+    color: var(--cl-text) !important;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    -webkit-text-fill-color: unset !important;
+    background: none !important;
+}
+
+#casjoe-links-app .cl-empty p {
+    color: var(--cl-text-muted);
+    margin-bottom: 28px;
+    font-size: 15px;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Form Controls
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-form-group {
+    margin-bottom: 26px;
+}
+
+#casjoe-links-app .cl-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--cl-text);
+    font-size: 15px;
+    letter-spacing: 0.3px;
+}
+
+#casjoe-links-app .cl-label .optional {
+    opacity: 0.5;
+    font-size: 0.85em;
+    font-weight: 400;
+}
+
+#casjoe-links-app .cl-input {
+    width: 100%;
+    padding: 13px 18px;
+    background: var(--cl-surface-input) !important;
+    border: 1px solid var(--cl-border) !important;
+    border-radius: var(--cl-radius-sm) !important;
+    color: var(--cl-text) !important;
+    font-size: 15px;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+#casjoe-links-app .cl-input:focus {
+    outline: none;
+    border-color: var(--cl-accent) !important;
+    box-shadow: 0 0 0 3px rgba(255, 166, 0, 0.12) !important;
+}
+
+#casjoe-links-app .cl-input::placeholder {
+    color: var(--cl-text-muted) !important;
+    opacity: 0.5;
+}
+
+#casjoe-links-app .cl-input-group {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--cl-border);
+    border-radius: var(--cl-radius-sm);
+    overflow: hidden;
+    background: var(--cl-surface-input);
+    transition: all 0.3s;
+}
+
+#casjoe-links-app .cl-input-group:focus-within {
+    border-color: var(--cl-accent);
+    box-shadow: 0 0 0 3px rgba(255, 166, 0, 0.12);
+}
+
+#casjoe-links-app .cl-input-prefix {
+    background: var(--cl-surface);
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    color: var(--cl-text-muted);
+    font-weight: 500;
+    font-size: 14px;
+    border-right: 1px solid var(--cl-border);
+    white-space: nowrap;
+}
+
+#casjoe-links-app .cl-input-group input {
+    border: none !important;
+    background: transparent !important;
+    padding: 13px 18px !important;
+    width: 100%;
+    outline: none !important;
+    font-size: 15px;
+    color: var(--cl-text) !important;
+    box-shadow: none !important;
+    font-family: 'Outfit', sans-serif;
+}
+
+#casjoe-links-app .cl-input-group input::placeholder {
+    color: var(--cl-text-muted) !important;
+    opacity: 0.5;
+}
+
+#casjoe-links-app .cl-hint {
+    color: var(--cl-text-muted);
+    font-size: 13px;
+    margin-top: 7px;
+    display: block;
+}
+
+#casjoe-links-app .cl-form-card {
+    background: var(--cl-surface) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--cl-border) !important;
+    border-radius: 24px !important;
+    padding: 36px !important;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.35) !important;
+    max-width: 600px;
+}
+
+html.light-theme #casjoe-links-app .cl-form-card {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Error Message
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-error {
+    background: var(--cl-danger-bg);
+    border: 1px solid var(--cl-danger-border);
+    color: #f87171;
+    padding: 14px 18px;
+    border-radius: var(--cl-radius-sm);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    max-width: 600px;
+    animation: clFadeIn 0.4s ease-out;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Back / Cancel Link
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-back {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    color: var(--cl-text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: color 0.2s;
+}
+
+#casjoe-links-app .cl-back:hover {
+    color: var(--cl-text);
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Card Grid (QR Codes, etc.)
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+#casjoe-links-app .cl-card {
+    background: var(--cl-surface) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--cl-border);
+    border-radius: var(--cl-radius) !important;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+html.light-theme #casjoe-links-app .cl-card {
+    background: rgba(255,255,255,0.8) !important;
+}
+
+#casjoe-links-app .cl-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--cl-accent-border);
+    box-shadow: 0 12px 28px rgba(255, 166, 0, 0.12);
+}
+
+#casjoe-links-app .cl-card h4 {
+    font-size: 15px;
+    color: var(--cl-text) !important;
+    margin: 14px 0 4px 0;
+    font-weight: 600;
+    -webkit-text-fill-color: unset !important;
+    background: none !important;
+}
+
+#casjoe-links-app .cl-card .cl-card-type {
+    font-size: 13px;
+    color: var(--cl-text-muted);
+    margin-bottom: 14px;
+}
+
+#casjoe-links-app .cl-card .cl-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+/* QR Canvas Container */
+#casjoe-links-app .cl-qr-wrap {
+    background: #ffffff;
+    border-radius: var(--cl-radius-sm);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Status Badge
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#casjoe-links-app .cl-badge-active {
+    background: var(--cl-success-bg);
+    color: var(--cl-success);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+#casjoe-links-app .cl-badge-draft {
+    background: rgba(100, 116, 139, 0.1);
+    color: var(--cl-text-muted);
+    border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+#casjoe-links-app .cl-badge-paused {
+    background: rgba(234, 179, 8, 0.1);
+    color: #eab308;
+    border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Two-Column Layout (Create pages)
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-split {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    max-width: 900px;
+}
+
+#casjoe-links-app .cl-split-form {
+    flex: 1;
+    min-width: 0;
+}
+
+#casjoe-links-app .cl-split-preview {
+    width: 300px;
+    min-width: 300px;
+    position: sticky;
+    top: 40px;
+}
+
+#casjoe-links-app .cl-preview-box {
+    background: var(--cl-surface) !important;
+    border: 1px solid var(--cl-border);
+    border-radius: var(--cl-radius);
+    padding: 24px;
+    text-align: center;
+    backdrop-filter: blur(16px);
+}
+
+#casjoe-links-app .cl-preview-box h3 {
+    font-size: 14px;
+    color: var(--cl-text-muted) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+    -webkit-text-fill-color: unset !important;
+    background: none !important;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Date & Muted Text
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-date {
+    color: var(--cl-text-muted);
+    font-size: 14px;
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT: Dashboard Stat Cards
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+}
+
+#casjoe-links-app .cl-stat-card {
+    background: var(--cl-surface) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--cl-border);
+    border-radius: var(--cl-radius);
+    padding: 24px;
+    transition: all 0.3s;
+}
+
+html.light-theme #casjoe-links-app .cl-stat-card {
+    background: rgba(255,255,255,0.8) !important;
+}
+
+#casjoe-links-app .cl-stat-card:hover {
+    border-color: var(--cl-accent-border);
+    transform: translateY(-2px);
+}
+
+#casjoe-links-app .cl-stat-card .cl-stat-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+#casjoe-links-app .cl-stat-card .cl-stat-icon {
+    font-size: 24px;
+    color: var(--cl-accent);
+}
+
+#casjoe-links-app .cl-stat-card .cl-stat-title {
+    font-size: 13px;
+    color: var(--cl-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+#casjoe-links-app .cl-stat-card .cl-stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--cl-text);
+}
+
+html.light-theme #casjoe-links-app .cl-stat-card .cl-stat-value {
+    color: #000066;
+}
+
+html.light-theme #casjoe-links-app .cl-stat-card {
+    border-left: 3px solid #FFA600;
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT: Quick Action Cards
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+#casjoe-links-app .cl-quick-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--cl-surface) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--cl-border);
+    border-radius: var(--cl-radius);
+    padding: 18px 20px;
+    text-decoration: none;
+    transition: all 0.3s;
+    color: var(--cl-text);
+}
+
+html.light-theme #casjoe-links-app .cl-quick-card {
+    background: rgba(255,255,255,0.9) !important;
+    border: 1px solid rgba(0, 0, 102, 0.08);
+}
+
+#casjoe-links-app .cl-quick-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--cl-accent-border);
+    box-shadow: 0 8px 24px rgba(255, 166, 0, 0.1);
+}
+
+html.light-theme #casjoe-links-app .cl-quick-card:hover {
+    border-color: rgba(0, 0, 102, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 102, 0.08);
+}
+
+#casjoe-links-app .cl-quick-card .cl-quick-icon {
+    font-size: 28px;
+    color: var(--cl-accent);
+    min-width: 32px;
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT: Dashboard Hero Section
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-dashboard-hero {
+    background: linear-gradient(135deg, rgba(0, 0, 102, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid rgba(255, 166, 0, 0.25);
+    border-radius: 24px;
+    padding: 32px 36px;
+    margin-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+#casjoe-links-app .cl-dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 166, 0, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    pointer-events: none;
+}
+
+html.light-theme #casjoe-links-app .cl-dashboard-hero {
+    background: linear-gradient(135deg, #000066 0%, #000044 100%);
+    border: 1px solid rgba(255, 166, 0, 0.3);
+    box-shadow: 0 12px 32px rgba(0, 0, 102, 0.25);
+}
+
+#casjoe-links-app .cl-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 166, 0, 0.15);
+    border: 1px solid rgba(255, 166, 0, 0.3);
+    color: #FFA600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+#casjoe-links-app .cl-hero-content h1 {
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    margin: 0 0 10px 0 !important;
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+    letter-spacing: -0.5px;
+}
+
+#casjoe-links-app .cl-hero-content p {
+    color: #cbd5e1;
+    font-size: 15px;
+    margin: 0;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+html.light-theme #casjoe-links-app .cl-hero-content p {
+    color: #e2e8f0;
+}
+
+/* ═══════════════════════════════════════
+   UTILITY: Icon Colors
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-stat-icon,
+#casjoe-links-app .cl-quick-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+#casjoe-links-app .icon-blue { background: rgba(14, 165, 233, 0.12); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.2); }
+#casjoe-links-app .icon-purple { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); }
+#casjoe-links-app .icon-pink { background: rgba(236, 72, 153, 0.12); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.2); }
+#casjoe-links-app .icon-green { background: rgba(34, 197, 94, 0.12); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); }
+#casjoe-links-app .icon-amber { background: rgba(255, 166, 0, 0.15); color: #FFA600; border: 1px solid rgba(255, 166, 0, 0.3); }
+
+html.light-theme #casjoe-links-app .icon-blue { background: rgba(0, 0, 102, 0.08); color: #000066; border-color: rgba(0, 0, 102, 0.15); }
+html.light-theme #casjoe-links-app .icon-purple { background: rgba(0, 0, 102, 0.08); color: #000066; border-color: rgba(0, 0, 102, 0.15); }
+html.light-theme #casjoe-links-app .icon-pink { background: rgba(0, 0, 102, 0.08); color: #000066; border-color: rgba(0, 0, 102, 0.15); }
+html.light-theme #casjoe-links-app .icon-green { background: rgba(0, 0, 102, 0.08); color: #000066; border-color: rgba(0, 0, 102, 0.15); }
+html.light-theme #casjoe-links-app .icon-amber { background: rgba(255, 166, 0, 0.15); color: #000066; border-color: rgba(255, 166, 0, 0.4); }
+
+/* Quick Action Titles & Descriptions - Force High Contrast */
+#casjoe-links-app .cl-quick-card .cl-quick-title {
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    color: #f8fafc !important;
+}
+
+html.light-theme #casjoe-links-app .cl-quick-card .cl-quick-title {
+    color: #000066 !important;
+}
+
+#casjoe-links-app .cl-quick-card .cl-quick-desc {
+    font-size: 13px !important;
+    color: #94a3b8 !important;
+    margin-top: 2px !important;
+}
+
+html.light-theme #casjoe-links-app .cl-quick-card .cl-quick-desc {
+    color: #475569 !important;
+}
+
+/* Section Header H2 Styling */
+#casjoe-links-app .cl-section h2 {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    color: var(--cl-text) !important;
+}
+
+html.light-theme #casjoe-links-app .cl-section h2 {
+    color: #000066 !important;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Section Header
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cl-text);
+    margin-bottom: 20px;
+    margin-top: 24px;
+}
+
+html.light-theme #casjoe-links-app .cl-section {
+    color: #000066;
+}
+
+html.light-theme #casjoe-links-app .cl-section ion-icon {
+    color: #000066;
+}
+
+#casjoe-links-app .cl-section ion-icon {
+    color: var(--cl-accent);
+    font-size: 22px;
+}
+
+/* ═══════════════════════════════════════
+   COMPONENT: Info Card (No data)
+   ═══════════════════════════════════════ */
+#casjoe-links-app .cl-info-card {
+    background: var(--cl-surface) !important;
+    border: 1px solid var(--cl-border);
+    border-radius: var(--cl-radius);
+    padding: 40px;
+    text-align: center;
+    color: var(--cl-text-muted);
+    font-size: 15px;
+}
+
+html.light-theme #casjoe-links-app .cl-info-card {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 102, 0.12) !important;
+    color: #475569 !important;
+}
+
+/* ═══════════════════════════════════════
+   UTILITY: Datetime picker dark mode
+   ═══════════════════════════════════════ */
+::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+html.light-theme ::-webkit-calendar-picker-indicator {
+    filter: none;
+    opacity: 1;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE: Mobile (<= 991px)
+   ═══════════════════════════════════════ */
+@media screen and (max-width: 991px) {
+    #casjoe-links-app {
+        padding: 20px 16px;
+    }
+
+    #casjoe-links-app .cl-header h1 {
+        font-size: 26px !important;
+    }
+
+    #casjoe-links-app .cl-panel {
+        padding: 18px !important;
+        border-radius: 18px !important;
+    }
+
+    #casjoe-links-app .cl-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #casjoe-links-app .cl-table thead { min-width: 600px; }
+    #casjoe-links-app .cl-table tbody { min-width: 600px; }
+
+    #casjoe-links-app .cl-card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+    }
+
+    #casjoe-links-app .cl-split {
+        flex-direction: column;
+    }
+
+    #casjoe-links-app .cl-split-preview {
+        width: 100%;
+        min-width: 100%;
+        position: static;
+        order: -1;
+    }
+
+    #casjoe-links-app .cl-form-card {
+        padding: 24px !important;
+    }
+
+    #casjoe-links-app .cl-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #casjoe-links-app .cl-quick-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #casjoe-links-app .cl-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #casjoe-links-app .cl-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #casjoe-links-app .cl-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #casjoe-links-app .cl-card-grid {
+        grid-template-columns: 1fr;
+    }
+}

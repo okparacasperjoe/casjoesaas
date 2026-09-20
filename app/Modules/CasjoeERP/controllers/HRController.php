@@ -15,7 +15,7 @@ class HRController
         $stmt = $db->query("SELECT * FROM erp_employees WHERE tenant_id = ?", [$tenantId]);
         $employees = $stmt->fetchAll();
 
-        require __DIR__ . '/../views/hr.php';
+        require __DIR__ . '/../Views/hr.php';
     }
 
     public function addEmployee()

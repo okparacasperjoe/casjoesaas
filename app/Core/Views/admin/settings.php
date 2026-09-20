@@ -1,169 +1,448 @@
 <?php
-// Admin Settings View
-$tab = $_GET['tab'] ?? 'general';
+$pageTitle = 'Platform Settings';
+require __DIR__ . '/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>System Settings | Casjoe Admin</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <style>
-        .settings-container { display: flex; gap: 30px; margin-top: 20px; }
-        .settings-sidebar { width: 250px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .settings-content { flex: 1; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .settings-nav a { display: block; padding: 10px 15px; text-decoration: none; color: #555; border-radius: 5px; margin-bottom: 5px; transition: background 0.2s; }
-        .settings-nav a:hover { background: #f0f0f0; }
-        .settings-nav a.active { background: var(--secondary); color: white; font-weight: bold; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa; }
-        .toggle-switch { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .toggle-bg { width: 50px; height: 26px; background: #ccc; border-radius: 13px; position: relative; transition: background 0.3s; }
-        .toggle-bg::after { content: ''; position: absolute; left: 3px; top: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: left 0.3s; }
-        input[type="checkbox"]:checked + .toggle-bg { background: var(--secondary); }
-        input[type="checkbox"]:checked + .toggle-bg::after { left: 27px; }
+<style>
+        .settings-container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            background: transparent;
+            padding: 0; 
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+        }
+        
+        /* Tabs Container Header */
+        .tabs-header-container {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 20px;
+            overflow-x: auto;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 20px 25px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            white-space: nowrap;
+        }
+        
+        .tab-btn:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 4px 4px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: white;
+            font-weight: 600;
+        }
+        
+        .tab-btn.active::after {
+            opacity: 1;
+        }
+        
+        .tab-btn ion-icon {
+            font-size: 1.3rem;
+        }
+        
+        /* Tab Content Area */
+        .tab-content-area {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            position: relative;
+            flex-grow: 1;
+        }
+        
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Form Styles */
+        .form-section h3 { 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+            margin-top: 0;
+            color: white; 
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .btn-save-container {
+            margin-top: 30px;
+            text-align: right;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-save:hover { 
+            filter: brightness(1.1); 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4); 
+        }
+        
+        @media (max-width: 768px) {
+            .tabs-nav { padding: 0 10px; }
+            .tab-btn { padding: 15px 20px; }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
     </style>
-</head>
-<body>
-<div class="app-container">
-    <?php 
-    $sidebarPath = __DIR__ . '/../../../Modules/CasjoeERP/views/layout/sidebar.php';
-    if (file_exists($sidebarPath)) {
-        require $sidebarPath; 
-    }
-    ?>
-    <main class="main-content">
-        <div class="top-bar">
-            <h2>System Settings</h2>
-            <div class="user-profile">
-                <span>Super Admin</span>
-            </div>
+        <div class="top-bar" style="margin-bottom: 20px;">
+            <h2><ion-icon name="options-outline" style="vertical-align: middle;"></ion-icon> Platform Settings</h2>
         </div>
 
-        <?php if(isset($_GET['success'])): ?>
-            <div style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                Settings saved successfully!
-            </div>
+        <?php if (isset($_GET['success'])): ?>
+            <div class="alert alert-success" style="margin-bottom: 20px;"><ion-icon name="checkmark-circle"></ion-icon> Settings updated successfully!</div>
+        <?php endif; ?>
+        <?php if (isset($_GET['msg'])): ?>
+            <div class="alert alert-success" style="margin-bottom: 20px;"><ion-icon name="checkmark-circle"></ion-icon> <?= htmlspecialchars($_GET['msg']) ?></div>
         <?php endif; ?>
 
-        <div class="settings-container">
-            <aside class="settings-sidebar">
-                <nav class="settings-nav">
-                    <a href="?tab=general" class="<?= $tab == 'general' ? 'active' : '' ?>">
-                        <ion-icon name="options-outline"></ion-icon> General
-                    </a>
-                    <a href="?tab=payments" class="<?= $tab == 'payments' ? 'active' : '' ?>">
-                        <ion-icon name="card-outline"></ion-icon> Payments (Gateways)
-                    </a>
-                    <a href="?tab=security" class="<?= $tab == 'security' ? 'active' : '' ?>">
-                        <ion-icon name="shield-checkmark-outline"></ion-icon> Security
-                    </a>
-                </nav>
-            </aside>
-
-            <section class="settings-content">
-                <form method="POST" action="/admin/settings/update">
-                <?= \App\Core\Services\CsrfService::getTokenField() ?>
-                <input type="hidden" name="tab" value="<?= $tab ?>">
-
-                    <?php if ($tab == 'general'): ?>
-                        <h3>General Configuration</h3>
-                        
-                        <div class="card" style="background: #fff4e5; border: 1px solid #ffcc80; padding: 20px; margin-bottom: 20px;">
-                            <h4 style="margin-top: 0; color: #e65100;">Payment Routing Mode</h4>
-                            <p style="font-size: 0.9em; margin-bottom: 15px;">Determine whose API keys are used for processing transactions.</p>
-                            
-                            <label class="toggle-switch">
-                                <input type="radio" name="payment_routing_mode" value="global" <?= ($settings['payment_routing_mode'] ?? 'global') == 'global' ? 'checked' : '' ?>> 
-                                <strong>Global (Super Admin)</strong> - Use keys defined in Payment Settings (Best for Single SaaS)
-                            </label>
-                            <br>
-                            <label class="toggle-switch">
-                                <input type="radio" name="payment_routing_mode" value="tenant" <?= ($settings['payment_routing_mode'] ?? '') == 'tenant' ? 'checked' : '' ?>> 
-                                <strong>Tenant Control</strong> - Allow tenants to set their own keys (Best for White Label/Multi-Vendor)
-                            </label>
-                            
-                            <?php if (($settings['payment_routing_mode'] ?? 'global') == 'global'): ?>
-                                <p style="margin-top: 10px; color: green; font-weight: bold;"><ion-icon name="checkmark-circle"></ion-icon> Currently using YOUR Global Admin Keys.</p>
-                            <?php else: ?>
-                                <p style="margin-top: 10px; color: orange; font-weight: bold;"><ion-icon name="warning"></ion-icon> Currently expecting TENANT keys.</p>
-                            <?php endif; ?>
+        <form action="/<?= ADMIN_PATH ?>/settings/update" method="POST">
+            <input type="hidden" name="csrf_token" value="<?= \App\Core\Services\CsrfService::generateToken() ?>">
+            <input type="hidden" name="tab" id="active_tab_input" value="<?= htmlspecialchars($_GET['tab'] ?? 'offline') ?>">
+            
+            <div class="settings-container">
+                <!-- Tabs Container -->
+                <div class="tabs-header-container">
+                    <div class="tabs-nav">
+                        <button type="button" class="tab-btn active" onclick="openTab('payment', this)">
+                            <ion-icon name="card-outline"></ion-icon> Payment Gateways
+                        </button>
+                        <button type="button" class="tab-btn" onclick="openTab('virtual-cards', this)">
+                            <ion-icon name="wallet-outline"></ion-icon> Virtual Cards
+                        </button>
+                        <button type="button" class="tab-btn" onclick="openTab('offline', this)">
+                            <ion-icon name="cash-outline"></ion-icon> Offline Deposit
+                        </button>
+                        <button type="button" class="tab-btn" onclick="openTab('general', this)">
+                            <ion-icon name="settings-outline"></ion-icon> General
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Tabs Content -->
+                <div class="tab-content-area">
+                    
+                    <!-- Tab: Payment Gateways -->
+                    <div id="payment" class="tab-pane active">
+                        <div class="form-section">
+                            <h3>Monnify Settings</h3>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>API Key</label>
+                                    <input type="text" name="settings[monnify_api_key]" class="form-control" value="<?= htmlspecialchars($settings['monnify_api_key'] ?? '') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Secret Key</label>
+                                    <input type="password" name="settings[monnify_secret_key]" class="form-control" value="<?= htmlspecialchars($settings['monnify_secret_key'] ?? '') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Contract Code</label>
+                                    <input type="text" name="settings[monnify_contract_code]" class="form-control" value="<?= htmlspecialchars($settings['monnify_contract_code'] ?? '') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mode</label>
+                                    <select name="settings[monnify_mode]" class="form-control" style="background-color: #1a1a2e;">
+                                        <option value="test" <?= ($settings['monnify_mode'] ?? 'test') == 'test' ? 'selected' : '' ?>>Test</option>
+                                        <option value="live" <?= ($settings['monnify_mode'] ?? 'test') == 'live' ? 'selected' : '' ?>>Live</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
-                    <?php elseif ($tab == 'payments'): ?>
-                        <h3>Payment Gateways</h3>
-                        <p style="color: #666; margin-bottom: 20px;">Configure your global API credentials. These act as the master keys for the platform.</p>
-
-                        <!-- Flutterwave -->
-                        <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <img src="https://asset.brandfetch.io/idAnM3w5m0/id9d4sC-Q0.png" style="height: 24px;"> 
-                                <h4 style="margin: 0;">Flutterwave</h4>
-                            </div>
+                        <div class="form-section mt-4">
+                            <h3>Flutterwave Settings</h3>
                             <div class="form-group">
                                 <label>Public Key</label>
-                                <input type="text" name="flutterwave_public_key" class="form-control" value="<?= htmlspecialchars($settings['flutterwave_public_key'] ?? '') ?>" placeholder="FLWPUBK_...">
+                                <input type="text" name="settings[flutterwave_public_key]" class="form-control" value="<?= htmlspecialchars($settings['flutterwave_public_key'] ?? '') ?>">
                             </div>
                             <div class="form-group">
                                 <label>Secret Key</label>
-                                <input type="password" name="flutterwave_secret_key" class="form-control" value="<?= htmlspecialchars($settings['flutterwave_secret_key'] ?? '') ?>" placeholder="FLWSECK_...">
+                                <input type="password" name="settings[flutterwave_secret_key]" class="form-control" value="<?= htmlspecialchars($settings['flutterwave_secret_key'] ?? '') ?>">
+                                <small style="color: rgba(255,255,255,0.4); margin-top: 5px; display: block;">Leave unchanged unless updating.</small>
                             </div>
                         </div>
-
-                        <!-- Paystack -->
-                        <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <h4 style="margin: 0;">Paystack</h4>
-                            </div>
+                        
+                        <div class="form-section mt-4">
+                            <h3>Paystack Settings</h3>
                             <div class="form-group">
                                 <label>Public Key</label>
-                                <input type="text" name="paystack_public_key" class="form-control" value="<?= htmlspecialchars($settings['paystack_public_key'] ?? '') ?>" placeholder="pk_live_...">
+                                <input type="text" name="settings[paystack_public_key]" class="form-control" value="<?= htmlspecialchars($settings['paystack_public_key'] ?? '') ?>">
                             </div>
                             <div class="form-group">
                                 <label>Secret Key</label>
-                                <input type="password" name="paystack_secret_key" class="form-control" value="<?= htmlspecialchars($settings['paystack_secret_key'] ?? '') ?>" placeholder="sk_live_...">
+                                <input type="password" name="settings[paystack_secret_key]" class="form-control" value="<?= htmlspecialchars($settings['paystack_secret_key'] ?? '') ?>">
+                                <small style="color: rgba(255,255,255,0.4); margin-top: 5px; display: block;">Leave unchanged unless updating.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Virtual Cards -->
+                    <div id="virtual-cards" class="tab-pane">
+                        <div class="form-section">
+                            <h3>Provider Configurations</h3>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Active Card Provider</label>
+                                    <select name="settings[virtual_card_provider]" class="form-control" style="background-color: #1a1a2e;">
+                                        <option value="ziiropay" <?= in_array($settings['virtual_card_provider'] ?? 'ziiropay', ['ziiropay', 'ziirocard', ''], true) ? 'selected' : '' ?>>ZiiroPay (USD Virtual Dollar Cards)</option>
+                                        <option value="strowallet" <?= ($settings['virtual_card_provider'] ?? '') == 'strowallet' ? 'selected' : '' ?>>StroWallet</option>
+                                        <option value="sudo" <?= ($settings['virtual_card_provider'] ?? '') == 'sudo' ? 'selected' : '' ?>>Sudo Africa</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Active Payout/Transfer Provider</label>
+                                    <select name="settings[payout_provider]" class="form-control" style="background-color: #1a1a2e;">
+                                        <option value="flutterwave" <?= ($settings['payout_provider'] ?? 'flutterwave') == 'flutterwave' ? 'selected' : '' ?>>Flutterwave</option>
+                                        <option value="strowallet" <?= ($settings['payout_provider'] ?? '') == 'strowallet' ? 'selected' : '' ?>>StroWallet</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Sudo (Virtual Cards) -->
-                        <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                <h4 style="margin: 0;">Sudo (Virtual Cards)</h4>
+                        <div class="form-section mt-4">
+                            <h3>Fee & Minimum Funding Configuration</h3>
+                            <div class="grid-3">
+                                <div class="form-group">
+                                    <label>USD Exchange Rate (NGN/USD)</label>
+                                    <input type="number" step="0.01" name="settings[usd_exchange_rate]" class="form-control" placeholder="e.g. 1600.00" value="<?= htmlspecialchars($settings['usd_exchange_rate'] ?? '1600') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Card Creation Fee (USD)</label>
+                                    <input type="number" step="0.01" name="settings[virtual_card_creation_fee]" class="form-control" placeholder="e.g. 4.00" value="<?= htmlspecialchars($settings['virtual_card_creation_fee'] ?? '4') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Minimum Initial Card Funding / Deposit (USD)</label>
+                                    <input type="number" step="0.01" name="settings[virtual_card_min_deposit]" class="form-control" placeholder="e.g. 5.00" value="<?= htmlspecialchars($settings['virtual_card_min_deposit'] ?? '5') ?>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mt-4">
+                            <div class="form-section">
+                                <h3>Sudo Africa</h3>
+                                <div class="form-group">
+                                    <label>API Key</label>
+                                    <input type="text" name="settings[sudo_api_key]" class="form-control" value="<?= htmlspecialchars($settings['sudo_api_key'] ?? '') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>API Secret</label>
+                                    <input type="password" name="settings[sudo_api_secret]" class="form-control" value="<?= htmlspecialchars($settings['sudo_api_secret'] ?? '') ?>">
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h3>StroWallet (Virtual Accounts & Naira Cards)</h3>
+                                <div class="form-group">
+                                    <label>Public Key (starts with pub_...)</label>
+                                    <input type="text" name="settings[strowallet_public_key]" class="form-control" value="<?= htmlspecialchars($settings['strowallet_public_key'] ?? '') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Secret Key (starts with sec_...)</label>
+                                    <input type="password" name="settings[strowallet_secret_key]" class="form-control" value="<?= htmlspecialchars($settings['strowallet_secret_key'] ?? '') ?>">
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h3>ZiiroPay (USD Virtual Dollar Cards)</h3>
+                                <div class="form-group">
+                                    <label>Public Key</label>
+                                    <input type="text" name="settings[ziiropay_public_key]" class="form-control" value="<?= htmlspecialchars($settings['ziiropay_public_key'] ?? '') ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Secret Key</label>
+                                    <input type="password" name="settings[ziiropay_secret_key]" class="form-control" value="<?= htmlspecialchars($settings['ziiropay_secret_key'] ?? '') ?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Offline Deposit -->
+                    <div id="offline" class="tab-pane">
+                        <div class="form-section">
+                            <h3>Offline Bank Transfer Details</h3>
+                            <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px; font-size: 0.9rem;">
+                                These details will be shown to users when they select "Offline Deposit" or "Bank Transfer" as their payment method.
+                            </p>
+                            
+                            <div class="form-group">
+                                <label>Bank Name</label>
+                                <input type="text" name="settings[offline_deposit_bank]" class="form-control" placeholder="e.g. Chase Bank, Guaranty Trust Bank" value="<?= htmlspecialchars($settings['offline_deposit_bank'] ?? '') ?>">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Account Name</label>
+                                <input type="text" name="settings[offline_deposit_account_name]" class="form-control" placeholder="e.g. Casjoe Global Solutions" value="<?= htmlspecialchars($settings['offline_deposit_account_name'] ?? '') ?>">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Account Number</label>
+                                <input type="text" name="settings[offline_deposit_account_number]" class="form-control" placeholder="e.g. 1234567890" value="<?= htmlspecialchars($settings['offline_deposit_account_number'] ?? '') ?>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: General -->
+                    <div id="general" class="tab-pane">
+                        <div class="form-section">
+                            <h3>General Options</h3>
+                            <div class="form-group">
+                                <label>Payment Routing Mode</label>
+                                <select name="settings[payment_routing_mode]" class="form-control" style="background-color: #1a1a2e;">
+                                    <option value="direct" <?= ($settings['payment_routing_mode'] ?? '') == 'direct' ? 'selected' : '' ?>>Direct to Gateway</option>
+                                    <option value="wallet" <?= ($settings['payment_routing_mode'] ?? '') == 'wallet' ? 'selected' : '' ?>>Wallet Balance Priority</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>API Key</label>
-                                <input type="text" name="sudo_api_key" class="form-control" value="<?= htmlspecialchars($settings['sudo_api_key'] ?? '') ?>" placeholder="apiKey...">
-                            </div>
-                            <div class="form-group">
-                                <label>API Secret (or Private Key)</label>
-                                <textarea name="sudo_api_secret" class="form-control" rows="3" placeholder="Paste private key content..."><?= htmlspecialchars($settings['sudo_api_secret'] ?? '') ?></textarea>
+                                <label>Minimum Funding Amount</label>
+                                <input type="number" step="0.01" name="settings[min_funding_amount]" class="form-control" placeholder="e.g. 1000.00" value="<?= htmlspecialchars($settings['min_funding_amount'] ?? '1000') ?>">
+                                <small style="color: rgba(255,255,255,0.4); margin-top: 5px; display: block;">The minimum amount a user can deposit to their wallet.</small>
                             </div>
                         </div>
+                    </div>
 
-                    <?php elseif ($tab == 'security'): ?>
-                        <h3>Security Settings</h3>
-                        <p>Configure global security policies.</p>
-                        <!-- Placeholders -->
-                        <div class="card" style="text-align: center; padding: 40px;">
-                            <ion-icon name="shield-half-outline" style="font-size: 64px; color: var(--primary);"></ion-icon>
-                            <h3>Two-Factor Authentication</h3>
-                            <p>Protect your account with an extra layer of security.</p>
-                            <a href="/security" class="btn" style="display: inline-block; margin-top: 15px;">Manage 2FA Settings</a>
-                        </div>
-                        
-                        <div class="form-group" style="margin-top: 30px; opacity: 0.5;">
-                            <label>Session Timeout (Minutes) - <i>Coming Soon</i></label>
-                            <input type="number" name="session_timeout" class="form-control" value="60" disabled>
-                        </div>
-                    <?php endif; ?>
+                    <!-- Submit Button -->
+                    <div class="btn-save-container">
+                        <button type="submit" class="btn-save"><ion-icon name="checkmark-circle-outline"></ion-icon> Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+<script>
+    function openTab(tabId, btnElement) {
+        // Hide all tabs
+        const panes = document.querySelectorAll('.tab-pane');
+        panes.forEach(pane => pane.classList.remove('active'));
+        
+        // Remove active class from buttons
+        const btns = document.querySelectorAll('.tab-btn');
+        btns.forEach(btn => btn.classList.remove('active'));
+        
+        // Show selected tab
+        const target = document.getElementById(tabId);
+        if (target) target.classList.add('active');
+        
+        // Set active class on clicked button
+        if (btnElement) btnElement.classList.add('active');
 
-                    <button type="submit" class="btn" style="padding: 12px 30px;">Save Changes</button>
-                </form>
-            </section>
-        </div>
-    </main>
-</div>
-</body>
-</html>
+        const tabInput = document.getElementById('active_tab_input');
+        if (tabInput) tabInput.value = tabId;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get('tab');
+        if (tab) {
+            const pane = document.getElementById(tab);
+            if (pane) {
+                const btns = document.querySelectorAll('.tab-btn');
+                btns.forEach(b => {
+                    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + tab + "'")) {
+                        openTab(tab, b);
+                    }
+                });
+            }
+        }
+    });
+</script>
+<?php require __DIR__ . '/footer.php'; ?>

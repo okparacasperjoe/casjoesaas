@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($course['title']) ?> | Casjoe Academy</title>
     <link rel="stylesheet" href="/css/style.css">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -14,6 +18,7 @@
             margin-bottom: 30px;
             display: flex;
             gap: 30px;
+            align-items: flex-start;
         }
         .hero-content {
             flex: 1;
@@ -49,24 +54,56 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero-section {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .hero-image {
+                width: 100%;
+                height: 250px;
+            }
+            .mobile-toggle {
+                display: block !important;
+                background: #000066;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 8px 12px;
+                font-size: 1.5rem;
+                cursor: pointer;
+                margin-bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="app-container">
+    <!-- Mobile Sidebar Toggle -->
+    <?php include dirname(__DIR__, 3) . '/Core/Views/partials/mobile_nav.php'; ?>
+
     <aside class="sidebar">
-        <div class="brand">
+        <?php include __DIR__ . '/partials/sidebar_acad_css.php'; ?>
+
+        <div class="acad-brand">
              <img src="/assets/casjoe_logo.png" alt="Casjoe Apps" style="height: 40px;">
         </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="/academy" class="nav-link"><ion-icon name="arrow-back-outline"></ion-icon> Back to Catalog</a></li>
+        <ul class="acad-menu">
+            <li class="acad-item"><a href="/academy" class="acad-link"><ion-icon name="arrow-back-outline"></ion-icon> Back to Catalog</a></li>
         </ul>
     </aside>
 
     <main class="main-content">
+        <button class="mobile-toggle d-md-none" onclick="toggleMobileMenu()" style="display: none;">
+            <ion-icon name="menu-outline"></ion-icon>
+        </button>
+
         <div class="hero-section">
             <div class="hero-content">
                 <h1 style="color: white; margin-top: 0;"><?= htmlspecialchars($course['title']) ?></h1>
-                <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.6;"><?= nl2br(htmlspecialchars($course['description'])) ?></p>
+                <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.6;"><?= nl2br(htmlspecialchars(strip_tags($course['description'] ?? ''))) ?></p>
                 <div style="margin-top: 20px;">
                     <?php if ($isEnrolled): ?>
                         <button class="btn" style="background: var(--secondary); color: white;">Continue Learning</button>

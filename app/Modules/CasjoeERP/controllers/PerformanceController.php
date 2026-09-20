@@ -29,7 +29,7 @@ class PerformanceController
         $stmt->execute([$this->tenantId]);
         $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/hr/performance/index.php';
+        require __DIR__ . '/../Views/hr/performance/index.php';
     }
 
     public function create()
@@ -39,7 +39,7 @@ class PerformanceController
         $stmt->execute([$this->tenantId]);
         $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/hr/performance/create.php';
+        require __DIR__ . '/../Views/hr/performance/create.php';
     }
 
     public function store()
@@ -58,6 +58,15 @@ class PerformanceController
         $stmt->execute([$this->tenantId, $employeeId, $reviewerId, $reviewDate, $rating, $comments]);
 
         header('Location: /erp/performance');
+        exit;
+    }
+
+
+    public function delete() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_hr_performance WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/hr/performance');
         exit;
     }
 }

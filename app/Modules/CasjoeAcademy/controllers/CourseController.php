@@ -15,12 +15,12 @@ class CourseController
         $stmt = $db->query("SELECT * FROM academy_courses WHERE tenant_id = ?", [$tenantId]);
         $courses = $stmt->fetchAll();
 
-        require __DIR__ . '/../views/index.php';
+        require __DIR__ . '/../Views/index.php';
     }
 
     public function create()
     {
-        require __DIR__ . '/../views/create.php';
+        require __DIR__ . '/../Views/create.php';
     }
 
     public function store()
@@ -52,6 +52,6 @@ class CourseController
         $stmt = $db->query("SELECT * FROM academy_lessons WHERE course_id = ? ORDER BY sort_order ASC", [$course['id']]);
         $lessons = $stmt->fetchAll();
 
-        require __DIR__ . '/../views/course.php';
+        require __DIR__ . '/../Views/course.php';
     }
 }

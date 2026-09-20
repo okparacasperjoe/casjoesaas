@@ -1,0 +1,43 @@
+<aside class="sidebar">
+    <div class="brand">
+        <a href="/dashboard"><img src="/assets/casjoe_logo.png" alt="Casjoe Links" style="max-height: 40px; max-width: 100%;"></a>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <a href="/links" class="nav-link <?= ($active ?? '') === 'links_dashboard' ? 'active' : '' ?>">
+                <ion-icon name="grid-outline"></ion-icon> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/links/bio" class="nav-link <?= ($active ?? '') === 'bio_pages' ? 'active' : '' ?>">
+                <ion-icon name="person-outline"></ion-icon> Bio Pages
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/links/short" class="nav-link <?= ($active ?? '') === 'short_urls' ? 'active' : '' ?>">
+                <ion-icon name="link-outline"></ion-icon> Short URLs
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/links/qr" class="nav-link <?= ($active ?? '') === 'qr_codes' ? 'active' : '' ?>">
+                <ion-icon name="qr-code-outline"></ion-icon> QR Codes
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/links/funnels" class="nav-link <?= ($active ?? '') === 'funnels' ? 'active' : '' ?>">
+                <ion-icon name="funnel-outline"></ion-icon> Sales Funnels
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/links/static" class="nav-link <?= ($active ?? '') === 'static_sites' ? 'active' : '' ?>">
+                <ion-icon name="cloud-upload-outline"></ion-icon> Static Hosting
+            </a>
+        </li>
+    </ul>
+
+    <div style="margin-top: auto; padding: 20px;">
+        <a href="/dashboard" class="hero-btn" style="width: 100%; justify-content: center; background: rgba(255,255,255,0.1); color: #fff;">
+            <ion-icon name="apps-outline"></ion-icon> All Apps
+        </a>
+    </div>
+</aside>

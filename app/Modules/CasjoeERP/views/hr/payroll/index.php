@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>Payroll | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -25,7 +30,7 @@
                         <th>Period</th>
                         <th>Gross Pay</th>
                         <th>Net Pay</th>
-                        <th>Status</th>
+                        <th>Status</th><th>Action</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

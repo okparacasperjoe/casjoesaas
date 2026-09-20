@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta charset="UTF-8">
     <title>New Announcement | Casjoe ERP</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -25,7 +30,15 @@
                 
                 <div class="form-group">
                     <label>Content</label>
-                    <textarea name="content" class="form-control" rows="5" required></textarea>
+                    
+                    <!-- Casjoe Visual Editor Component -->
+                    <?php 
+                        $editorName = 'content';
+                        // The initial value is populated directly from PHP since we are in PHP
+                        $editorValue = '';
+                        require dirname(__DIR__, 4) . '/Views/partials/casjoe_editor.php'; 
+                    ?>
+    
                 </div>
 
                 <div class="form-group" style="margin-top: 20px;">

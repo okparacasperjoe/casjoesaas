@@ -23,7 +23,7 @@ class ProjectController
         $stmt->execute([$this->tenantId]);
         $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/projects/index.php';
+        require __DIR__ . '/../Views/projects/index.php';
     }
 
     public function createProject()
@@ -32,7 +32,7 @@ class ProjectController
         $stmt->execute([$this->tenantId]);
         $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/projects/create.php';
+        require __DIR__ . '/../Views/projects/create.php';
     }
 
     public function storeProject()
@@ -60,7 +60,7 @@ class ProjectController
         $stmt->execute([$this->tenantId]);
         $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/projects/tasks.php';
+        require __DIR__ . '/../Views/projects/tasks.php';
     }
 
     public function createTask()
@@ -75,7 +75,7 @@ class ProjectController
         $stmt->execute([$this->tenantId]);
         $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/projects/create_task.php';
+        require __DIR__ . '/../Views/projects/create_task.php';
     }
 
     public function storeTask()
@@ -89,6 +89,32 @@ class ProjectController
 
         $stmt = $this->pdo->prepare("INSERT INTO erp_tasks (tenant_id, project_id, title, description, assigned_to, priority, due_date) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$this->tenantId, $projectId, $title, $desc, $assignedTo, $priority, $dueDate]);
+
+        if ($assignedTo) {
+            $empStmt = $this->pdo->prepare("SELECT email, first_name, last_name FROM erp_employees WHERE id = ?");
+            $empStmt->execute([$assignedTo]);
+            $emp = $empStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($emp && !empty($emp['email'])) {
+                $subject = "New Task Assigned: " . $title;
+                $message = "<p>Hello {$emp['first_name']},</p>";
+                $message .= "<p>A new task has been assigned to you:</p>";
+                $message .= "<ul>";
+                $message .= "<li><strong>Task:</strong> " . htmlspecialchars($title) . "</li>";
+                $message .= "<li><strong>Priority:</strong> " . htmlspecialchars($priority) . "</li>";
+                if ($dueDate) {
+                    $message .= "<li><strong>Due Date:</strong> " . htmlspecialchars($dueDate) . "</li>";
+                }
+                $message .= "</ul>";
+                $message .= "<p><strong>Description:</strong><br>" . nl2br(htmlspecialchars($desc)) . "</p>";
+
+                try {
+                    \App\Core\Mailer::send($emp['email'], $subject, $message, false);
+                } catch (\Exception $e) {
+                    error_log("Task assignment email failed: " . $e->getMessage());
+                }
+            }
+        }
 
         header('Location: /erp/tasks');
         exit;
@@ -141,7 +167,7 @@ class ProjectController
         $nextYear = $year;
         if ($nextMonth > 12) { $nextMonth = 1; $nextYear++; }
 
-        require __DIR__ . '/../views/projects/calendar.php';
+        require __DIR__ . '/../Views/projects/calendar.php';
     }
     public function timesheets()
     {
@@ -168,7 +194,7 @@ class ProjectController
         $stmtEmp->execute([$this->tenantId]);
         $employees = $stmtEmp->fetchAll(PDO::FETCH_ASSOC);
 
-        require __DIR__ . '/../views/projects/timesheets.php';
+        require __DIR__ . '/../Views/projects/timesheets.php';
     }
 
     public function logTime()
@@ -190,6 +216,70 @@ class ProjectController
         $stmt->execute([$this->tenantId, $projectId, $taskId, $employeeId, $desc, $startTime, $endTime, $minutes]);
 
         header('Location: /erp/projects/timesheets');
+        exit;
+    }
+
+
+    // ==========================================
+    // PROJECTS (Edit/Update/Delete)
+    // ==========================================
+    public function updateProject() {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+        $client_id = $_POST['client_id'] ?: null;
+        $status = $_POST['status'];
+        $stmt = $this->pdo->prepare("UPDATE erp_projects SET name=?, description=?, client_id=?, status=? WHERE id=? AND tenant_id=?");
+        $stmt->execute([$name, $description, $client_id, $status, $id, $this->tenantId]);
+        header('Location: /erp/projects');
+        exit;
+    }
+
+    public function deleteProject() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_projects WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/projects');
+        exit;
+    }
+
+    // ==========================================
+    // TASKS (Edit/Update/Delete)
+    // ==========================================
+    public function updateTask() {
+        $id = $_POST['id'];
+        $title = $_POST['title'];
+        $project_id = $_POST['project_id'] ?: null;
+        $assigned_to = $_POST['assigned_to'] ?: null;
+        $due_date = $_POST['due_date'] ?: null;
+        $status = $_POST['status'];
+        $priority = $_POST['priority'];
+        $stmt = $this->pdo->prepare("UPDATE erp_tasks SET title=?, project_id=?, assigned_to=?, due_date=?, status=?, priority=? WHERE id=? AND tenant_id=?");
+        $stmt->execute([$title, $project_id, $assigned_to, $due_date, $status, $priority, $id, $this->tenantId]);
+        header('Location: /erp/tasks');
+        exit;
+    }
+
+    public function deleteTask() {
+        $id = $_POST['id'];
+        $stmt = $this->pdo->prepare("DELETE FROM erp_tasks WHERE id = ? AND tenant_id = ?");
+        $stmt->execute([$id, $this->tenantId]);
+        header('Location: /erp/tasks');
+        exit;
+    }
+
+    public function updateStatus()
+    {
+        $taskId = (int)($_POST['task_id'] ?? ($_POST['id'] ?? 0));
+        $status = $_POST['status'] ?? 'pending';
+
+        if ($taskId > 0) {
+            $stmt = $this->pdo->prepare("UPDATE erp_tasks SET status = ? WHERE id = ? AND tenant_id = ?");
+            $stmt->execute([$status, $taskId, $this->tenantId]);
+        }
+
+        $redirect = $_SERVER['HTTP_REFERER'] ?? '/erp/tasks';
+        header("Location: {$redirect}");
         exit;
     }
 }

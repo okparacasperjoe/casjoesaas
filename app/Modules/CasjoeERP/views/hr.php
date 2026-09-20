@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR | Casjoe ERP</title>
@@ -14,44 +17,46 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="brand">
+    <?php include __DIR__ . '/layout/sidebar_erp_css.php'; ?>
+
+            <div class="erp-brand">
                 <ion-icon name="planet"></ion-icon>
                 Casjoe<span>ERP</span>
             </div>
 
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="/" class="nav-link">
+            <ul class="erp-menu">
+                <li class="erp-item">
+                    <a href="/" class="erp-link">
                         <ion-icon name="apps-outline"></ion-icon>
                         Back to Apps
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/erp" class="nav-link">
+                <li class="erp-item">
+                    <a href="/erp" class="erp-link">
                         <ion-icon name="grid-outline"></ion-icon>
                         Dashboard
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/erp/hr" class="nav-link active">
+                <li class="erp-item">
+                    <a href="/erp/hr" class="erp-link active">
                         <ion-icon name="people-outline"></ion-icon>
                         Human Resources
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/erp/finance" class="nav-link">
+                <li class="erp-item">
+                    <a href="/erp/finance" class="erp-link">
                         <ion-icon name="cash-outline"></ion-icon>
                         Finance
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/erp/crm" class="nav-link">
+                <li class="erp-item">
+                    <a href="/erp/crm" class="erp-link">
                         <ion-icon name="briefcase-outline"></ion-icon>
                         CRM
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/erp/inventory" class="nav-link">
+                <li class="erp-item">
+                    <a href="/erp/inventory" class="erp-link">
                         <ion-icon name="cube-outline"></ion-icon>
                         Inventory
                     </a>

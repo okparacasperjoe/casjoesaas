@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/js/casjoe_theme.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($page['title']) ?></title>
+    
+    <?php 
+    $theme = json_decode($page['theme_config'] ?? '{}', true);
+    $bgColor = $theme['bg_color'] ?? '#ffffff';
+    $textColor = $theme['text_color'] ?? '#000000';
+    $blocks = json_decode($page['blocks'] ?? '[]', true);
+    ?>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: <?= $bgColor ?>;
+            color: <?= $textColor ?>;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 6px; }
+        .description { opacity: 0.8; margin-bottom: 10px; font-size: 0.9rem; }
+        
+        .block-link {
+            display: block;
+            background: rgba(0,0,0,0.05);
+            border: 2px solid <?= $textColor ?>;
+            color: <?= $textColor ?>;
+            text-decoration: none;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .block-link:hover {
+            transform: translateY(-2px);
+            background: rgba(0,0,0,0.1);
+        }
+        .block-text { margin-bottom: 20px; line-height: 1.6; }
+
+        /* Social Icons Row */
+        .social-row {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 18px 0 28px 0;
+        }
+        .social-icon-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: <?= $textColor ?>;
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.25s ease;
+            background: rgba(0, 0, 0, 0.06);
+        }
+        .social-icon-link:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark mode checks for fallback */
+        <?php if (($theme['bg_mode'] ?? 'light') == 'dark'): ?>
+            .block-link { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); }
+            .social-icon-link { background: rgba(255,255,255,0.1); }
+            .social-icon-link:hover { background: rgba(255,255,255,0.2); }
+        <?php endif; ?>
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <?php 
+        $settings = json_decode($page['settings'] ?? '{}', true);
+        $profileImage = $settings['profile_image'] ?? null;
+        $profileName = $settings['profile_name'] ?? $page['title'];
+        $description = $settings['description'] ?? $page['description'] ?? '';
+        
+        // Fix legacy bare filenames (no path prefix)
+        if ($profileImage && !str_starts_with($profileImage, '/') && !str_starts_with($profileImage, 'http')) {
+            $profileImage = '/uploads/bio/profiles/' . $profileImage;
+        }
+
+        // Separate social links from regular links
+        $socialLinks = [];
+        $mainLinks = [];
+        foreach ($blocks as $block) {
+            if (($block['type'] ?? 'link') === 'link') {
+                $icon = $block['icon'] ?? 'globe-outline';
+                if (str_starts_with($icon, 'logo-') || $icon === 'mail-outline') {
+                    $socialLinks[] = $block;
+                } else {
+                    $mainLinks[] = $block;
+                }
+            } elseif (($block['type'] ?? '') === 'subscribe' || ($block['type'] ?? '') === 'embed') {
+                  $mainLinks[] = $block;
+              }
+        }
+        ?>
+
+        <?php if($profileImage): ?>
+            <img src="<?= htmlspecialchars($profileImage) ?>" alt="Profile" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid rgba(255,255,255,0.2);">
+        <?php endif; ?>
+
+        <h1><?= htmlspecialchars($profileName) ?></h1>
+        
+        <?php if(!empty($description)): ?>
+            <p class="description"><?= nl2br(htmlspecialchars($description)) ?></p>
+        <?php endif; ?>
+
+        <!-- Social Icons Row -->
+        <?php if (!empty($socialLinks)): ?>
+            <div class="social-row">
+                <?php foreach ($socialLinks as $social): ?>
+                    <a href="<?= htmlspecialchars($social['url']) ?>" class="social-icon-link" target="_blank" rel="noopener noreferrer" title="<?= htmlspecialchars($social['title']) ?>">
+                        <ion-icon name="<?= htmlspecialchars($social['icon']) ?>"></ion-icon>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Main Links -->
+        <div class="blocks">
+            <?php if (isset($_GET['subscribed']) && $_GET['subscribed'] == '1'): ?>
+                <div style="background: rgba(34, 197, 94, 0.2); color: #166534; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: 500; border: 1px solid rgba(34, 197, 94, 0.4);">
+                    Thanks for subscribing!
+                </div>
+            <?php endif; ?>
+
+            <?php foreach($mainLinks as $block): ?>
+                <?php if (($block['type'] ?? 'link') === 'subscribe'): ?>
+                    <div style="background: rgba(0,0,0,0.03); border: 2px solid <?= $textColor ?>; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 15px;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 15px; font-weight: 600;"><?= htmlspecialchars($block['title']) ?></h3>
+                        <form action="/links/bio/subscribe" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="hidden" name="bio_page_id" value="<?= $page['id'] ?>">
+                            <input type="hidden" name="slug" value="<?= $page['slug'] ?>">
+                            <input type="text" name="name" placeholder="Your Name" required style="padding: 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.9); width: 100%; font-family: inherit;">
+                            <input type="email" name="email" placeholder="Your Email" required style="padding: 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.9); width: 100%; font-family: inherit;">
+                            <button type="submit" class="block-link" style="width: 100%; cursor: pointer; margin-top: 5px; margin-bottom: 0;"><?= htmlspecialchars($block['button_text'] ?? 'Subscribe') ?></button>
+                        </form>
+                    </div>
+                  <?php elseif (($block['type'] ?? '') === 'embed'): ?>
+                        <?php
+                            $url = $block['url'] ?? '';
+                            $embedHtml = '';
+                            if (str_contains($url, 'youtube.com') || str_contains($url, 'youtu.be')) {
+                                preg_match('/(?:v=|youtu\.be\/)([^&]+)/', $url, $matches);
+                                $vidId = $matches[1] ?? '';
+                                if ($vidId) {
+                                    $embedHtml = '<iframe width="100%" height="200" src="https://www.youtube.com/embed/'.$vidId.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:8px; margin-bottom:15px; border: 2px solid '.$textColor.';"></iframe>';
+                                }
+                            } elseif (str_contains($url, 'spotify.com')) {
+                                $embedUrl = str_replace('spotify.com/', 'spotify.com/embed/', $url);
+                                $embedHtml = '<iframe style="border-radius:8px; margin-bottom:15px; border: 2px solid '.$textColor.'; background-color: '.$textColor.';" src="'.$embedUrl.'" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+                            }
+                        ?>
+                        <?= $embedHtml ?>
+                  <?php else: ?>
+                    <a href="<?= htmlspecialchars($block['url']) ?>" class="block-link" target="_blank" rel="noopener noreferrer">
+                        <?= htmlspecialchars($block['title']) ?>
+                    </a>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <?php foreach($blocks as $block): ?>
+                <?php if(($block['type'] ?? '') === 'text'): ?>
+                    <div class="block-text"><?= nl2br(htmlspecialchars($block['content'])) ?></div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+
+        <div style="margin-top: 50px; font-size: 0.8rem; opacity: 0.5;">
+            Powered by Casjoe Links
+        </div>
+    </div>
+</body>
+</html>

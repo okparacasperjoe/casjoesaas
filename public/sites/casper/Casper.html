@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Run Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            border: none;
+            background: #007bff;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>HTML Test Run</h1>
+    <p>If you see this page, your HTML is working.</p>
+
+    <button onclick="runTest()">Run Test</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function runTest() {
+        document.getElementById('result').innerText =
+            "✅ JavaScript is running successfully!";
+        console.log("Test button clicked");
+    }
+</script>
+
+</body>
+</html>
