@@ -505,5 +505,15 @@ Router::post('/erp/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIn
 Router::get('/casjoe-erp/settings/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'settings']);
 Router::post('/casjoe-erp/settings/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'saveSettings']);
 Router::post('/api/erp/moniepoint/push', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'pushPayment']);
+Router::post('/erp/moniepoint/simulate-test', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'simulateTest']);
+
+// Moniepoint Real-Time Webhook Endpoints
+Router::post('/api/erp/moniepoint/webhook', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
+Router::get('/api/erp/moniepoint/webhook', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
+Router::post('/api/erp/moniepoint/webhook/{tenant_id}', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
+Router::get('/api/erp/moniepoint/webhook/{tenant_id}', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
+Router::post('/api/moniepoint/webhook', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
+Router::get('/api/moniepoint/webhook', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
+
 
 
