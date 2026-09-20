@@ -34,7 +34,7 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .btn-primary { 
             background: #0284c7; 
@@ -52,10 +52,20 @@
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 10px 18px;
+            padding: 9px 16px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
         }
         .hint-text {
             color: #64748b;
@@ -84,6 +94,17 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .terminal-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(2, 132, 199, 0.1);
+            color: #0284c7;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.82rem;
             font-weight: 700;
         }
     </style>
@@ -125,7 +146,7 @@
                         <span style="background: #0284c7; color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Auto-Sync Webhook</span>
                         <h3 style="margin: 8px 0 6px 0; font-size: 1.15rem; color: var(--text-color);">Your Moniepoint Webhook Notification URL</h3>
                         <p style="margin: 0; color: #64748b; font-size: 0.88rem; line-height: 1.5;">
-                            Copy this URL and paste it into your <strong>Moniepoint Business Dashboard</strong> under <strong>Developer &gt; Webhook Settings</strong>. Whenever any <strong>deposit (inflow)</strong> or <strong>debit (outflow)</strong> occurs on your POS terminal, Moniepoint pushes it directly here to notify you and update your ERP stats in real time.
+                            Paste this single webhook URL into your <strong>Moniepoint Dashboard</strong> under <strong>Developer &gt; Webhook Settings</strong>. Whether your business has <strong>1, 2, or 10 POS terminals</strong>, Moniepoint will automatically route every deposit (inflow) and debit (outflow) from all your terminals to your ERP in real time!
                         </p>
                     </div>
                 </div>
@@ -139,10 +160,114 @@
                 <small id="copyAlert" style="display: none; color: #10b981; font-weight: 700; margin-top: 6px;">✓ Webhook URL copied to clipboard!</small>
             </div>
 
+            <!-- Multi-Terminal Management Section -->
+            <div class="settings-card" style="border-top: 4px solid #0284c7;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                            <ion-icon name="hardware-chip-outline" style="color: #0284c7; font-size: 1.3rem;"></ion-icon> Registered POS Terminals (Multi-Terminal)
+                        </h3>
+                        <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.88rem;">
+                            You can link multiple POS devices (e.g. Counter 1, Counter 2, Bar POS, Branch 2). Each terminal's transactions will be labeled individually in your notifications and financial stats!
+                        </p>
+                    </div>
+                    <button type="button" onclick="document.getElementById('addTerminalModal').style.display='block'" class="btn btn-primary" style="padding: 9px 16px; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
+                        <ion-icon name="add-circle-outline"></ion-icon> Link Another POS Terminal
+                    </button>
+                </div>
+
+                <div class="table-container" style="box-shadow: none; border: 1px solid var(--border-color); border-radius: 8px; margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Terminal Name / Label</th>
+                                <th>Serial Number</th>
+                                <th>Assigned Location</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($terminals)): ?>
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">
+                                        No terminals registered yet. Click "Link Another POS Terminal" above to add your first device!
+                                    </td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($terminals as $term): ?>
+                                    <tr>
+                                        <td>
+                                            <strong style="color: var(--text-color);"><?= htmlspecialchars($term['terminal_name']) ?></strong>
+                                        </td>
+                                        <td>
+                                            <span class="terminal-pill">
+                                                <ion-icon name="calculator-outline"></ion-icon> <?= htmlspecialchars($term['terminal_serial']) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <?= htmlspecialchars($term['location_name'] ?? 'Main Store') ?>
+                                        </td>
+                                        <td>
+                                            <span style="color: #10b981; font-weight: 700; font-size: 0.85rem;">● Active</span>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <form action="/erp/settings/moniepoint/terminals/delete" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to remove this terminal?');">
+                                                <input type="hidden" name="terminal_id" value="<?= $term['id'] ?>">
+                                                <button type="submit" class="btn-danger" title="Remove Terminal">
+                                                    <ion-icon name="trash-outline" style="vertical-align: text-bottom;"></ion-icon> Remove
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Terminal Modal -->
+            <div id="addTerminalModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;">
+                <div style="background: var(--card-bg); max-width: 480px; width: 90%; margin: 80px auto; padding: 25px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0; font-size: 1.15rem;">Link New POS Terminal</h3>
+                        <button type="button" onclick="document.getElementById('addTerminalModal').style.display='none'" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color);">&times;</button>
+                    </div>
+                    <form action="/erp/settings/moniepoint/terminals/add" method="POST">
+                        <div class="form-group">
+                            <label>Terminal Label / Name</label>
+                            <input type="text" name="terminal_name" class="form-control" placeholder="e.g. Counter 2 / Bar / Mobile POS" required>
+                            <small class="hint-text">A friendly name so you know which cashier or station took the payment.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Terminal Serial Number</label>
+                            <input type="text" name="terminal_serial" class="form-control" placeholder="e.g. MP12345678" required>
+                            <small class="hint-text">Found on the back of the physical Moniepoint POS device.</small>
+                        </div>
+                        <?php if (!empty($locations)): ?>
+                            <div class="form-group">
+                                <label>Assign to Branch / Location</label>
+                                <select name="location_id" class="form-control">
+                                    <option value="">-- Main Store / Unassigned --</option>
+                                    <?php foreach ($locations as $loc): ?>
+                                        <option value="<?= $loc['id'] ?>"><?= htmlspecialchars($loc['name']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+                        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                            <button type="button" onclick="document.getElementById('addTerminalModal').style.display='none'" class="btn btn-outline">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Terminal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
-                <!-- Moniepoint Credentials Form -->
+                <!-- Moniepoint API Account Credentials Form -->
                 <div class="settings-card">
-                    <h3 style="margin: 0 0 15px 0; font-size: 1.15rem;">Terminal Credentials</h3>
+                    <h3 style="margin: 0 0 15px 0; font-size: 1.15rem;">Moniepoint Developer API Credentials</h3>
                     <form action="/erp/settings/moniepoint" method="POST">
                         <div class="form-group">
                             <label>Moniepoint Client ID</label>
@@ -157,15 +282,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label>POS Terminal Serial Number</label>
-                            <input type="text" name="terminal_serial" class="form-control" value="<?= htmlspecialchars($integration['terminal_serial'] ?? '') ?>" placeholder="e.g. MP12345678" required>
-                            <small class="hint-text">Serial number printed on your physical Moniepoint terminal.</small>
+                            <label>Primary Terminal Serial Number</label>
+                            <input type="text" name="terminal_serial" class="form-control" value="<?= htmlspecialchars($integration['terminal_serial'] ?? '') ?>" placeholder="e.g. MP12345678">
+                            <small class="hint-text">Default terminal for single-terminal push payments.</small>
                         </div>
 
                         <div class="form-group">
                             <label>Webhook Secret Key (Optional)</label>
                             <input type="text" name="webhook_secret" class="form-control" value="<?= htmlspecialchars($integration['webhook_secret'] ?? '') ?>" placeholder="Optional webhook signature key">
-                            <small class="hint-text">If configured in Moniepoint, used to verify webhook integrity.</small>
                         </div>
 
                         <div class="form-group" style="display:flex; align-items:center; gap: 10px; padding: 14px; background: rgba(2, 132, 199, 0.05); border-radius: 8px; border: 1px solid rgba(2, 132, 199, 0.15);">
@@ -173,57 +297,62 @@
                             <label for="is_active" style="margin:0; cursor: pointer; font-size: 0.95rem;">Enable Moniepoint POS Integration</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Save Settings</button>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Save API Settings</button>
                     </form>
                 </div>
 
-                <!-- Simulation & How It Works -->
+                <!-- Simulation & Multi-POS Testing -->
                 <div>
-                    <!-- Simulation Card -->
                     <div class="settings-card" style="border-left: 4px solid #10b981;">
                         <h3 style="margin: 0 0 10px 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
                             <ion-icon name="flash-outline" style="color: #10b981;"></ion-icon> Real-Time Notification & Stat Test
                         </h3>
                         <p style="color: #64748b; font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px;">
-                            Click below to simulate an incoming Moniepoint POS event. You will instantly receive an in-app notification on your bell icon, and the transaction will immediately reflect in your <strong>ERP Stats</strong>!
+                            Simulate an incoming Moniepoint POS deposit or debit event from any of your registered terminals to verify that alerts and ERP stats update instantly!
                         </p>
 
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <form action="/erp/moniepoint/simulate-test" method="POST" style="flex: 1;">
-                                <input type="hidden" name="test_type" value="deposit">
-                                <input type="hidden" name="test_amount" value="5000">
-                                <button type="submit" class="btn" style="width: 100%; background: #10b981; color: #fff; font-weight: 700; padding: 12px;">
+                        <form action="/erp/moniepoint/simulate-test" method="POST">
+                            <?php if (!empty($terminals)): ?>
+                                <div class="form-group" style="margin-bottom: 15px;">
+                                    <label style="font-size: 0.88rem;">Select Which POS Terminal to Test:</label>
+                                    <select name="terminal_serial" class="form-control">
+                                        <?php foreach ($terminals as $term): ?>
+                                            <option value="<?= htmlspecialchars($term['terminal_serial']) ?>">
+                                                <?= htmlspecialchars($term['terminal_name']) ?> (<?= htmlspecialchars($term['terminal_serial']) ?>)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            <?php endif; ?>
+
+                            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                <button type="submit" name="test_type" value="deposit" class="btn" style="flex: 1; background: #10b981; color: #fff; font-weight: 700; padding: 12px;">
                                     <ion-icon name="arrow-down-circle-outline"></ion-icon> Test Deposit (+₦5,000)
                                 </button>
-                            </form>
-
-                            <form action="/erp/moniepoint/simulate-test" method="POST" style="flex: 1;">
-                                <input type="hidden" name="test_type" value="debit">
-                                <input type="hidden" name="test_amount" value="2000">
-                                <button type="submit" class="btn" style="width: 100%; background: #ef4444; color: #fff; font-weight: 700; padding: 12px;">
+                                <button type="submit" name="test_type" value="debit" class="btn" style="flex: 1; background: #ef4444; color: #fff; font-weight: 700; padding: 12px;">
                                     <ion-icon name="arrow-up-circle-outline"></ion-icon> Test Debit (-₦2,000)
                                 </button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
 
-                    <!-- Integration Info -->
+                    <!-- Multi-POS Summary -->
                     <div class="settings-card">
-                        <h4 style="margin: 0 0 10px 0; font-size: 1rem;">How Inflows & Outflows Update Your ERP:</h4>
+                        <h4 style="margin: 0 0 10px 0; font-size: 1rem;">How Multiple POS Devices Work:</h4>
                         <ul style="padding-left: 18px; margin: 0; color: #64748b; font-size: 0.88rem; line-height: 1.6;">
-                            <li><strong>Deposits (Inflows)</strong>: Card purchases and bank transfers received on the POS are logged as <code>income</code>. They increase your Total Revenue, Gross Profit, and Cash Inflow in the Financial Overview stats.</li>
-                            <li><strong>Debits (Outflows)</strong>: Withdrawals, refunds, or disbursements are recorded as <code>expense</code>, updating your Total Expenses and Net Profit in real time.</li>
-                            <li><strong>Instant Alerts</strong>: All tenant administrators receive an immediate in-app notification bell update on every transaction.</li>
+                            <li><strong>Unified Webhook</strong>: You only need to register the webhook URL once in Moniepoint. Moniepoint will automatically send transactions from ALL your POS terminals.</li>
+                            <li><strong>Terminal Labeling</strong>: Transactions will specifically state which terminal made them (e.g., <em>"via Counter 1"</em> or <em>"via Bar POS"</em>).</li>
+                            <li><strong>Selectable POS on Push Payment</strong>: Cashiers can choose which terminal prompts the customer when collecting payments.</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Moniepoint POS Transactions -->
+            <!-- Recent Activity Table -->
             <div class="table-container" style="margin-top: 10px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="margin: 0; font-size: 1.2rem;">Recent Moniepoint POS Activity</h3>
-                    <a href="/erp/transactions" class="btn btn-outline" style="text-decoration: none; font-size: 0.85rem;">View All in Ledger &rarr;</a>
+                    <h3 style="margin: 0; font-size: 1.2rem;">Recent Moniepoint Activity Across All Terminals</h3>
+                    <a href="/erp/transactions" class="btn btn-outline" style="text-decoration: none; font-size: 0.85rem;">View Full Ledger &rarr;</a>
                 </div>
 
                 <table>
@@ -240,7 +369,7 @@
                         <?php if (empty($recentMoniepointTx)): ?>
                             <tr>
                                 <td colspan="5" style="text-align: center; padding: 25px; color: #64748b;">
-                                    No Moniepoint transactions recorded yet. Use the simulation buttons above or connect your live webhook to see activity here!
+                                    No Moniepoint transactions recorded yet.
                                 </td>
                             </tr>
                         <?php else: ?>

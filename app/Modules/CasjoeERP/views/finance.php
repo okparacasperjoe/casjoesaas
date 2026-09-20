@@ -33,18 +33,44 @@
             </div>
 
             <!-- POS Modal -->
+            <?php
+            $posTerminals = [];
+            try {
+                $dbPos = \App\Core\Database::getInstance()->getConnection();
+                $tId = \App\Core\TenantContext::getTenantId();
+                if ($tId) {
+                    $stP = $dbPos->prepare("SELECT terminal_name, terminal_serial FROM erp_pos_terminals WHERE tenant_id = ? AND is_active = 1");
+                    $stP->execute([$tId]);
+                    $posTerminals = $stP->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+                }
+            } catch (\Throwable $e) {}
+            ?>
             <div id="posModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
-                <div class="modal-content" style="background:var(--card-bg); padding:20px; border-radius:8px; width:400px; max-width:90%; position:relative; margin: 10% auto;">
+                <div class="modal-content" style="background:var(--card-bg); padding:20px; border-radius:8px; width:420px; max-width:90%; position:relative; margin: 10% auto;">
                     <span onclick="document.getElementById('posModal').style.display='none'" style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px;">&times;</span>
-                    <h2>Receive via Moniepoint POS</h2>
+                    <h2 style="margin-top:0;">Receive via Moniepoint POS</h2>
                     <div style="margin-top:15px;">
-                        <label>Amount (₦)</label><br>
+                        <?php if (count($posTerminals) > 1): ?>
+                            <label style="font-weight:600;">Select POS Terminal</label><br>
+                            <select id="posTerminalSerial" style="width:100%; padding:8px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-color); color:var(--text-color);">
+                                <?php foreach ($posTerminals as $term): ?>
+                                    <option value="<?= htmlspecialchars($term['terminal_serial']) ?>">
+                                        <?= htmlspecialchars($term['terminal_name']) ?> (<?= htmlspecialchars($term['terminal_serial']) ?>)
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php elseif (count($posTerminals) === 1): ?>
+                            <input type="hidden" id="posTerminalSerial" value="<?= htmlspecialchars($posTerminals[0]['terminal_serial']) ?>">
+                            <small style="color:#0284c7; display:block; margin-bottom:12px; font-weight:600;">Target Device: <?= htmlspecialchars($posTerminals[0]['terminal_name']) ?> (<?= htmlspecialchars($posTerminals[0]['terminal_serial']) ?>)</small>
+                        <?php endif; ?>
+
+                        <label style="font-weight:600;">Amount (₦)</label><br>
                         <input type="number" id="posAmount" style="width:100%; padding:8px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-color); color:var(--text-color);" placeholder="Enter amount">
                         
-                        <label>Description</label><br>
+                        <label style="font-weight:600;">Description</label><br>
                         <input type="text" id="posDesc" style="width:100%; padding:8px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-color); color:var(--text-color);" placeholder="e.g., POS Sale">
                         
-                        <button onclick="pushToPos()" class="btn" style="width:100%; background:#2ecc71; text-align:center;">Push to Terminal</button>
+                        <button onclick="pushToPos()" class="btn" style="width:100%; background:#2ecc71; text-align:center; font-weight:700; padding:10px;">Push to Terminal</button>
                     </div>
                 </div>
             </div>
@@ -53,16 +79,20 @@
             async function pushToPos() {
                 const amount = document.getElementById('posAmount').value;
                 const desc = document.getElementById('posDesc').value;
+                const termEl = document.getElementById('posTerminalSerial');
                 if (!amount) return alert('Enter amount');
                 
                 const btn = document.querySelector('#posModal .btn');
                 const origText = btn.innerHTML;
-                btn.innerHTML = 'Waiting for Customer...';
+                btn.innerHTML = 'Waiting for Customer on Terminal...';
                 btn.disabled = true;
 
                 const formData = new FormData();
                 formData.append('amount', amount);
                 formData.append('description', desc);
+                if (termEl && termEl.value) {
+                    formData.append('terminal_serial', termEl.value);
+                }
 
                 try {
                     const response = await fetch('/api/erp/moniepoint/push', {

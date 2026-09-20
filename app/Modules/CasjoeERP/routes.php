@@ -513,7 +513,9 @@ Router::get('/api/erp/moniepoint/webhook', [\App\Modules\CasjoeERP\Controllers\M
 Router::post('/api/erp/moniepoint/webhook/{tenant_id}', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
 Router::get('/api/erp/moniepoint/webhook/{tenant_id}', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
 Router::post('/api/moniepoint/webhook', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
-Router::get('/api/moniepoint/webhook', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'webhook']);
+// Moniepoint Terminal Management Routes
+Router::post('/erp/settings/moniepoint/terminals/add', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'addTerminal']);
+Router::post('/erp/settings/moniepoint/terminals/delete', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'deleteTerminal']);
 
 
 
