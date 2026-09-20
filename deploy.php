@@ -196,6 +196,8 @@ $modifiedFiles = [
     'app/Modules/CasjoeERP/Services/MoniepointService.php',
     'app/Modules/CasjoeERP/Controllers/MoniepointIntegrationController.php',
     'app/Modules/CasjoeERP/Views/moniepoint_settings.php',
+    'app/Modules/CasjoeERP/Views/system/settings.php',
+    'app/Modules/CasjoeERP/Views/layout/sidebar.php',
     'app/Modules/CasjoeERP/Views/finance.php',
     'app/Modules/CasjoeERP/routes.php',
 ];

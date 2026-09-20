@@ -130,6 +130,18 @@
                 </div>
             </form>
         </div>
+
+        <div class="card" style="max-width: 650px; margin-top: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 style="margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                        <ion-icon name="calculator-outline" style="color: #0284c7;"></ion-icon> Moniepoint POS Integration
+                    </h3>
+                    <p style="color: #6c757d; margin: 5px 0 0 0; font-size: 0.95rem;">Connect your Moniepoint Smart POS terminal to push payment prompts and sync inflows directly.</p>
+                </div>
+                <a href="/erp/settings/moniepoint" class="btn btn-primary" style="white-space: nowrap; text-decoration: none; padding: 10px 18px; font-size: 0.9rem; font-weight: 700;">Configure POS</a>
+            </div>
+        </div>
     </main>
 </div>
 </body>

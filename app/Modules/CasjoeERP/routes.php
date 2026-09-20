@@ -498,7 +498,12 @@ Router::get('/erp/payroll/run', [\App\Modules\CasjoeERP\Controllers\PayrollContr
 
 
 // Moniepoint POS Integration
+Router::get('/erp/settings/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'settings']);
+Router::post('/erp/settings/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'saveSettings']);
+Router::get('/erp/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'settings']);
+Router::post('/erp/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'saveSettings']);
 Router::get('/casjoe-erp/settings/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'settings']);
 Router::post('/casjoe-erp/settings/moniepoint', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'saveSettings']);
 Router::post('/api/erp/moniepoint/push', [\App\Modules\CasjoeERP\Controllers\MoniepointIntegrationController::class, 'pushPayment']);
+
 

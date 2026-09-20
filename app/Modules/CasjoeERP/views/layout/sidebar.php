@@ -593,6 +593,7 @@ if (class_exists('\App\Core\Database') && class_exists('\App\Core\TenantContext'
                 <li class="erp-item"><a href="/erp/assets" class="erp-link <?= (strpos($uri, 'assets') !== false) ? 'active' : '' ?>">Office Assets</a></li>
                 <li class="erp-item"><a href="/erp/wallet" class="erp-link <?= (strpos($uri, 'wallet') !== false) ? 'active' : '' ?>">Employee Wallet</a></li>
                 <li class="erp-item"><a href="/erp/finance" class="erp-link <?= ($uri == '/erp/finance') ? 'active' : '' ?>">Chart of Accounts</a></li>
+                <li class="erp-item"><a href="/erp/settings/moniepoint" class="erp-link <?= (strpos($uri, 'moniepoint') !== false) ? 'active' : '' ?>">Moniepoint POS</a></li>
             </ul>
         </li>
         <?php endif; ?>
