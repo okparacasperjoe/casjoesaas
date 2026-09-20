@@ -191,6 +191,13 @@ $modifiedFiles = [
     'app/Modules/CasjoeERP/Views/layout/sidebar.php',
     'app/Core/Auth.php',
     'public/migrate_locations.php',
+
+    # Moniepoint POS Integration
+    'app/Modules/CasjoeERP/Services/MoniepointService.php',
+    'app/Modules/CasjoeERP/Controllers/MoniepointIntegrationController.php',
+    'app/Modules/CasjoeERP/Views/moniepoint_settings.php',
+    'app/Modules/CasjoeERP/Views/finance.php',
+    'app/Modules/CasjoeERP/routes.php',
 ];
 
 foreach ($allFiles as $f) {
@@ -221,7 +228,11 @@ $remotePath = '/';
 
 // 2. Connect
 echo "\nConnecting to $ftpHost...\n";
-$conn = ftp_connect($ftpHost);
+$conn = @ftp_connect($ftpHost);
+if (!$conn) {
+    echo "Direct connection to $ftpHost failed, falling back to ftp.gb.stackcp.com...\n";
+    $conn = @ftp_connect('ftp.gb.stackcp.com');
+}
 if (!$conn) die("Could not connect to FTP host.\n");
 
 if (!ftp_login($conn, $ftpUser, $ftpPass)) {
