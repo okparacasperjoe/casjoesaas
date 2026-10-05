@@ -24,14 +24,16 @@ function getDirContents($dir, &$results = array()) {
             // Exclude git, vendor, artifacts, temp files
             if (strpos($relPath, '.git') === 0) continue;
             if (strpos($relPath, 'vendor') === 0) continue;
+            if (strpos($relPath, 'mobile') === 0) continue;
+            if (strpos($relPath, 'node_modules') === 0) continue;
             if (strpos($relPath, 'deploy.php') !== false) continue;
             if (strpos($relPath, 'test_') === 0) continue;
             if (strpos($relPath, '.') === 0 && $relPath !== '.htaccess') continue; // Exclude hidden files except .htaccess
 
             $results[] = $relPath;
         } else if ($value != "." && $value != "..") {
-            // Exclude git and brain dirs
-            if ($value === '.git' || $value === '.gemini' || $value === 'vendor') continue; 
+            // Exclude git, brain, mobile, and vendor dirs
+            if ($value === '.git' || $value === '.gemini' || $value === 'vendor' || $value === 'mobile' || $value === 'node_modules') continue; 
             
             getDirContents($path, $results);
         }

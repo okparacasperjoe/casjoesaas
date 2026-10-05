@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Casjoe</string>
+    <string name="title_activity_main">Casjoe</string>
+    <string name="package_name">com.casjoe.app</string>
+    <string name="custom_url_scheme">com.casjoe.app</string>
+</resources>

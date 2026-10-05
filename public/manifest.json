@@ -1,21 +1,30 @@
 {
-  "name": "Casjoe App",
+  "name": "Casjoe SaaS Ecosystem",
   "short_name": "Casjoe",
-  "description": "Casjoe SaaS Overview Dashboard",
-  "start_url": "/",
+  "description": "Casjoe Business Operating System & Financial Ecosystem",
+  "start_url": "/dashboard",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "orientation": "portrait",
+  "background_color": "#000066",
+  "theme_color": "#000066",
   "icons": [
     {
-      "src": "/casjoe_logo.webp",
+      "src": "/assets/casjoe_logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/casjoe_logo.webp",
+      "src": "/assets/casjoe_logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/casjoe_logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
     }
   ]
 }
