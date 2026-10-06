@@ -5,42 +5,301 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Casjoe</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
       margin: 0;
       padding: 0;
-      background: #ffffff;
-      color: #000066;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #FFFFFF;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    /* Splash / Auto-Redirect Loader Screen */
+    #loaderScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #FFFFFF;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      text-align: center;
+      z-index: 100;
+      transition: opacity 0.3s ease;
+    }
+    .loader-logo {
+      width: 160px;
+      max-width: 60%;
+      margin-bottom: 24px;
+      object-fit: contain;
     }
     .spinner {
-      width: 44px;
-      height: 44px;
-      border: 3px solid rgba(255, 166, 0, 0.2);
+      width: 38px;
+      height: 38px;
+      border: 3px solid rgba(0, 0, 102, 0.1);
       border-top-color: #FFA600;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    h2 { margin: 0 0 8px; font-weight: 800; }
-    p { margin: 0; opacity: 0.7; font-size: 0.9rem; }
+    .loader-text {
+      color: #000066;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    /* Onboarding Carousel */
+    #onboardingScreen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      background: #FFFFFF;
+    }
+
+    /* Top Navigation (Skip Button) */
+    .top-bar {
+      position: absolute;
+      top: env(safe-area-inset-top, 16px);
+      right: 16px;
+      z-index: 20;
+      padding-top: 10px;
+    }
+    .skip-btn {
+      background: rgba(0, 0, 102, 0.06);
+      border: 1px solid rgba(0, 0, 102, 0.12);
+      color: #000066;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Slider Container */
+    .slider-viewport {
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      touch-action: pan-y pinch-zoom;
+    }
+    .slider-track {
+      display: flex;
+      height: 100%;
+      width: 400%;
+      transition: transform 0.32s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .slide {
+      width: 25%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 10px 120px 10px;
+      position: relative;
+    }
+    .slide img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    /* Bottom Control Bar */
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 16px 24px calc(env(safe-area-inset-bottom, 20px) + 16px) 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 40%, #FFFFFF 100%);
+      z-index: 20;
+    }
+
+    /* Dots */
+    .dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: #D1D5DB;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .dot.active {
+      width: 26px;
+      background: #FFA600;
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      background: #FFA600;
+      color: #000066;
+      font-weight: 700;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255, 166, 0, 0.35);
+      transition: transform 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action:active {
+      transform: scale(0.96);
+    }
   </style>
 </head>
 <body>
-  <div class="spinner"></div>
-  <h2>Connecting to Casjoe...</h2>
-  <p>Loading your executive workspace</p>
+
+  <!-- Screen 1: Splash / Loading Screen (shown to returning users) -->
+  <div id="loaderScreen">
+    <div class="spinner"></div>
+    <div class="loader-text">Loading Casjoe...</div>
+  </div>
+
+  <!-- Screen 2: 4-Slide Onboarding Walkthrough -->
+  <div id="onboardingScreen">
+    <div class="top-bar">
+      <button class="skip-btn" onclick="finishIntro()">Skip</button>
+    </div>
+
+    <div class="slider-viewport" id="sliderViewport">
+      <div class="slider-track" id="sliderTrack">
+        <div class="slide">
+          <img src="images/splash2.png" alt="Sales & CRM">
+        </div>
+        <div class="slide">
+          <img src="images/splash3.png" alt="Pay & Links">
+        </div>
+        <div class="slide">
+          <img src="images/splash4_ready.png" alt="Casjoe Pay & Academy">
+        </div>
+        <div class="slide">
+          <img src="images/splash5_ready.png" alt="Casjoe Mail & Mart">
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="dots" id="dotsContainer">
+        <div class="dot active" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
+        <div class="dot" onclick="goToSlide(3)"></div>
+      </div>
+      <button class="btn-action" id="nextBtn" onclick="nextSlide()">
+        <span>Next</span>
+      </button>
+    </div>
+  </div>
+
   <script>
-    // Redirect to live SaaS platform if not redirected by Capacitor config
-    setTimeout(function() {
-      window.location.href = 'https://app.casjoe.com/dashboard';
-    }, 1500);
+    const LIVE_URL = "https://app.casjoe.com/dashboard";
+    const totalSlides = 4;
+    let currentSlide = 0;
+
+    // Check if user has already seen the intro walkthrough
+    const hasSeenIntro = localStorage.getItem("casjoe_intro_seen");
+
+    if (hasSeenIntro === "true") {
+      // Returning user: go straight to live SaaS dashboard
+      window.location.replace(LIVE_URL);
+    } else {
+      // First-time user: display the 4-slide onboarding walkthrough
+      document.getElementById("loaderScreen").style.display = "none";
+      document.getElementById("onboardingScreen").style.display = "flex";
+      setupSwipeGestures();
+    }
+
+    function goToSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      currentSlide = index;
+      const track = document.getElementById("sliderTrack");
+      track.style.transform = `translateX(-${currentSlide * 25}%)`;
+
+      // Update dots
+      const dots = document.querySelectorAll(".dot");
+      dots.forEach((dot, idx) => {
+        dot.className = idx === currentSlide ? "dot active" : "dot";
+      });
+
+      // Update button text
+      const nextBtn = document.getElementById("nextBtn");
+      if (currentSlide === totalSlides - 1) {
+        nextBtn.innerHTML = "<span>Get Started</span>";
+      } else {
+        nextBtn.innerHTML = "<span>Next</span>";
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        goToSlide(currentSlide + 1);
+      } else {
+        finishIntro();
+      }
+    }
+
+    function finishIntro() {
+      localStorage.setItem("casjoe_intro_seen", "true");
+      // Transition to loader and redirect
+      document.getElementById("onboardingScreen").style.display = "none";
+      document.getElementById("loaderScreen").style.display = "flex";
+      window.location.replace(LIVE_URL);
+    }
+
+    // Touch swipe support
+    function setupSwipeGestures() {
+      const viewport = document.getElementById("sliderViewport");
+      let startX = 0;
+      let startY = 0;
+      let diffX = 0;
+
+      viewport.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        diffX = 0;
+      }, { passive: true });
+
+      viewport.addEventListener("touchmove", (e) => {
+        diffX = e.touches[0].clientX - startX;
+      }, { passive: true });
+
+      viewport.addEventListener("touchend", () => {
+        if (Math.abs(diffX) > 45) {
+          if (diffX < 0) {
+            // Swiped left -> next slide
+            nextSlide();
+          } else {
+            // Swiped right -> previous slide
+            goToSlide(currentSlide - 1);
+          }
+        }
+      });
+    }
   </script>
 </body>
 </html>

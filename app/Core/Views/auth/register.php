@@ -30,6 +30,7 @@
         }
 
         .login-container {
+            box-sizing: border-box;
             background: rgba(0, 0, 102, 0.4); /* Brand Blue with transparency */
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 166, 0, 0.2); /* Brand Orange Border hint */
@@ -145,6 +146,12 @@
             transition: 0.2s;
         }
         .btn-google:hover { background: #f1f1f1; }
+    
+        @media (max-width: 480px) {
+            .page-wrapper { padding: 15px; }
+            .login-container { padding: 30px 18px !important; border-radius: 16px !important; }
+            .logo-img { max-height: 44px !important; max-width: 80% !important; }
+        }
     </style>
 </head>
 <body>
@@ -165,7 +172,7 @@
 
 <div class="page-wrapper">
 <div class="login-container">
-    <img src="/casjoe_logo.png" alt="Casjoe Logo" class="logo-img" style="max-height: 80px; width: auto; object-fit: contain; margin: 0 auto 20px auto; display: block;">
+    <img src="/casjoe_logo.png" alt="Casjoe Logo" class="logo-img" style="max-height: 52px; max-width: 85%; width: auto; object-fit: contain; margin: 0 auto 18px auto; display: block;">
     <!-- <div class="logo">Casjoe</div> -->
     <div class="subtitle">Create your account</div>
 

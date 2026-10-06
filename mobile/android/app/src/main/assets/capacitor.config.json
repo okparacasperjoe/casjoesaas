@@ -4,7 +4,6 @@
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"server": {
-		"url": "https://app.casjoe.com/dashboard",
 		"cleartext": false,
 		"allowNavigation": [
 			"app.casjoe.com",
