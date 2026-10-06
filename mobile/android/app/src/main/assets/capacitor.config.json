@@ -1,0 +1,41 @@
+{
+	"appId": "com.casjoe.app",
+	"appName": "Casjoe",
+	"webDir": "www",
+	"bundledWebRuntime": false,
+	"server": {
+		"url": "https://app.casjoe.com/dashboard",
+		"cleartext": false,
+		"allowNavigation": [
+			"app.casjoe.com",
+			"casjoe.com",
+			"*.casjoe.com",
+			"checkout.paystack.com",
+			"api.ravepay.co",
+			"accounts.google.com"
+		]
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 1500,
+			"launchAutoHide": true,
+			"backgroundColor": "#000066",
+			"androidSplashResourceName": "splash",
+			"androidScaleType": "CENTER_CROP",
+			"showSpinner": true,
+			"androidSpinnerStyle": "large",
+			"spinnerColor": "#FFA600"
+		},
+		"StatusBar": {
+			"style": "DARK",
+			"backgroundColor": "#000066"
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		}
+	}
+}
