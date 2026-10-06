@@ -196,10 +196,10 @@
 
         /* ── Glass Welcome Hero ── */
         .welcome-hero {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 102, 0.35) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(0, 0, 102, 0.22) 100%);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 166, 0, 0.3);
+            border: 1.5px solid rgba(255, 166, 0, 0.4);
             color: white;
             padding: 38px 36px;
             border-radius: var(--gd-radius);
@@ -242,21 +242,20 @@
         }
 
         .hero-org-card {
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px solid rgba(255, 166, 0, 0.45);
-            padding: 10px 18px;
+            background: #ffffff !important;
+            border: 2px solid rgba(255, 166, 0, 0.6) !important;
+            padding: 12px 18px;
             border-radius: 16px;
             display: flex;
             align-items: center;
             gap: 14px;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
             max-width: 100%;
             box-sizing: border-box;
+            color: #000066;
         }
         .hero-org-card img {
-            max-height: 56px;
+            max-height: 54px;
             max-width: 140px;
             object-fit: contain;
             border-radius: 6px;
@@ -265,9 +264,9 @@
 
         /* ── Cori AI Briefing Glass Banner ── */
         .ai-briefing-glass {
-            padding: 20px 24px;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 166, 0, 0.45);
+            padding: 22px 24px;
+            background: #ffffff !important;
+            border: 2px solid rgba(255, 166, 0, 0.6) !important;
             border-radius: 18px;
             display: flex;
             gap: 18px;
@@ -277,8 +276,9 @@
             box-sizing: border-box;
             position: relative;
             z-index: 2;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.35);
             overflow: hidden;
+            color: #0f172a;
         }
         .ai-briefing-glass > ion-icon {
             color: var(--gd-gold);
@@ -288,17 +288,18 @@
         }
 
         .btn-briefing {
-            background: linear-gradient(135deg, var(--gd-gold) 0%, #ff8c00 100%);
-            color: #000;
+            background: linear-gradient(135deg, #000066 0%, #000088 100%);
+            color: #ffffff !important;
             font-weight: 800;
             font-size: 0.82rem;
-            padding: 9px 18px;
+            padding: 10px 20px;
             border-radius: 10px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(255, 166, 0, 0.3);
+            border: 1.5px solid #FFA600;
+            box-shadow: 0 4px 15px rgba(0, 0, 102, 0.35);
             max-width: 100%;
             box-sizing: border-box;
             text-align: center;
@@ -309,33 +310,33 @@
 
         /* ── Attendance Glass Widget ── */
         .attendance-card {
-            background: var(--gd-glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--gd-glass-border);
+            background: #ffffff !important;
+            border: 1.5px solid rgba(255, 166, 0, 0.45) !important;
             border-radius: var(--gd-radius);
             padding: 22px 30px;
             margin-bottom: 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: var(--gd-shadow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
             width: 100%;
             max-width: 100%;
             box-sizing: border-box;
+            color: #0f172a;
         }
         .attendance-info h3 {
             margin: 0 0 4px 0;
             font-size: 1.1rem;
-            font-weight: 700;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 10px;
+            color: #000066;
         }
         .attendance-info p {
             margin: 0;
             font-size: 0.95rem;
-            color: var(--gd-text-muted);
+            color: #475569;
         }
         .status-on { color: #34d399; font-weight: 700; }
         .status-off { color: #f87171; font-weight: 700; }
@@ -608,12 +609,24 @@
             color: #475569;
         }
         html.light-theme .welcome-hero {
-            background: linear-gradient(135deg, #000066 0%, #1a1aaa 100%);
-            color: #ffffff;
+            background: #ffffff !important;
+            border: 1.5px solid rgba(255, 166, 0, 0.45) !important;
+            color: #0f172a !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+        }
+        html.light-theme .welcome-name {
+            color: #000066 !important;
+        }
+        html.light-theme .welcome-label {
+            color: #d97706 !important;
+        }
+        html.light-theme .hero-org-card {
+            background: #f8fafc !important;
+            border: 1.5px solid rgba(255, 166, 0, 0.5) !important;
         }
         html.light-theme .ai-briefing-glass {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.2);
+            background: #f8fafc !important;
+            border: 1.5px solid rgba(255, 166, 0, 0.5) !important;
         }
         html.light-theme .module-name {
             color: #0f172a;
@@ -801,19 +814,19 @@
                         <?php if (!empty($tenantData['logo'])): ?>
                             <img src="<?= htmlspecialchars($tenantData['logo']) ?>" alt="Company Logo">
                         <?php else: ?>
-                            <div style="width: 44px; height: 44px; flex-shrink: 0; background: rgba(255, 166, 0, 0.15); border: 1px solid rgba(255, 166, 0, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--gd-gold); font-size: 1.4rem;">
+                            <div style="width: 44px; height: 44px; flex-shrink: 0; background: rgba(0, 0, 102, 0.08); border: 1.5px solid rgba(0, 0, 102, 0.25); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #000066; font-size: 1.4rem;">
                                 <ion-icon name="business-outline"></ion-icon>
                             </div>
                         <?php endif; ?>
                         <div style="min-width: 0; flex: 1;">
-                            <div style="font-size: 0.72rem; color: var(--gd-text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                            <div style="font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                 Active Organization
                                 <?php if (!empty($tenantData['currency'])): ?>
-                                    <span style="background: rgba(255,255,255,0.12); padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; color: var(--gd-gold);"><?= htmlspecialchars($tenantData['currency']) ?></span>
+                                    <span style="background: #000066; color: #FFA600; padding: 2px 7px; border-radius: 4px; font-size: 0.65rem; font-weight: 800;"><?= htmlspecialchars($tenantData['currency']) ?></span>
                                 <?php endif; ?>
                             </div>
-                            <div style="font-weight: 800; color: #fff; font-size: 1rem; word-break: break-word;"><?= htmlspecialchars($tenantData['name']) ?></div>
-                            <a href="/erp/settings" style="font-size: 0.73rem; color: var(--gd-gold); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
+                            <div style="font-weight: 800; color: #000066; font-size: 1.05rem; word-break: break-word;"><?= htmlspecialchars($tenantData['name']) ?></div>
+                            <a href="/erp/settings" style="font-size: 0.73rem; color: #d97706; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; font-weight: 700;">
                                 <ion-icon name="settings-outline"></ion-icon> Edit Logo &amp; Info
                             </a>
                         </div>
@@ -826,20 +839,20 @@
                     <ion-icon name="sparkles"></ion-icon>
                     <div style="flex: 1; min-width: 0;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                            <strong style="color: var(--gd-gold); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.2px;">
-                                <ion-icon name="analytics-outline" style="vertical-align: middle; font-size: 1.1rem; margin-right: 4px;"></ion-icon>
+                            <strong style="color: #000066; font-size: 0.88rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 800;">
+                                <ion-icon name="analytics-outline" style="vertical-align: middle; font-size: 1.15rem; margin-right: 4px; color: #FFA600;"></ion-icon>
                                 Cori AI Daily Executive Briefing
                             </strong>
-                            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 10px; border-radius: 999px; font-weight: 700;">
+                            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.35); padding: 3px 10px; border-radius: 999px; font-weight: 800;">
                                 ● LIVE TELEMETRY
                             </span>
                         </div>
-                        <div style="font-size: 0.93rem; color: rgba(255, 255, 255, 0.92); line-height: 1.6; margin-bottom: 14px; word-break: break-word;">
+                        <div style="font-size: 0.94rem; color: #1e293b; line-height: 1.6; margin-bottom: 14px; word-break: break-word; font-weight: 500;">
                             <?= $aiBriefing ?>
                         </div>
                         <div>
                             <a href="/erp/ai-manager" class="btn btn-briefing">
-                                Read More &amp; Launch Full AI Manager <ion-icon name="arrow-forward-outline"></ion-icon>
+                                Read More &amp; Launch Full AI Manager <ion-icon name="arrow-forward-outline" style="color: #FFA600;"></ion-icon>
                             </a>
                         </div>
                     </div>
