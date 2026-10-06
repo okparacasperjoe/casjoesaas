@@ -8,16 +8,17 @@ $GLOBALS['floating_theme_widget_loaded'] = true;
     #floating-theme-widget {
         position: fixed;
         top: 50%;
-        right: 24px;
+        right: 20px;
         transform: translateY(-50%);
         z-index: 999999;
+        transition: right 0.3s ease;
     }
 
     .ftw-switch {
         position: relative;
         display: inline-block;
-        width: 104px;
-        height: 42px;
+        width: 78px;
+        height: 32px;
     }
     
     .ftw-switch input {
@@ -31,10 +32,10 @@ $GLOBALS['floating_theme_widget_loaded'] = true;
         cursor: pointer;
         top: 0; left: 0; right: 0; bottom: 0;
         background-color: #030414;
-        border-radius: 42px;
+        border-radius: 32px;
         /* Brand color glowing border */
-        box-shadow: 0 0 0 2px #000066, 0 0 12px rgba(0, 0, 102, 0.8), inset 0 0 15px rgba(0,0,0,0.8);
-        transition: .4s;
+        box-shadow: 0 0 0 1.5px #000066, 0 0 10px rgba(0, 0, 102, 0.6), inset 0 0 10px rgba(0,0,0,0.8);
+        transition: .35s ease;
         overflow: hidden;
         display: flex;
         align-items: center;
@@ -43,45 +44,45 @@ $GLOBALS['floating_theme_widget_loaded'] = true;
     .ftw-label {
         position: absolute;
         font-family: 'Outfit', 'Inter', sans-serif;
-        font-size: 0.85rem;
+        font-size: 0.68rem;
         font-weight: 800;
-        transition: .4s;
+        transition: .35s ease;
         pointer-events: none;
-        letter-spacing: 1px;
+        letter-spacing: 0.6px;
     }
     
     /* "DARK" text is visible when unchecked (knob is on the left) */
     .ftw-label-dark {
-        right: 14px;
-        color: rgba(255, 166, 0, 0.65);
+        right: 10px;
+        color: rgba(255, 166, 0, 0.75);
     }
     
     /* "LIGHT" text is visible when checked (knob is on the right) */
     .ftw-label-light {
-        left: 12px;
-        color: rgba(0, 0, 102, 0.75);
+        left: 9px;
+        color: rgba(0, 0, 102, 0.85);
         opacity: 0;
     }
     
     .ftw-knob {
         position: absolute;
-        height: 34px;
-        width: 34px;
-        left: 4px;
-        bottom: 4px;
+        height: 26px;
+        width: 26px;
+        left: 3px;
+        bottom: 3px;
         background-color: #0a0e27;
         border-radius: 50%;
-        transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        transition: .35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         display: flex;
         align-items: center;
         justify-content: center;
         /* Knob border and glow */
-        box-shadow: 0 0 0 2px #FFA600, 0 0 10px rgba(255, 166, 0, 0.5), inset 0 0 8px rgba(0,0,0,0.5);
+        box-shadow: 0 0 0 1.5px #FFA600, 0 0 8px rgba(255, 166, 0, 0.5), inset 0 0 6px rgba(0,0,0,0.5);
     }
     
     .ftw-knob ion-icon {
-        font-size: 1.2rem;
-        transition: .4s;
+        font-size: 0.95rem;
+        transition: .35s ease;
         position: absolute;
     }
     
@@ -89,7 +90,7 @@ $GLOBALS['floating_theme_widget_loaded'] = true;
         color: #FFA600; 
         opacity: 1; 
         transform: scale(1) rotate(0); 
-        filter: drop-shadow(0 0 4px rgba(255, 166, 0, 0.6));
+        filter: drop-shadow(0 0 3px rgba(255, 166, 0, 0.6));
     }
     .ftw-sun { 
         color: #000066; 
@@ -100,7 +101,7 @@ $GLOBALS['floating_theme_widget_loaded'] = true;
     /* Checked State (Light Mode) */
     .ftw-switch input:checked + .ftw-slider {
         background-color: #ffffff;
-        box-shadow: 0 0 0 2px #FFA600, 0 0 12px rgba(255, 166, 0, 0.5), inset 0 0 10px rgba(0,0,0,0.05);
+        box-shadow: 0 0 0 1.5px #FFA600, 0 0 10px rgba(255, 166, 0, 0.5), inset 0 0 8px rgba(0,0,0,0.05);
     }
     
     .ftw-switch input:checked + .ftw-slider .ftw-label-dark {
@@ -112,9 +113,9 @@ $GLOBALS['floating_theme_widget_loaded'] = true;
     }
     
     .ftw-switch input:checked + .ftw-slider .ftw-knob {
-        transform: translateX(62px);
+        transform: translateX(46px);
         background-color: #f8fafc;
-        box-shadow: 0 0 0 2px #000066, 0 0 10px rgba(0, 0, 102, 0.3), inset 0 0 5px rgba(255,255,255,0.8);
+        box-shadow: 0 0 0 1.5px #000066, 0 0 8px rgba(0, 0, 102, 0.3), inset 0 0 4px rgba(255,255,255,0.8);
     }
     
     .ftw-switch input:checked + .ftw-slider .ftw-moon {
@@ -131,7 +132,7 @@ $GLOBALS['floating_theme_widget_loaded'] = true;
     /* Media query to ensure it doesn't overlap weirdly on mobile if left: 24px is too far */
     @media (max-width: 768px) {
         #floating-theme-widget {
-            right: 15px;
+            right: 8px;
         }
     }
 </style>
@@ -156,22 +157,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if(!ftwCheckbox) return;
 
     // Check localStorage to set initial toggle state
-    const currentTheme = localStorage.getItem('casjoe_theme');
+    const currentTheme = localStorage.getItem('casjoe_theme') || localStorage.getItem('theme');
     if (currentTheme === 'light') {
         ftwCheckbox.checked = true;
+        document.documentElement.classList.add('light-theme');
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.classList.remove('dark-theme');
     } else {
         ftwCheckbox.checked = false;
+        document.documentElement.classList.add('dark-theme');
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.classList.remove('light-theme');
     }
 
     ftwCheckbox.addEventListener('change', function() {
         if (this.checked) {
             document.documentElement.classList.add('light-theme');
+            document.documentElement.setAttribute('data-theme', 'light');
             document.documentElement.classList.remove('dark-theme');
             localStorage.setItem('casjoe_theme', 'light');
+            localStorage.setItem('theme', 'light');
         } else {
             document.documentElement.classList.add('dark-theme');
+            document.documentElement.setAttribute('data-theme', 'dark');
             document.documentElement.classList.remove('light-theme');
             localStorage.setItem('casjoe_theme', 'dark');
+            localStorage.setItem('theme', 'dark');
         }
     });
 });
