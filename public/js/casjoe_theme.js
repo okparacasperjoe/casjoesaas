@@ -2,12 +2,14 @@
 // This script runs immediately in the <head> to prevent Flash of Unstyled Content (FOUC).
 (function() {
     // 1. Theme Loading
-    const currentTheme = localStorage.getItem('casjoe_theme');
+    const currentTheme = localStorage.getItem('casjoe_theme') || localStorage.getItem('theme');
     if (currentTheme === 'light') {
         document.documentElement.classList.add('light-theme');
+        document.documentElement.setAttribute('data-theme', 'light');
         document.documentElement.classList.remove('dark-theme');
     } else {
         document.documentElement.classList.add('dark-theme');
+        document.documentElement.setAttribute('data-theme', 'dark');
         document.documentElement.classList.remove('light-theme');
     }
 
@@ -39,7 +41,7 @@
                 const link = document.createElement('link');
                 link.id = 'casjoe-a11y-css';
                 link.rel = 'stylesheet';
-                link.href = '/css/casjoe_a11y.css';
+                link.href = '/css/casjoe_a11y.css?v=2.2';
                 document.head.appendChild(link);
             }
             if (!document.getElementById('casjoe-a11y-js')) {

@@ -212,5 +212,11 @@ $isSupport  = (strpos($currentUri, '/support') !== false);
             max-height: 100vh !important;
             padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
         }
+
+        /* Lift floating accessibility button well above Overview bottom nav item */
+        #casjoe-a11y-btn {
+            bottom: calc(120px + env(safe-area-inset-bottom, 0px)) !important;
+            left: 16px !important;
+        }
     }
 </style>
