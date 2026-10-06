@@ -45,6 +45,13 @@
             box-sizing: border-box;
         }
 
+        html {
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
             background: var(--gd-bg);
             background-image:
@@ -57,11 +64,20 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+            position: relative;
+            touch-action: pan-y pinch-zoom;
         }
 
         .app-container {
             min-height: 100vh;
             display: flex;
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+            position: relative;
         }
 
         /* ── Sidebar ── */
@@ -109,8 +125,13 @@
 
         .main-content {
             flex: 1;
+            min-width: 0;
+            width: 100%;
+            max-width: 100%;
             margin-left: 270px;
             padding: 28px 40px 60px 40px;
+            box-sizing: border-box;
+            overflow-x: hidden;
         }
 
         /* ── Top Executive Header Banner ── */
@@ -186,6 +207,9 @@
             overflow: hidden;
             box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
             margin-bottom: 28px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .welcome-hero::after {
             content: '';
@@ -213,6 +237,30 @@
             line-height: 1.15;
             position: relative;
             z-index: 1;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .hero-org-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 166, 0, 0.45);
+            padding: 10px 18px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .hero-org-card img {
+            max-height: 56px;
+            max-width: 140px;
+            object-fit: contain;
+            border-radius: 6px;
+            flex-shrink: 0;
         }
 
         /* ── Cori AI Briefing Glass Banner ── */
@@ -224,16 +272,39 @@
             display: flex;
             gap: 18px;
             align-items: flex-start;
-            max-width: 880px;
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
             position: relative;
             z-index: 2;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
         }
         .ai-briefing-glass > ion-icon {
             color: var(--gd-gold);
             font-size: 1.8rem;
             flex-shrink: 0;
             margin-top: 2px;
+        }
+
+        .btn-briefing {
+            background: linear-gradient(135deg, var(--gd-gold) 0%, #ff8c00 100%);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 9px 18px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 166, 0, 0.3);
+            max-width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            justify-content: center;
+            white-space: normal;
+            word-break: break-word;
         }
 
         /* ── Attendance Glass Widget ── */
@@ -249,6 +320,9 @@
             align-items: center;
             justify-content: space-between;
             box-shadow: var(--gd-shadow);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .attendance-info h3 {
             margin: 0 0 4px 0;
@@ -316,6 +390,9 @@
             grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
             gap: 16px;
             margin-bottom: 50px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         /* ── Glass Module Tile (Compact & Sleek) ── */
@@ -333,6 +410,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            min-width: 0;
         }
         .module-tile:hover {
             transform: translateY(-5px);
@@ -560,12 +641,118 @@
 
         /* ── Responsive ── */
         @media (max-width: 992px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 18px 18px 100px 18px; }
-            .exec-topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .welcome-hero { padding: 26px 22px; }
-            .welcome-name { font-size: 1.8rem; }
-            .attendance-card { flex-direction: column; gap: 14px; text-align: center; }
+            .sidebar {
+                display: flex !important;
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: -285px !important;
+                width: 275px !important;
+                height: 100vh !important;
+                z-index: 10000 !important;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5) !important;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding-top: calc(72px + env(safe-area-inset-top, 0px)) !important;
+                padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+                padding-left: 14px !important;
+                padding-right: 14px !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                box-sizing: border-box !important;
+                overflow-x: hidden !important;
+            }
+            .exec-topbar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+                padding: 14px 16px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .exec-status-text {
+                font-size: 0.82rem !important;
+                word-break: break-word;
+            }
+            .status-pill {
+                font-size: 0.75rem !important;
+                padding: 5px 12px !important;
+                white-space: normal !important;
+                word-break: break-word !important;
+            }
+            .welcome-hero {
+                padding: 20px 14px !important;
+                border-radius: 18px !important;
+                margin-bottom: 20px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+            }
+            .welcome-hero::after {
+                display: none !important;
+            }
+            .welcome-name {
+                font-size: 1.6rem !important;
+                word-break: break-word;
+            }
+            .attendance-card {
+                flex-direction: column !important;
+                gap: 14px !important;
+                text-align: center !important;
+                padding: 18px 14px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .hero-org-card {
+                width: 100% !important;
+                padding: 10px 14px !important;
+                gap: 12px !important;
+            }
+            .hero-org-card img {
+                max-height: 44px !important;
+                max-width: 90px !important;
+            }
+            .ai-briefing-glass {
+                padding: 14px 12px !important;
+                gap: 12px !important;
+                border-radius: 14px !important;
+            }
+            .ai-briefing-glass > ion-icon {
+                font-size: 1.4rem !important;
+            }
+            .btn-briefing {
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-grid {
+                grid-template-columns: 1fr !important;
+                gap: 14px !important;
+            }
+            .main-content {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            .welcome-hero {
+                padding: 16px 12px !important;
+            }
+            .hero-org-card {
+                padding: 8px 10px !important;
+                gap: 8px !important;
+            }
+            .hero-org-card img {
+                max-height: 38px !important;
+                max-width: 70px !important;
+            }
         }
     </style>
 </head>
@@ -596,12 +783,12 @@
         <!-- Main Dashboard Content -->
         <main class="main-content">
             <div class="welcome-hero">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
-                    <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; width: 100%; max-width: 100%;">
+                    <div style="min-width: 0; max-width: 100%;">
                         <div class="welcome-label">ENTERPRISE COMMAND CENTER</div>
                         <h1 class="welcome-name" style="margin-bottom: 6px;"><?= htmlspecialchars(\App\Core\Auth::user()['name'] ?? 'Executive Partner') ?></h1>
                         <?php if (!empty($tenantData['name'])): ?>
-                        <div style="color: var(--gd-gold); font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                        <div style="color: var(--gd-gold); font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <ion-icon name="business"></ion-icon> <?= htmlspecialchars($tenantData['name']) ?>
                             <?php if (!empty($tenantData['country'])): ?>
                                 <span style="font-size: 0.8rem; background: rgba(255,166,0,0.15); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(255,166,0,0.3);"><?= htmlspecialchars($tenantData['country']) ?></span>
@@ -610,22 +797,22 @@
                         <?php endif; ?>
                     </div>
                     <?php if (!empty($tenantData['name'])): ?>
-                    <div style="background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255, 166, 0, 0.45); padding: 10px 18px; border-radius: 16px; display: flex; align-items: center; gap: 14px; backdrop-filter: blur(14px); box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+                    <div class="hero-org-card">
                         <?php if (!empty($tenantData['logo'])): ?>
-                            <img src="<?= htmlspecialchars($tenantData['logo']) ?>" alt="Company Logo" style="max-height: 56px; max-width: 150px; object-fit: contain; border-radius: 6px;">
+                            <img src="<?= htmlspecialchars($tenantData['logo']) ?>" alt="Company Logo">
                         <?php else: ?>
-                            <div style="width: 50px; height: 50px; background: rgba(255, 166, 0, 0.15); border: 1px solid rgba(255, 166, 0, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--gd-gold); font-size: 1.6rem;">
+                            <div style="width: 44px; height: 44px; flex-shrink: 0; background: rgba(255, 166, 0, 0.15); border: 1px solid rgba(255, 166, 0, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--gd-gold); font-size: 1.4rem;">
                                 <ion-icon name="business-outline"></ion-icon>
                             </div>
                         <?php endif; ?>
-                        <div>
-                            <div style="font-size: 0.72rem; color: var(--gd-text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="font-size: 0.72rem; color: var(--gd-text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                 Active Organization
                                 <?php if (!empty($tenantData['currency'])): ?>
                                     <span style="background: rgba(255,255,255,0.12); padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; color: var(--gd-gold);"><?= htmlspecialchars($tenantData['currency']) ?></span>
                                 <?php endif; ?>
                             </div>
-                            <div style="font-weight: 800; color: #fff; font-size: 1rem;"><?= htmlspecialchars($tenantData['name']) ?></div>
+                            <div style="font-weight: 800; color: #fff; font-size: 1rem; word-break: break-word;"><?= htmlspecialchars($tenantData['name']) ?></div>
                             <a href="/erp/settings" style="font-size: 0.73rem; color: var(--gd-gold); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
                                 <ion-icon name="settings-outline"></ion-icon> Edit Logo &amp; Info
                             </a>
@@ -637,7 +824,7 @@
                 <?php if (!empty($aiBriefing)): ?>
                 <div class="ai-briefing-glass">
                     <ion-icon name="sparkles"></ion-icon>
-                    <div style="flex: 1;">
+                    <div style="flex: 1; min-width: 0;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
                             <strong style="color: var(--gd-gold); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.2px;">
                                 <ion-icon name="analytics-outline" style="vertical-align: middle; font-size: 1.1rem; margin-right: 4px;"></ion-icon>
@@ -647,11 +834,11 @@
                                 ● LIVE TELEMETRY
                             </span>
                         </div>
-                        <div style="font-size: 0.93rem; color: rgba(255, 255, 255, 0.92); line-height: 1.6; margin-bottom: 14px;">
+                        <div style="font-size: 0.93rem; color: rgba(255, 255, 255, 0.92); line-height: 1.6; margin-bottom: 14px; word-break: break-word;">
                             <?= $aiBriefing ?>
                         </div>
                         <div>
-                            <a href="/erp/ai-manager" class="btn" style="background: linear-gradient(135deg, var(--gd-gold) 0%, #ff8c00 100%); color: #000; font-weight: 800; font-size: 0.82rem; padding: 9px 18px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; box-shadow: 0 4px 15px rgba(255, 166, 0, 0.3);">
+                            <a href="/erp/ai-manager" class="btn btn-briefing">
                                 Read More &amp; Launch Full AI Manager <ion-icon name="arrow-forward-outline"></ion-icon>
                             </a>
                         </div>
