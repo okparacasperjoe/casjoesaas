@@ -262,50 +262,227 @@
             flex-shrink: 0;
         }
 
-        /* ── Cori AI Briefing Glass Banner ── */
-        .ai-briefing-glass {
-            padding: 22px 24px;
-            background: #ffffff !important;
-            border: 2px solid rgba(255, 166, 0, 0.6) !important;
-            border-radius: 18px;
+        /* ── Cori AI Briefing Modal Styles ── */
+        .cori-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(3, 4, 19, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 99999;
             display: flex;
-            gap: 18px;
-            align-items: flex-start;
-            max-width: 100%;
-            width: 100%;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             box-sizing: border-box;
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.35);
-            overflow: hidden;
-            color: #0f172a;
-        }
-        .ai-briefing-glass > ion-icon {
-            color: var(--gd-gold);
-            font-size: 1.8rem;
-            flex-shrink: 0;
-            margin-top: 2px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .btn-briefing {
-            background: linear-gradient(135deg, #000066 0%, #000088 100%);
-            color: #ffffff !important;
+        .cori-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .cori-modal-dialog {
+            background: linear-gradient(150deg, #070924 0%, #0d1238 60%, #080a24 100%);
+            border: 2px solid rgba(255, 166, 0, 0.65);
+            border-radius: 22px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 166, 0, 0.18);
+            width: 100%;
+            max-width: 640px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .cori-modal-overlay.active .cori-modal-dialog {
+            transform: scale(1) translateY(0);
+        }
+
+        .cori-modal-corner-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        .cori-modal-corner-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ef4444;
+            transform: rotate(90deg);
+        }
+
+        .cori-modal-header {
+            padding: 22px 26px 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .cori-modal-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(255, 166, 0, 0.2), rgba(0, 0, 102, 0.5));
+            border: 1.5px solid #FFA600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: #FFA600;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(255, 166, 0, 0.25);
+        }
+        .cori-modal-title-wrap {
+            flex: 1;
+            min-width: 0;
+        }
+        .cori-modal-eyebrow {
+            font-size: 0.7rem;
             font-weight: 800;
-            font-size: 0.82rem;
-            padding: 10px 20px;
-            border-radius: 10px;
+            letter-spacing: 1.2px;
+            color: #FFA600;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+        .cori-live-badge {
+            font-size: 0.68rem;
+            background: rgba(16, 185, 129, 0.16);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        .cori-modal-title {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .cori-modal-body {
+            padding: 22px 26px;
+            overflow-y: auto;
+            flex: 1;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #e2e8f0;
+        }
+        .cori-briefing-content p {
+            margin: 0 0 10px 0;
+        }
+        .cori-briefing-content strong {
+            color: #FFA600;
+        }
+
+        .cori-modal-footer {
+            padding: 18px 26px 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: rgba(0, 0, 0, 0.15);
+        }
+        .btn-cori-modal-close {
+            background: rgba(255, 255, 255, 0.08);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 11px 22px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .btn-cori-modal-close:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+        .btn-cori-modal-launch {
+            background: linear-gradient(135deg, #000066 0%, #0000aa 50%, #FFA600 150%);
+            color: #ffffff !important;
+            border: 1.5px solid #FFA600;
+            padding: 11px 22px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 800;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            text-decoration: none;
-            border: 1.5px solid #FFA600;
-            box-shadow: 0 4px 15px rgba(0, 0, 102, 0.35);
-            max-width: 100%;
-            box-sizing: border-box;
-            text-align: center;
-            justify-content: center;
-            white-space: normal;
-            word-break: break-word;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(255, 166, 0, 0.25);
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .btn-cori-modal-launch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255, 166, 0, 0.4);
+            border-color: #ffd000;
+            color: #ffffff !important;
+        }
+
+        .cori-briefing-pill-btn {
+            background: rgba(255, 166, 0, 0.12);
+            border: 1px solid rgba(255, 166, 0, 0.35);
+            color: #FFA600;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .cori-briefing-pill-btn:hover {
+            background: rgba(255, 166, 0, 0.25);
+            border-color: #FFA600;
+            transform: translateY(-1px);
         }
 
         /* ── Attendance Glass Widget ── */
@@ -624,9 +801,56 @@
             background: #f8fafc !important;
             border: 1.5px solid rgba(255, 166, 0, 0.5) !important;
         }
-        html.light-theme .ai-briefing-glass {
-            background: #f8fafc !important;
-            border: 1.5px solid rgba(255, 166, 0, 0.5) !important;
+        html.light-theme .cori-modal-dialog {
+            background: #ffffff !important;
+            border: 2px solid rgba(255, 166, 0, 0.6) !important;
+            box-shadow: 0 25px 60px rgba(0, 0, 30, 0.2), 0 0 30px rgba(255, 166, 0, 0.12) !important;
+            color: #0f172a !important;
+        }
+        html.light-theme .cori-modal-header {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        html.light-theme .cori-modal-title {
+            color: #000066 !important;
+        }
+        html.light-theme .cori-modal-corner-close {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #64748b;
+        }
+        html.light-theme .cori-modal-corner-close:hover {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+        html.light-theme .cori-modal-body {
+            color: #1e293b !important;
+        }
+        html.light-theme .cori-briefing-content strong {
+            color: #000066 !important;
+        }
+        html.light-theme .cori-modal-footer {
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        html.light-theme .btn-cori-modal-close {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        html.light-theme .btn-cori-modal-close:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+            border-color: #94a3b8;
+        }
+        html.light-theme .cori-briefing-pill-btn {
+            background: rgba(217, 119, 6, 0.1);
+            border-color: rgba(217, 119, 6, 0.3);
+            color: #d97706;
+        }
+        html.light-theme .cori-briefing-pill-btn:hover {
+            background: rgba(217, 119, 6, 0.18);
+            border-color: #d97706;
         }
         html.light-theme .module-name {
             color: #0f172a;
@@ -733,16 +957,25 @@
                 max-height: 44px !important;
                 max-width: 90px !important;
             }
-            .ai-briefing-glass {
-                padding: 14px 12px !important;
-                gap: 12px !important;
-                border-radius: 14px !important;
+            .cori-modal-dialog {
+                max-width: 100% !important;
+                border-radius: 18px !important;
             }
-            .ai-briefing-glass > ion-icon {
-                font-size: 1.4rem !important;
+            .cori-modal-header {
+                padding: 16px 18px 12px !important;
             }
-            .btn-briefing {
+            .cori-modal-body {
+                padding: 14px 18px !important;
+                font-size: 0.9rem !important;
+            }
+            .cori-modal-footer {
+                padding: 12px 18px 16px !important;
+                flex-direction: column-reverse !important;
+            }
+            .btn-cori-modal-close,
+            .btn-cori-modal-launch {
                 width: 100% !important;
+                justify-content: center !important;
             }
         }
 
@@ -796,9 +1029,16 @@
         <!-- Main Dashboard Content -->
         <main class="main-content">
             <div class="welcome-hero">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; width: 100%; max-width: 100%;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 0; width: 100%; max-width: 100%;">
                     <div style="min-width: 0; max-width: 100%;">
-                        <div class="welcome-label">ENTERPRISE COMMAND CENTER</div>
+                        <div class="welcome-label" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <span>ENTERPRISE COMMAND CENTER</span>
+                            <?php if (!empty($aiBriefing)): ?>
+                            <button type="button" onclick="openCoriBriefingModal()" class="cori-briefing-pill-btn" title="View Cori AI Daily Executive Briefing">
+                                <ion-icon name="sparkles"></ion-icon> Cori Briefing
+                            </button>
+                            <?php endif; ?>
+                        </div>
                         <h1 class="welcome-name" style="margin-bottom: 6px;"><?= htmlspecialchars(\App\Core\Auth::user()['name'] ?? 'Executive Partner') ?></h1>
                         <?php if (!empty($tenantData['name'])): ?>
                         <div style="color: var(--gd-gold); font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -833,31 +1073,6 @@
                     </div>
                     <?php endif; ?>
                 </div>
-                
-                <?php if (!empty($aiBriefing)): ?>
-                <div class="ai-briefing-glass">
-                    <ion-icon name="sparkles"></ion-icon>
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                            <strong style="color: #000066; font-size: 0.88rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 800;">
-                                <ion-icon name="analytics-outline" style="vertical-align: middle; font-size: 1.15rem; margin-right: 4px; color: #FFA600;"></ion-icon>
-                                Cori AI Daily Executive Briefing
-                            </strong>
-                            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.35); padding: 3px 10px; border-radius: 999px; font-weight: 800;">
-                                ● LIVE TELEMETRY
-                            </span>
-                        </div>
-                        <div style="font-size: 0.94rem; color: #1e293b; line-height: 1.6; margin-bottom: 14px; word-break: break-word; font-weight: 500;">
-                            <?= $aiBriefing ?>
-                        </div>
-                        <div>
-                            <a href="/erp/ai-manager" class="btn btn-briefing">
-                                Read More &amp; Launch Full AI Manager <ion-icon name="arrow-forward-outline" style="color: #FFA600;"></ion-icon>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <?php endif; ?>
             </div>
 
             <!-- Staff Attendance Glass Widget -->
@@ -1078,5 +1293,109 @@
         </main>
     </div>
     <?php if (file_exists(__DIR__ . '/../../Views/partials/footer.php')) require __DIR__ . '/../../Views/partials/footer.php'; ?>
+
+    <?php if (!empty($aiBriefing)): ?>
+    <!-- Cori AI Daily Executive Briefing Pop-up Modal -->
+    <div id="coriBriefingModal" class="cori-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="coriModalTitle">
+        <div class="cori-modal-dialog">
+            <!-- Corner Close Button -->
+            <button type="button" class="cori-modal-corner-close" onclick="closeCoriBriefingModal()" aria-label="Close Briefing">
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="cori-modal-header">
+                <div class="cori-modal-avatar">
+                    <ion-icon name="sparkles"></ion-icon>
+                </div>
+                <div class="cori-modal-title-wrap">
+                    <div class="cori-modal-eyebrow">
+                        <span>Executive Intelligence</span>
+                        <span class="cori-live-badge">● LIVE TELEMETRY</span>
+                    </div>
+                    <h3 id="coriModalTitle" class="cori-modal-title">
+                        Cori AI Daily Executive Briefing
+                    </h3>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="cori-modal-body">
+                <div class="cori-briefing-content">
+                    <?= $aiBriefing ?>
+                </div>
+            </div>
+
+            <!-- Modal Footer / Actions -->
+            <div class="cori-modal-footer">
+                <button type="button" class="btn-cori-modal-close" onclick="closeCoriBriefingModal()">
+                    <ion-icon name="close-circle-outline"></ion-icon>
+                    <span>Close</span>
+                </button>
+                <a href="/erp/ai-manager" class="btn-cori-modal-launch" onclick="markCoriBriefingDismissed()">
+                    <ion-icon name="rocket-outline"></ion-icon>
+                    <span>Read More &amp; Launch Full AI Manager</span>
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const coriSessionToken = <?= json_encode($briefingSessionId ?? 'session') ?>;
+
+        function markCoriBriefingDismissed() {
+            try {
+                sessionStorage.setItem('cori_briefing_closed_' + coriSessionToken, '1');
+            } catch (e) {}
+        }
+
+        function openCoriBriefingModal() {
+            const modal = document.getElementById('coriBriefingModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeCoriBriefingModal() {
+            const modal = document.getElementById('coriBriefingModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                markCoriBriefingDismissed();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('coriBriefingModal');
+            if (!modal) return;
+
+            let isClosed = false;
+            try {
+                isClosed = sessionStorage.getItem('cori_briefing_closed_' + coriSessionToken);
+            } catch (e) {}
+
+            // Immediately pop up when visiting/logging into the dashboard if not closed this session
+            if (!isClosed) {
+                setTimeout(function () {
+                    openCoriBriefingModal();
+                }, 350);
+            }
+
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    closeCoriBriefingModal();
+                }
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeCoriBriefingModal();
+                }
+            });
+        });
+    </script>
+    <?php endif; ?>
 </body>
 </html>

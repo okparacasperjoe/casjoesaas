@@ -282,6 +282,11 @@ class GlobalDashboardController
             $tenantData = $stmtTenant->fetch() ?: [];
         } catch (\Exception $e) {}
 
+        if (!isset($_SESSION['cori_login_session_id'])) {
+            $_SESSION['cori_login_session_id'] = bin2hex(random_bytes(8));
+        }
+        $briefingSessionId = $_SESSION['cori_login_session_id'];
+
         require __DIR__ . '/../Views/global_dashboard.php';
     }
 }
